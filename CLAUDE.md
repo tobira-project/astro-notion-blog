@@ -158,12 +158,28 @@ This is an Astro-based static site generator that creates blogs from Notion data
   - Removed pagination from home page
   - Card layout includes thumbnail, title, and date
 
+- ✅ **Site Title Update**
+  - Changed site title from "TOBIRACAST" to "Tobiratory公式ポータルサイト"
+  - Updated both SITE_TITLE and SITE_DESCRIPTION in `src/server-constants.ts`
+
+- ✅ **Article List Page Implementation**
+  - Created `/posts/index.astro` for article list first page
+  - Fixed "記事一覧へ" button to link to `/posts` instead of `/posts/page/1`
+  - Implemented full pagination system for all articles
+  - Added proper page title and styling for article list
+
+- ✅ **Code Quality Improvements**
+  - Fixed ESLint error: removed unused PostTitle import from `src/pages/index.astro`
+  - Ensured lint checks pass for deployment
+
 ### Current Implementation Status
 
 - Home page shows 6 latest articles in card format
 - Brand colors applied throughout layout
-- Site title changed from database title to "TOBIRACAST"
+- Site title changed to "Tobiratory公式ポータルサイト"
 - Footer includes copyright and branding
+- Article list page with full pagination working properly
+- "記事一覧へ" button correctly navigates to complete article list
 
 ### Next Priority Tasks
 
@@ -177,6 +193,8 @@ This is an Astro-based static site generator that creates blogs from Notion data
 - Article cards use CSS Grid for responsive layout
 - Brand colors accessible via `var(--tobiracast-primary-blue)` and `var(--tobiracast-primary-orange)`
 - Site constants centralized in `server-constants.ts` for easy configuration
+- Article list routing: `/posts` (first page) and `/posts/page/[page]` (subsequent pages)
+- Home page navigation properly linked to article list via `/posts` route
 
 ### Phase 1: Foundation (Current Priority)
 
