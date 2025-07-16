@@ -254,33 +254,39 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Technical Architecture Details
 
 #### Animation System
+
 - **Keyframes**: `fadeInUp` animation (translateY: 20px → 0px, opacity: 0 → 1)
 - **Timing**: 0.8s duration with ease-out for natural feel
 - **Delays**: Sequential delays for hierarchical content appearance
 - **Implementation**: Inline styles with animation-delay for staggered effects
 
 #### Responsive Breakpoints
+
 - **Desktop**: > 768px (full layout)
 - **Tablet**: ≤ 768px (adjusted grid, mobile navigation)
 - **Mobile**: ≤ 480px (single column, optimized spacing)
 
 #### Color System
+
 - **Primary Blue**: `#1779DE` (--tobiracast-primary-blue)
 - **Primary Orange**: `#FF811C` (--tobiracast-primary-orange)
 - **Light Blue**: Calculated variations for gradients
 - **Dark Orange**: Calculated variations for hover effects
 
 #### Image Loading System
+
 - **Lazy Loading**: Native browser lazy loading
 - **Placeholders**: Neutral background during loading
 - **Fade Effects**: Smooth opacity transitions
 - **Error Handling**: Fallback styling for failed loads
 
 #### Header Background Architecture
+
 ```css
 .site-header {
-  background: linear-gradient(135deg, 
-    var(--tobiracast-primary-blue) 0%, 
+  background: linear-gradient(
+    135deg,
+    var(--tobiracast-primary-blue) 0%,
     var(--tobiracast-light-blue) 30%,
     var(--tobiracast-primary-orange) 70%,
     var(--tobiracast-dark-orange) 100%
@@ -291,6 +297,7 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### File Structure & Key Components
 
 #### Core Layout Files
+
 - `src/layouts/Layout.astro` - Main layout with header, footer, and navigation
 - `src/pages/index.astro` - Home page with latest articles grid
 - `src/pages/posts/index.astro` - Article list first page
@@ -299,6 +306,7 @@ This is an Astro-based static site generator that creates blogs from Notion data
 - `src/pages/login.astro` - Login form page
 
 #### Component Files
+
 - `src/components/ReadMoreLink.astro` - Enhanced orange button component
 - `src/components/PostFeaturedImage.astro` - Article image component
 - `src/components/PostDate.astro` - Article date display
@@ -307,10 +315,12 @@ This is an Astro-based static site generator that creates blogs from Notion data
 - `src/components/PostExcerpt.astro` - Article excerpt display
 
 #### Script Files
+
 - `public/scripts/image-fade.js` - Image loading animation handler
 - `src/scripts/image-fade.js` - Source version of image script
 
 #### Configuration Files
+
 - `src/server-constants.ts` - Site title, description, and constants
 - `src/styles/tobiracast.css` - Brand colors and theming variables
 
@@ -324,35 +334,41 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Technical Notes for Development
 
 #### CSS Architecture
+
 - **Color Variables**: CSS custom properties for easy theming
   - Primary colors accessible via `var(--tobiracast-primary-blue)` and `var(--tobiracast-primary-orange)`
   - Light/dark variations automatically calculated
   - Consistent usage across all components
 
 #### Grid System
+
 - **Home Page**: Auto-fill grid with minmax(350px, 1fr) for responsive cards
 - **Article List**: Single column layout with horizontal cards
 - **Mobile**: Responsive grid that collapses to single column
 
 #### Animation Implementation
+
 - **Keyframes**: Defined in each component's style section
 - **Timing**: 0.8s duration with ease-out easing
-- **Delays**: Calculated via inline styles (index * 0.1s)
+- **Delays**: Calculated via inline styles (index \* 0.1s)
 - **Performance**: CSS transforms for smooth 60fps animations
 
 #### Image Optimization
+
 - **Lazy Loading**: Native browser lazy loading with JavaScript fallback
 - **Placeholders**: Neutral background colors during loading
 - **Fade Effects**: Smooth opacity transitions
 - **Error Handling**: Fallback styling for failed image loads
 
 #### Navigation System
+
 - **Routing**: `/posts` (first page) and `/posts/page/[page]` (pagination)
 - **Breadcrumbs**: Proper page numbering and navigation
 - **Active States**: Visual feedback for current page
 
 #### Header System
-- **Background Layers**: 
+
+- **Background Layers**:
   1. Base gradient (blue to orange)
   2. Cover image (opacity: 0.15, blur: 2px, multiply blend)
   3. Light effects (radial gradients)
@@ -363,16 +379,19 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Known Issues & Considerations
 
 #### Performance
+
 - **Image Loading**: Optimized with lazy loading and fade effects
 - **Animation Performance**: Using CSS transforms for hardware acceleration
 - **Bundle Size**: Minimal JavaScript, mostly CSS-based animations
 
 #### Browser Compatibility
+
 - **Modern Browsers**: Full support for CSS Grid, flexbox, and animations
 - **Legacy Support**: Graceful degradation for older browsers
 - **Mobile**: Tested on iOS Safari and Android Chrome
 
 #### Future Enhancements
+
 - **Progressive Web App**: Service worker for offline functionality
 - **Dark Mode**: Toggle between light/dark themes
 - **Advanced Animations**: More sophisticated entrance effects
@@ -381,12 +400,14 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Deployment Notes
 
 #### Build Process
+
 - **Static Generation**: Full static build via Astro
 - **Image Processing**: Sharp.js for image optimization
 - **CSS Minification**: Automatic in production builds
 - **JavaScript Bundling**: Minimal client-side JavaScript
 
 #### Environment Setup
+
 - **Node.js**: Version 20.18.1 or higher required
 - **Package Manager**: npm (yarn compatibility untested)
 - **Build Time**: Approximately 30-60 seconds for full build
@@ -394,18 +415,21 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Development Workflow
 
 #### Code Organization
+
 - **Components**: Reusable Astro components in `/src/components/`
 - **Pages**: Route-based pages in `/src/pages/`
 - **Layouts**: Shared layouts in `/src/layouts/`
 - **Styles**: Global styles and variables in `/src/styles/`
 
 #### Testing Strategy
+
 - **Manual Testing**: Visual regression testing across devices
 - **Responsive Testing**: Chrome DevTools device emulation
 - **Performance Testing**: Lighthouse audits
 - **Accessibility Testing**: Screen reader compatibility
 
 #### Version Control
+
 - **Git Strategy**: Feature branch workflow
 - **Commit Messages**: Descriptive commits with context
 - **PR Reviews**: Team review process before merging
@@ -413,12 +437,14 @@ This is an Astro-based static site generator that creates blogs from Notion data
 ### Troubleshooting Guide
 
 #### Common Issues
+
 1. **Animation Not Working**: Check z-index and animation-delay values
 2. **Images Not Loading**: Verify image paths and lazy loading script
 3. **Responsive Issues**: Check CSS media queries and flexbox properties
 4. **Color Inconsistencies**: Verify CSS custom property usage
 
 #### Debug Commands
+
 ```bash
 # Check build errors
 npm run build
@@ -436,6 +462,7 @@ npm run cache:purge
 ### Phase Implementation Strategy
 
 #### Current Phase: Design & UX (95% Complete)
+
 - ✅ Professional visual design
 - ✅ Responsive layout system
 - ✅ Animation system
@@ -444,18 +471,21 @@ npm run cache:purge
 - ☐ Premium content UI (remaining)
 
 #### Next Phase: Premium Content (0% Complete)
+
 - ☐ Notion schema extension
 - ☐ Article detail page paywall
 - ☐ Content filtering logic
 - ☐ Premium content display
 
 #### Future Phase: Authentication (0% Complete)
+
 - ☐ Firebase Auth integration
 - ☐ User session management
 - ☐ Login/logout functionality
 - ☐ Protected routes
 
 #### Future Phase: Payments (0% Complete)
+
 - ☐ Stripe integration
 - ☐ Subscription management
 - ☐ Payment processing
