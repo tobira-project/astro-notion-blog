@@ -1,22 +1,16 @@
 ---
 import {
   getPosts,
-  getRankedPosts,
-  getAllTags,
 } from '../lib/notion/client.ts'
 import { getNavLink } from '../lib/blog-helpers.ts'
 import Layout from '../layouts/Layout.astro'
 import NoContents from '../components/NoContents.astro'
 import PostDate from '../components/PostDate.astro'
 import PostFeaturedImage from '../components/PostFeaturedImage.astro'
-import BlogPostsLink from '../components/BlogPostsLink.astro'
-import BlogTagsLink from '../components/BlogTagsLink.astro'
 import styles from '../styles/blog.module.css'
 
-const [posts, rankedPosts, tags] = await Promise.all([
+const [posts] = await Promise.all([
   getPosts(6), // 最新6記事のみ取得
-  getRankedPosts(),
-  getAllTags(),
 ])
 ---
 

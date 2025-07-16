@@ -6,7 +6,6 @@ import '../styles/syntax-coloring.css'
 import '../styles/tobiracast.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
 import SearchModal from '../components/SearchModal.astro'
-import SearchButton from '../components/SearchButton.astro'
 
 export interface Props {
   title: string
@@ -167,10 +166,9 @@ if (database.Icon && database.Icon.Type === 'file') {
     <SearchModal />
     {
       ENABLE_LIGHTBOX && (
-        <script src={getStaticFilePath('/scripts/fslightbox.js')} />
+        <script src={getStaticFilePath('/scripts/fslightbox.js')}></script>
       )
     }
-    <script src={getStaticFilePath('/scripts/image-fade.js')} />
   </body>
 </html>
 
