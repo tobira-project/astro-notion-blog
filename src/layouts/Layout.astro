@@ -124,6 +124,15 @@ if (database.Icon && database.Icon.Type === 'file') {
               <div class="description">
                 {SITE_DESCRIPTION}
               </div>
+              
+              <nav class="main-nav">
+                <ul>
+                  <li><a href={getNavLink('/')}>ホーム</a></li>
+                  <li><a href={getNavLink('/posts')}>記事一覧</a></li>
+                  <li><a href={getNavLink('/subscription')}>プラン加入</a></li>
+                  <li><a href={getNavLink('/login')} class="login-btn">ログイン</a></li>
+                </ul>
+              </nav>
             </header>
 
             <slot name="main" />
@@ -250,6 +259,61 @@ if (database.Icon && database.Icon.Type === 'file') {
   main header div.description {
     padding: 0.3rem 0 0.6rem;
     font-size: 0.95rem;
+  }
+
+  .main-nav {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--tobiracast-border);
+    margin-bottom: 1rem;
+  }
+
+  .main-nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+  }
+
+  .main-nav li {
+    margin: 0;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--tobiracast-text-primary);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .main-nav a:hover {
+    background: var(--tobiracast-bg-secondary);
+    color: var(--tobiracast-primary-blue);
+  }
+
+  .main-nav a.login-btn {
+    background: var(--tobiracast-primary-orange);
+    color: white;
+  }
+
+  .main-nav a.login-btn:hover {
+    background: var(--tobiracast-dark-orange);
+    color: white;
+  }
+
+  @media (max-width: 640px) {
+    .main-nav ul {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .main-nav a {
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
   }
 
   main footer {

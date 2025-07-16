@@ -1,0 +1,300 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="プラン加入" path="/subscription">
+  <div slot="main" class="subscription-page">
+    <header>
+      <h1 class="page-title">プラン加入</h1>
+      <p class="page-description">
+        有料プランに加入して、限定コンテンツや特典をお楽しみください。
+      </p>
+    </header>
+
+    <div class="plans-container">
+      <div class="plan-card">
+        <div class="plan-header">
+          <h2 class="plan-name">ベーシックプラン</h2>
+          <div class="plan-price">
+            <span class="price">¥500</span>
+            <span class="period">/月</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>全ての記事の有料部分を閲覧可能</li>
+          <li>限定動画コンテンツの視聴</li>
+          <li>月1回の限定ウェビナー参加権</li>
+          <li>コミュニティへの参加</li>
+        </ul>
+        <button class="plan-button">
+          プランを選択
+        </button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">おすすめ</div>
+        <div class="plan-header">
+          <h2 class="plan-name">プレミアムプラン</h2>
+          <div class="plan-price">
+            <span class="price">¥1,200</span>
+            <span class="period">/月</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>ベーシックプランの全特典</li>
+          <li>月2回の限定ウェビナー参加権</li>
+          <li>個別質問・相談の権利</li>
+          <li>限定資料のダウンロード</li>
+          <li>早期アクセス特典</li>
+        </ul>
+        <button class="plan-button primary">
+          プランを選択
+        </button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-header">
+          <h2 class="plan-name">エンタープライズ</h2>
+          <div class="plan-price">
+            <span class="price">¥3,000</span>
+            <span class="period">/月</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li>プレミアムプランの全特典</li>
+          <li>月4回の限定ウェビナー参加権</li>
+          <li>1対1メンタリングセッション</li>
+          <li>カスタムコンテンツ制作</li>
+          <li>優先サポート</li>
+        </ul>
+        <button class="plan-button">
+          プランを選択
+        </button>
+      </div>
+    </div>
+
+    <div class="payment-info">
+      <h3>お支払いについて</h3>
+      <p>
+        お支払いはStripeを通じて安全に処理されます。<br>
+        クレジットカード、デビットカードをご利用いただけます。<br>
+        いつでもキャンセル可能です。
+      </p>
+    </div>
+  </div>
+
+  <div slot="aside" class="aside">
+    <div class="subscription-help">
+      <h3>よくある質問</h3>
+      <div class="faq-item">
+        <h4>いつでもキャンセルできますか？</h4>
+        <p>はい、いつでもキャンセル可能です。</p>
+      </div>
+      <div class="faq-item">
+        <h4>支払い方法は？</h4>
+        <p>クレジットカード、デビットカードでお支払いいただけます。</p>
+      </div>
+      <div class="faq-item">
+        <h4>領収書は発行されますか？</h4>
+        <p>Stripeから自動的に領収書が発行されます。</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .subscription-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    color: var(--tobiracast-primary-blue);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .page-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--tobiracast-text-secondary);
+    margin-bottom: 3rem;
+  }
+
+  .plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .plan-card {
+    background: var(--tobiracast-bg-primary);
+    border: 2px solid var(--tobiracast-border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--tobiracast-shadow-hover);
+  }
+
+  .plan-card.featured {
+    border-color: var(--tobiracast-primary-orange);
+    background: linear-gradient(135deg, var(--tobiracast-bg-primary) 0%, var(--tobiracast-bg-secondary) 100%);
+  }
+
+  .plan-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: var(--tobiracast-primary-orange);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .plan-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .plan-name {
+    font-size: 1.5rem;
+    color: var(--tobiracast-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--tobiracast-primary-blue);
+  }
+
+  .period {
+    font-size: 1rem;
+    color: var(--tobiracast-text-secondary);
+  }
+
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+
+  .plan-features li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .plan-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--tobiracast-primary-orange);
+    font-weight: bold;
+  }
+
+  .plan-button {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--tobiracast-primary-blue);
+    background: white;
+    color: var(--tobiracast-primary-blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .plan-button:hover {
+    background: var(--tobiracast-primary-blue);
+    color: white;
+  }
+
+  .plan-button.primary {
+    background: var(--tobiracast-primary-orange);
+    border-color: var(--tobiracast-primary-orange);
+    color: white;
+  }
+
+  .plan-button.primary:hover {
+    background: var(--tobiracast-dark-orange);
+    border-color: var(--tobiracast-dark-orange);
+  }
+
+  .payment-info {
+    background: var(--tobiracast-bg-secondary);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .payment-info h3 {
+    color: var(--tobiracast-primary-blue);
+    margin-bottom: 1rem;
+  }
+
+  .subscription-help {
+    background: var(--tobiracast-bg-primary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .subscription-help h3 {
+    color: var(--tobiracast-primary-blue);
+    margin-bottom: 1rem;
+  }
+
+  .faq-item {
+    margin-bottom: 1.5rem;
+  }
+
+  .faq-item h4 {
+    color: var(--tobiracast-text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .faq-item p {
+    color: var(--tobiracast-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .plans-container {
+      grid-template-columns: 1fr;
+    }
+
+    .plan-card {
+      padding: 1.5rem;
+    }
+
+    .price {
+      font-size: 2rem;
+    }
+  }
+</style>
