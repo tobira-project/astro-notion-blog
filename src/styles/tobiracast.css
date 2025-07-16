@@ -1,26 +1,26 @@
 :root {
   /* TOBIRACAST Brand Colors */
-  --tobiracast-primary-blue: #0066CC;
-  --tobiracast-primary-orange: #FF811C;
-  --tobiracast-light-blue: #4D94FF;
-  --tobiracast-light-orange: #FF9A4D;
-  --tobiracast-dark-blue: #004C99;
-  --tobiracast-dark-orange: #E66A00;
-  
+  --tobiracast-primary-blue: #0066cc;
+  --tobiracast-primary-orange: #ff811c;
+  --tobiracast-light-blue: #4d94ff;
+  --tobiracast-light-orange: #ff9a4d;
+  --tobiracast-dark-blue: #004c99;
+  --tobiracast-dark-orange: #e66a00;
+
   /* Background Colors */
-  --tobiracast-bg-primary: #FFFFFF;
-  --tobiracast-bg-secondary: #F5F8FA;
-  --tobiracast-bg-premium: #FFF9F0;
-  
+  --tobiracast-bg-primary: #ffffff;
+  --tobiracast-bg-secondary: #f5f8fa;
+  --tobiracast-bg-premium: #fff9f0;
+
   /* Text Colors */
-  --tobiracast-text-primary: #1A1A1A;
+  --tobiracast-text-primary: #1a1a1a;
   --tobiracast-text-secondary: #666666;
   --tobiracast-text-muted: #999999;
-  
+
   /* Border Colors */
-  --tobiracast-border: #E1E8ED;
-  --tobiracast-border-premium: #FFE4CC;
-  
+  --tobiracast-border: #e1e8ed;
+  --tobiracast-border-premium: #ffe4cc;
+
   /* Shadow */
   --tobiracast-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   --tobiracast-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -157,11 +157,11 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .premium-content {
     padding: 1.5rem;
   }
-  
+
   .premium-unlock-message {
     padding: 2rem 1.5rem;
   }
