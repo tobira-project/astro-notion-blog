@@ -8,6 +8,10 @@ export const CUSTOM_DOMAIN =
 export const BASE_PATH =
   import.meta.env.BASE_PATH || process.env.BASE_PATH || '' // <- Set sub directory path if you want. e.g. /docs/
 
+// TOBIRACAST specific configuration
+export const SITE_TITLE = 'TOBIRACAST'
+export const SITE_DESCRIPTION = 'Inutaの新しく人と会ったときに見せるポータルサイト'
+
 export const PUBLIC_GA_TRACKING_ID = import.meta.env.PUBLIC_GA_TRACKING_ID
 export const NUMBER_OF_POSTS_PER_PAGE = 10
 export const REQUEST_TIMEOUT_MS = parseInt(

@@ -1,54 +1,55 @@
 ---
-import { NUMBER_OF_POSTS_PER_PAGE } from '../server-constants.ts'
 import {
   getPosts,
   getRankedPosts,
   getAllTags,
-  getNumberOfPages,
 } from '../lib/notion/client.ts'
+import { getNavLink } from '../lib/blog-helpers.ts'
 import Layout from '../layouts/Layout.astro'
 import NoContents from '../components/NoContents.astro'
 import PostDate from '../components/PostDate.astro'
-import PostTags from '../components/PostTags.astro'
 import PostTitle from '../components/PostTitle.astro'
 import PostFeaturedImage from '../components/PostFeaturedImage.astro'
-import PostExcerpt from '../components/PostExcerpt.astro'
-import ReadMoreLink from '../components/ReadMoreLink.astro'
-import Pagination from '../components/Pagination.astro'
 import BlogPostsLink from '../components/BlogPostsLink.astro'
 import BlogTagsLink from '../components/BlogTagsLink.astro'
 import styles from '../styles/blog.module.css'
 
-const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
-  getPosts(NUMBER_OF_POSTS_PER_PAGE),
+const [posts, rankedPosts, tags] = await Promise.all([
+  getPosts(6), // 最新6記事のみ取得
   getRankedPosts(),
   getAllTags(),
-  getNumberOfPages(),
 ])
 ---
 
 <Layout>
   <div slot="main" class={styles.main}>
+    <h2 class="latest-articles-heading">最新記事</h2>
     {
       posts.length === 0 ? (
         <NoContents contents={posts} />
       ) : (
-        posts.map((post) => (
-          <div class={styles.post} key={post.Slug}>
-            <PostDate post={post} />
-            <PostTags post={post} />
-            <PostTitle post={post} />
-            <PostFeaturedImage post={post} />
-            <PostExcerpt post={post} />
-            <ReadMoreLink post={post} />
+        <>
+          <div class="latest-articles">
+            {posts.map((post) => (
+              <a href={getNavLink(`/posts/${post.Slug}`)} class="article-card-link">
+                <article class="article-card" key={post.Slug}>
+                  <PostFeaturedImage post={post} />
+                  <div class="article-card-content">
+                    <h3 class="article-card-title">{post.Title}</h3>
+                    <PostDate post={post} />
+                  </div>
+                </article>
+              </a>
+            ))}
           </div>
-        ))
+          <div class="view-all-articles">
+            <a href={getNavLink('/posts/page/1')} class="view-all-articles-link">
+              記事一覧へ →
+            </a>
+          </div>
+        </>
       )
     }
-
-    <footer>
-      <Pagination currentPage={1} numberOfPages={numberOfPages} />
-    </footer>
   </div>
 
   <div slot="aside" class={styles.aside}>
@@ -56,3 +57,63 @@ const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
     <BlogTagsLink heading="Categories" tags={tags} />
   </div>
 </Layout>
+
+<style>
+.latest-articles-heading {
+  color: var(--tobiracast-primary-blue);
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+}
+
+.article-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.article-card-link:hover {
+  color: inherit;
+}
+
+.view-all-articles {
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.view-all-articles-link {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--tobiracast-primary-orange);
+  color: white;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.view-all-articles-link:hover {
+  background: var(--tobiracast-dark-orange);
+  transform: translateY(-2px);
+  box-shadow: var(--tobiracast-shadow-hover);
+  color: white;
+}
+
+/* Override PostFeaturedImage styles for grid layout */
+.article-card :global(.featured-image) {
+  margin: 0;
+  width: 100%;
+  height: 200px;
+}
+
+.article-card :global(.featured-image img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Override PostDate styles for card layout */
+.article-card-content :global(.post-date) {
+  font-size: 0.875rem;
+  color: var(--tobiracast-text-muted);
+  margin: 0;
+}
+</style>

@@ -1,8 +1,9 @@
 ---
-import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX } from '../server-constants.ts'
+import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX, SITE_TITLE, SITE_DESCRIPTION } from '../server-constants.ts'
 import { getDatabase } from '../lib/notion/client.ts'
 import { getNavLink, getStaticFilePath, filePath } from '../lib/blog-helpers.ts'
 import '../styles/syntax-coloring.css'
+import '../styles/tobiracast.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
 import SearchModal from '../components/SearchModal.astro'
 import SearchButton from '../components/SearchButton.astro'
@@ -18,8 +19,8 @@ const { title = '', description = '', path = '/', ogImage = '' } = Astro.props
 
 const database = await getDatabase()
 
-const siteTitle = title ? `${title} - ${database.Title}` : database.Title
-const siteDescription = description ? description : database.Description
+const siteTitle = title ? `${title} - ${SITE_TITLE}` : SITE_TITLE
+const siteDescription = description ? description : SITE_DESCRIPTION
 const siteURL = new URL(getNavLink(path), Astro.site).toString()
 const siteOGImage = new URL(
   getStaticFilePath('/default-og-image.png'),
@@ -62,7 +63,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     <meta property="og:url" content={siteURL} />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteDescription} />
-    <meta property="og:site_name" content={database.Title} />
+    <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:image" content={ogImage || siteOGImage} />
     <meta name="twitter:title" content={siteTitle} />
     <meta name="twitter:description" content={siteDescription} />
@@ -98,12 +99,12 @@ if (database.Icon && database.Icon.Type === 'file') {
                     database.Icon && database.Icon.Type === 'emoji' ? (
                       <>
                         <span>{database.Icon.Emoji}</span>
-                        {database.Title}
+                        {SITE_TITLE}
                       </>
                     ) : database.Icon && database.Icon.Type === 'external' ? (
                       <>
                         <img src={database.Icon.Url} alt="Site icon image" />
-                        {database.Title}
+                        {SITE_TITLE}
                       </>
                     ) : database.Icon && database.Icon.Type === 'file' ? (
                       <>
@@ -112,16 +113,16 @@ if (database.Icon && database.Icon.Type === 'file') {
                           class="custom-icon"
                           alt="Site icon image"
                         />
-                        {database.Title}
+                        {SITE_TITLE}
                       </>
                     ) : (
-                      database.Title
+                      SITE_TITLE
                     )
                   }
                 </a>
               </h1>
               <div class="description">
-                {database.Description}
+                {SITE_DESCRIPTION}
               </div>
             </header>
 
@@ -129,7 +130,7 @@ if (database.Icon && database.Icon.Type === 'file') {
 
             <footer>
               <div>
-                <span>Powered by&nbsp;</span>
+                <span>© 2024 TOBIRACAST | Powered by&nbsp;</span>
                 <a href="https://github.com/otoyo/astro-notion-blog"
                   >astro-notion-blog</a
                 >
@@ -184,7 +185,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     order: 1;
     width: 300px;
     padding: 20px 20px;
-    background-color: #f4f4f4;
+    background-color: var(--tobiracast-bg-secondary);
   }
   @media (max-width: 640px) {
     aside {
@@ -217,14 +218,14 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
   main header h1 {
     font-weight: 700;
-    color: #333;
+    color: var(--tobiracast-primary-blue);
   }
   main header h1 a {
     display: block;
     color: inherit;
   }
   main header h1 a:hover {
-    color: inherit;
+    color: var(--tobiracast-light-blue);
   }
   main header h1 a span,
   main header h1 a img {
@@ -336,11 +337,11 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   a {
-    color: var(--accents-1);
+    color: var(--tobiracast-primary-orange);
     text-decoration: none;
   }
   a:hover {
-    color: var(--accents-1);
+    color: var(--tobiracast-light-orange);
   }
 
   mark {
