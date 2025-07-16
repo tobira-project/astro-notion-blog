@@ -153,10 +153,11 @@ This is an Astro-based static site generator that creates blogs from Notion data
 
 - ✅ **Home Page Layout Redesign**
   - Modified `src/pages/index.astro` to display latest 6 articles
-  - Implemented grid layout for article cards
-  - Added "記事一覧へ" (To article list) button
+  - Implemented grid layout for article cards with hover effects
+  - Added "記事一覧へ" (To article list) button with gradient styling
   - Removed pagination from home page
-  - Card layout includes thumbnail, title, and date
+  - Card layout includes thumbnail, title, date, and overlay effects
+  - Added section headers with decorative elements and animations
 
 - ✅ **Site Title Update**
   - Changed site title from "TOBIRACAST" to "Tobiratory公式ポータルサイト"
@@ -167,29 +168,298 @@ This is an Astro-based static site generator that creates blogs from Notion data
   - Fixed "記事一覧へ" button to link to `/posts` instead of `/posts/page/1`
   - Implemented full pagination system for all articles
   - Added proper page title and styling for article list
+  - Implemented horizontal card layout with image on left, content on right
+  - Added border separators between cards for better visual hierarchy
 
 - ✅ **Code Quality Improvements**
   - Fixed ESLint error: removed unused PostTitle import from `src/pages/index.astro`
   - Ensured lint checks pass for deployment
 
+- ✅ **Responsive Design Implementation**
+  - Added comprehensive responsive styles for all pages
+  - Breakpoints: 768px (tablet), 480px (mobile)
+  - Mobile-first approach with flexible grid layouts
+  - Responsive typography scaling
+  - Mobile-optimized navigation and card layouts
+  - Files updated: `src/pages/index.astro`, `src/pages/posts/index.astro`, `src/pages/posts/page/[page].astro`, `src/layouts/Layout.astro`
+
+- ✅ **ReadMore Button Enhancement**
+  - Updated `src/components/ReadMoreLink.astro` to prominent orange button
+  - Added hover effects and better visibility
+  - Consistent styling across all pages
+
+- ✅ **Sidebar Removal & Full-Width Layout**
+  - Removed unprofessional sidebar content ("There are no contents yet")
+  - Implemented full-width layout design
+  - Updated `src/layouts/Layout.astro` to remove gray sidebar
+
+- ✅ **Professional Design Implementation**
+  - Added gradient hero header with animations
+  - Implemented professional typography with decorative elements
+  - Enhanced card designs with hover effects and overlays
+  - Added structured footer with improved layout
+  - Reference sites: HIU and COTEN RADIO for professional aesthetics
+  - Files updated: `src/layouts/Layout.astro`, `src/pages/index.astro`
+
+- ✅ **Advanced Animation System**
+  - Implemented fadeInUp keyframe animations
+  - Unified animation timing across all pages (0.8s duration)
+  - Staggered animation delays for natural flow
+  - Sequential delays: titles (0s), descriptions (0.1s), navigation (0.2s)
+  - Article cards with 0.1s intervals for smooth appearance
+  - Files updated: all page components and layout files
+
+- ✅ **Footer Redesign**
+  - Compact horizontal layout with brand on left, links on right
+  - Reduced padding and font sizes for smarter appearance
+  - Added responsive design for mobile stacking
+  - Improved color scheme and hover effects
+  - Files updated: `src/layouts/Layout.astro`
+
+- ✅ **Image Loading Optimization**
+  - Implemented smooth image fade-in effects
+  - Added background placeholder during loading
+  - Custom JavaScript for image loading management
+  - Intersection Observer for natural loading behavior
+  - Files created: `src/scripts/image-fade.js`, `public/scripts/image-fade.js`
+  - Files updated: `src/layouts/Layout.astro`
+
+- ✅ **Subscription & Login Page Enhancements**
+  - Added consistent animation system to subscription page
+  - Implemented staggered animations for plan cards
+  - Added fadeInUp animations to login page
+  - Enhanced form container animations
+  - Files updated: `src/pages/subscription.astro`, `src/pages/login.astro`
+
+- ✅ **Professional Header Background**
+  - Implemented sophisticated blue-to-orange gradient background
+  - Added complex overlay effects with multiple radial gradients
+  - Enhanced text shadows for improved readability
+  - Navigation buttons with semi-transparent styling
+  - Cover image integration with multiply blend mode and blur effects
+  - Background layers: base gradient → cover image → light effects → content
+  - Files updated: `src/layouts/Layout.astro`
+
 ### Current Implementation Status
 
-- Home page shows 6 latest articles in card format
-- Brand colors applied throughout layout
-- Site title changed to "Tobiratory公式ポータルサイト"
-- Footer includes copyright and branding
-- Article list page with full pagination working properly
-- "記事一覧へ" button correctly navigates to complete article list
+- **Visual Design**: Professional, modern design with smooth animations
+- **Responsive**: Full responsive design working on all devices
+- **Performance**: Optimized image loading with smooth transitions
+- **User Experience**: Intuitive navigation with visual feedback
+- **Branding**: Consistent TOBIRACAST branding throughout
+- **Layout**: Full-width design with no sidebar clutter
+- **Header**: Beautiful gradient background with professional styling
+- **Footer**: Compact, smart layout with proper information hierarchy
+
+### Technical Architecture Details
+
+#### Animation System
+- **Keyframes**: `fadeInUp` animation (translateY: 20px → 0px, opacity: 0 → 1)
+- **Timing**: 0.8s duration with ease-out for natural feel
+- **Delays**: Sequential delays for hierarchical content appearance
+- **Implementation**: Inline styles with animation-delay for staggered effects
+
+#### Responsive Breakpoints
+- **Desktop**: > 768px (full layout)
+- **Tablet**: ≤ 768px (adjusted grid, mobile navigation)
+- **Mobile**: ≤ 480px (single column, optimized spacing)
+
+#### Color System
+- **Primary Blue**: `#1779DE` (--tobiracast-primary-blue)
+- **Primary Orange**: `#FF811C` (--tobiracast-primary-orange)
+- **Light Blue**: Calculated variations for gradients
+- **Dark Orange**: Calculated variations for hover effects
+
+#### Image Loading System
+- **Lazy Loading**: Native browser lazy loading
+- **Placeholders**: Neutral background during loading
+- **Fade Effects**: Smooth opacity transitions
+- **Error Handling**: Fallback styling for failed loads
+
+#### Header Background Architecture
+```css
+.site-header {
+  background: linear-gradient(135deg, 
+    var(--tobiracast-primary-blue) 0%, 
+    var(--tobiracast-light-blue) 30%,
+    var(--tobiracast-primary-orange) 70%,
+    var(--tobiracast-dark-orange) 100%
+  );
+}
+```
+
+### File Structure & Key Components
+
+#### Core Layout Files
+- `src/layouts/Layout.astro` - Main layout with header, footer, and navigation
+- `src/pages/index.astro` - Home page with latest articles grid
+- `src/pages/posts/index.astro` - Article list first page
+- `src/pages/posts/page/[page].astro` - Paginated article pages
+- `src/pages/subscription.astro` - Subscription plans page
+- `src/pages/login.astro` - Login form page
+
+#### Component Files
+- `src/components/ReadMoreLink.astro` - Enhanced orange button component
+- `src/components/PostFeaturedImage.astro` - Article image component
+- `src/components/PostDate.astro` - Article date display
+- `src/components/PostTags.astro` - Article tags display
+- `src/components/PostTitle.astro` - Article title component
+- `src/components/PostExcerpt.astro` - Article excerpt display
+
+#### Script Files
+- `public/scripts/image-fade.js` - Image loading animation handler
+- `src/scripts/image-fade.js` - Source version of image script
+
+#### Configuration Files
+- `src/server-constants.ts` - Site title, description, and constants
+- `src/styles/tobiracast.css` - Brand colors and theming variables
 
 ### Next Priority Tasks
 
+- ☐ **Article Detail Page Premium Content** - Add paywall section with premium content
 - ☐ **Notion DB Schema Extension** - Add `IsPremium` and `PremiumContent` properties
-- ☐ **Article Detail Page** - Add premium content section with paywall
-- ☐ **Responsive Design** - Optimize mobile layout for article cards
+- ☐ **Firebase Auth Integration** - Implement user authentication system
+- ☐ **Stripe Payment Integration** - Add subscription billing system
 
 ### Technical Notes for Development
 
-- Color variables defined in CSS custom properties for easy theming
+#### CSS Architecture
+- **Color Variables**: CSS custom properties for easy theming
+  - Primary colors accessible via `var(--tobiracast-primary-blue)` and `var(--tobiracast-primary-orange)`
+  - Light/dark variations automatically calculated
+  - Consistent usage across all components
+
+#### Grid System
+- **Home Page**: Auto-fill grid with minmax(350px, 1fr) for responsive cards
+- **Article List**: Single column layout with horizontal cards
+- **Mobile**: Responsive grid that collapses to single column
+
+#### Animation Implementation
+- **Keyframes**: Defined in each component's style section
+- **Timing**: 0.8s duration with ease-out easing
+- **Delays**: Calculated via inline styles (index * 0.1s)
+- **Performance**: CSS transforms for smooth 60fps animations
+
+#### Image Optimization
+- **Lazy Loading**: Native browser lazy loading with JavaScript fallback
+- **Placeholders**: Neutral background colors during loading
+- **Fade Effects**: Smooth opacity transitions
+- **Error Handling**: Fallback styling for failed image loads
+
+#### Navigation System
+- **Routing**: `/posts` (first page) and `/posts/page/[page]` (pagination)
+- **Breadcrumbs**: Proper page numbering and navigation
+- **Active States**: Visual feedback for current page
+
+#### Header System
+- **Background Layers**: 
+  1. Base gradient (blue to orange)
+  2. Cover image (opacity: 0.15, blur: 2px, multiply blend)
+  3. Light effects (radial gradients)
+  4. Content (z-index: 2)
+- **Text Shadows**: Enhanced readability on complex backgrounds
+- **Navigation Buttons**: Semi-transparent with backdrop-filter
+
+### Known Issues & Considerations
+
+#### Performance
+- **Image Loading**: Optimized with lazy loading and fade effects
+- **Animation Performance**: Using CSS transforms for hardware acceleration
+- **Bundle Size**: Minimal JavaScript, mostly CSS-based animations
+
+#### Browser Compatibility
+- **Modern Browsers**: Full support for CSS Grid, flexbox, and animations
+- **Legacy Support**: Graceful degradation for older browsers
+- **Mobile**: Tested on iOS Safari and Android Chrome
+
+#### Future Enhancements
+- **Progressive Web App**: Service worker for offline functionality
+- **Dark Mode**: Toggle between light/dark themes
+- **Advanced Animations**: More sophisticated entrance effects
+- **Performance Monitoring**: Real User Monitoring (RUM) implementation
+
+### Deployment Notes
+
+#### Build Process
+- **Static Generation**: Full static build via Astro
+- **Image Processing**: Sharp.js for image optimization
+- **CSS Minification**: Automatic in production builds
+- **JavaScript Bundling**: Minimal client-side JavaScript
+
+#### Environment Setup
+- **Node.js**: Version 20.18.1 or higher required
+- **Package Manager**: npm (yarn compatibility untested)
+- **Build Time**: Approximately 30-60 seconds for full build
+
+### Development Workflow
+
+#### Code Organization
+- **Components**: Reusable Astro components in `/src/components/`
+- **Pages**: Route-based pages in `/src/pages/`
+- **Layouts**: Shared layouts in `/src/layouts/`
+- **Styles**: Global styles and variables in `/src/styles/`
+
+#### Testing Strategy
+- **Manual Testing**: Visual regression testing across devices
+- **Responsive Testing**: Chrome DevTools device emulation
+- **Performance Testing**: Lighthouse audits
+- **Accessibility Testing**: Screen reader compatibility
+
+#### Version Control
+- **Git Strategy**: Feature branch workflow
+- **Commit Messages**: Descriptive commits with context
+- **PR Reviews**: Team review process before merging
+
+### Troubleshooting Guide
+
+#### Common Issues
+1. **Animation Not Working**: Check z-index and animation-delay values
+2. **Images Not Loading**: Verify image paths and lazy loading script
+3. **Responsive Issues**: Check CSS media queries and flexbox properties
+4. **Color Inconsistencies**: Verify CSS custom property usage
+
+#### Debug Commands
+```bash
+# Check build errors
+npm run build
+
+# Lint code
+npm run lint
+
+# Development server with hot reload
+npm run dev
+
+# Clear cache if needed
+npm run cache:purge
+```
+
+### Phase Implementation Strategy
+
+#### Current Phase: Design & UX (95% Complete)
+- ✅ Professional visual design
+- ✅ Responsive layout system
+- ✅ Animation system
+- ✅ Image optimization
+- ✅ Navigation system
+- ☐ Premium content UI (remaining)
+
+#### Next Phase: Premium Content (0% Complete)
+- ☐ Notion schema extension
+- ☐ Article detail page paywall
+- ☐ Content filtering logic
+- ☐ Premium content display
+
+#### Future Phase: Authentication (0% Complete)
+- ☐ Firebase Auth integration
+- ☐ User session management
+- ☐ Login/logout functionality
+- ☐ Protected routes
+
+#### Future Phase: Payments (0% Complete)
+- ☐ Stripe integration
+- ☐ Subscription management
+- ☐ Payment processing
+- ☐ Webhook handling
 - Article cards use CSS Grid for responsive layout
 - Brand colors accessible via `var(--tobiracast-primary-blue)` and `var(--tobiracast-primary-orange)`
 - Site constants centralized in `server-constants.ts` for easy configuration

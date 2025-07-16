@@ -12,7 +12,7 @@ import Layout from '../layouts/Layout.astro'
     </header>
 
     <div class="plans-container">
-      <div class="plan-card">
+      <div class="plan-card" style="animation-delay: 0.2s">
         <div class="plan-header">
           <h2 class="plan-name">ベーシックプラン</h2>
           <div class="plan-price">
@@ -31,7 +31,7 @@ import Layout from '../layouts/Layout.astro'
         </button>
       </div>
 
-      <div class="plan-card featured">
+      <div class="plan-card featured" style="animation-delay: 0.3s">
         <div class="plan-badge">おすすめ</div>
         <div class="plan-header">
           <h2 class="plan-name">プレミアムプラン</h2>
@@ -52,7 +52,7 @@ import Layout from '../layouts/Layout.astro'
         </button>
       </div>
 
-      <div class="plan-card">
+      <div class="plan-card" style="animation-delay: 0.4s">
         <div class="plan-header">
           <h2 class="plan-name">エンタープライズ</h2>
           <div class="plan-price">
@@ -81,22 +81,22 @@ import Layout from '../layouts/Layout.astro'
         いつでもキャンセル可能です。
       </p>
     </div>
-  </div>
-
-  <div slot="aside" class="aside">
+    
     <div class="subscription-help">
       <h3>よくある質問</h3>
-      <div class="faq-item">
-        <h4>いつでもキャンセルできますか？</h4>
-        <p>はい、いつでもキャンセル可能です。</p>
-      </div>
-      <div class="faq-item">
-        <h4>支払い方法は？</h4>
-        <p>クレジットカード、デビットカードでお支払いいただけます。</p>
-      </div>
-      <div class="faq-item">
-        <h4>領収書は発行されますか？</h4>
-        <p>Stripeから自動的に領収書が発行されます。</p>
+      <div class="faq-container">
+        <div class="faq-item">
+          <h4>いつでもキャンセルできますか？</h4>
+          <p>はい、いつでもキャンセル可能です。</p>
+        </div>
+        <div class="faq-item">
+          <h4>支払い方法は？</h4>
+          <p>クレジットカード、デビットカードでお支払いいただけます。</p>
+        </div>
+        <div class="faq-item">
+          <h4>領収書は発行されますか？</h4>
+          <p>Stripeから自動的に領収書が発行されます。</p>
+        </div>
       </div>
     </div>
   </div>
@@ -114,6 +114,7 @@ import Layout from '../layouts/Layout.astro'
     font-size: 2.5rem;
     margin-bottom: 1rem;
     text-align: center;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .page-description {
@@ -121,6 +122,7 @@ import Layout from '../layouts/Layout.astro'
     font-size: 1.1rem;
     color: var(--tobiracast-text-secondary);
     margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
   }
 
   .plans-container {
@@ -137,6 +139,9 @@ import Layout from '../layouts/Layout.astro'
     padding: 2rem;
     position: relative;
     transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out both;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .plan-card:hover {
@@ -252,31 +257,52 @@ import Layout from '../layouts/Layout.astro'
   }
 
   .subscription-help {
-    background: var(--tobiracast-bg-primary);
-    padding: 1.5rem;
+    background: var(--tobiracast-bg-secondary);
+    padding: 2rem;
     border-radius: 8px;
-    margin-bottom: 2rem;
+    margin-top: 3rem;
   }
 
   .subscription-help h3 {
     color: var(--tobiracast-primary-blue);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .faq-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
 
   .faq-item {
-    margin-bottom: 1.5rem;
+    background: var(--tobiracast-bg-primary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--tobiracast-border);
   }
 
   .faq-item h4 {
     color: var(--tobiracast-text-primary);
     margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .faq-item p {
     color: var(--tobiracast-text-secondary);
     font-size: 0.875rem;
     line-height: 1.4;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Responsive Design */

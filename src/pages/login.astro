@@ -58,9 +58,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
       </div>
     </div>
-  </div>
-
-  <div slot="aside" class="aside">
+    
     <div class="login-help">
       <h3>ログインについて</h3>
       <p>
@@ -102,17 +100,22 @@ import Layout from '../layouts/Layout.astro'
     font-size: 2rem;
     margin-bottom: 1rem;
     text-align: center;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .page-description {
     text-align: center;
     color: var(--tobiracast-text-secondary);
     margin-bottom: 2rem;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
   }
 
   .login-form-container {
     max-width: 400px;
     margin: 0 auto;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .form-group {
@@ -239,30 +242,60 @@ import Layout from '../layouts/Layout.astro'
   }
 
   .login-help {
-    background: var(--tobiracast-bg-primary);
-    padding: 1.5rem;
+    background: var(--tobiracast-bg-secondary);
+    padding: 2rem;
     border-radius: 8px;
-    margin-bottom: 2rem;
+    margin: 3rem auto 2rem;
+    max-width: 600px;
   }
 
   .login-help h3 {
     color: var(--tobiracast-primary-blue);
     margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .login-help p {
+    text-align: center;
+    color: var(--tobiracast-text-secondary);
+    margin-bottom: 1.5rem;
   }
 
   .login-help ul {
-    padding-left: 1.5rem;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
   }
 
   .login-help li {
-    margin-bottom: 0.5rem;
-    color: var(--tobiracast-text-secondary);
+    background: var(--tobiracast-bg-primary);
+    padding: 1rem;
+    border-radius: 6px;
+    color: var(--tobiracast-text-primary);
+    text-align: center;
+    border: 1px solid var(--tobiracast-border);
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .login-help li::before {
+    content: "✓";
+    position: absolute;
+    left: 0.75rem;
+    color: var(--tobiracast-primary-orange);
+    font-weight: bold;
   }
 
   .support-info {
-    background: var(--tobiracast-bg-secondary);
+    background: var(--tobiracast-bg-primary);
     padding: 1.5rem;
     border-radius: 8px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid var(--tobiracast-border);
   }
 
   .support-info h3 {
@@ -273,6 +306,17 @@ import Layout from '../layouts/Layout.astro'
   .support-info p {
     color: var(--tobiracast-text-secondary);
     font-size: 0.875rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Responsive Design */
