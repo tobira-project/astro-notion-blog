@@ -69,4 +69,19 @@ const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
     margin-bottom: 2rem;
     font-size: 1.75rem;
   }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-title {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+  }
 </style>
