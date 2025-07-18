@@ -310,7 +310,7 @@ This is an Astro-based static site generator that creates blogs from Notion data
       - Auto-close on link click or outside tap
       - Proper z-index (1000) to appear above all content
     - **Accessibility**: ARIA labels for screen readers, keyboard navigation support
-    - **Visual Polish**: 
+    - **Visual Polish**:
       - Menu positioned with `position: fixed` and centered with `translate(-50%, -50%)`
       - Max dimensions: 90vw width, 80vh height with scroll if needed
       - Enhanced shadow effects and rounded corners
@@ -319,7 +319,7 @@ This is an Astro-based static site generator that creates blogs from Notion data
     - HTML: Added hamburger button and close button to navigation structure
     - CSS: Comprehensive responsive styles with mobile-first approach
     - JavaScript: Event listeners for menu toggle, outside click, and link navigation
-  - **Impact**: 
+  - **Impact**:
     - Dramatically improved mobile navigation experience
     - Compact header design saves screen real estate
     - Professional modal-style menu interaction
