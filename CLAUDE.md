@@ -282,13 +282,13 @@ This is an Astro-based static site generator that creates blogs from Notion data
     - **Typography Improvements**: Font size increased to `1.1rem`, weight to `700`
     - **Visual Polish**: Border radius increased to `16px`, min-width to `140px`
     - **Spacing Optimization**: Button gap increased to `1.5rem` for better separation
-    - **Layout Tightening**: 
+    - **Layout Tightening**:
       - Hero section padding: `4rem 0` → `3rem 0 2rem`
       - Description margin: `2rem` → `1.5rem`
       - Navigation top margin: `3rem` → `1.5rem`
       - Content area margin-top: `-20px` → `-80px` (major overlap increase)
     - **Content Spacing**: Main content padding reduced from `3rem` to `2rem`
-  - **Impact**: 
+  - **Impact**:
     - More prominent, clickable navigation buttons
     - Significantly reduced white space between header and content
     - Improved visual hierarchy and professional appearance
