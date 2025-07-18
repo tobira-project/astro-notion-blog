@@ -1,7 +1,7 @@
 :root {
   /* TOBIRACAST Brand Colors */
-  --tobiracast-primary-blue: #1779DE;
-  --tobiracast-primary-orange: #E96800;
+  --tobiracast-primary-blue: #1779de;
+  --tobiracast-primary-orange: #e96800;
   --tobiracast-light-blue: #4d94ff;
   --tobiracast-light-orange: #ff9a4d;
   --tobiracast-dark-blue: #004c99;
@@ -25,60 +25,77 @@
   --tobiracast-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
   --tobiracast-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
   --tobiracast-shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.2);
-  
+
   /* Card Shadows */
   --tobiracast-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   --tobiracast-card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
   --tobiracast-card-shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.06);
   --tobiracast-card-shadow-subtle-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
-  
+
   /* Button Shadows */
   --tobiracast-button-shadow-orange: 0 2px 8px rgba(233, 104, 0, 0.2);
   --tobiracast-button-shadow-orange-hover: 0 4px 12px rgba(233, 104, 0, 0.3);
   --tobiracast-button-shadow-orange-strong: 0 4px 15px rgba(233, 104, 0, 0.3);
-  --tobiracast-button-shadow-orange-strong-hover: 0 8px 25px rgba(233, 104, 0, 0.4);
-  
+  --tobiracast-button-shadow-orange-strong-hover: 0 8px 25px
+    rgba(233, 104, 0, 0.4);
+
   /* Header & Navigation Shadows */
   --tobiracast-nav-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   --tobiracast-nav-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.2);
   --tobiracast-content-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
-  
+
   /* Navigation Button Specific */
-  --tobiracast-nav-button-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
-  --tobiracast-nav-button-bg-hover: linear-gradient(145deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.95));
+  --tobiracast-nav-button-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.85)
+  );
+  --tobiracast-nav-button-bg-hover: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.95)
+  );
   --tobiracast-nav-button-border: 1.5px solid rgba(255, 255, 255, 0.3);
   --tobiracast-nav-button-border-hover: 1.5px solid rgba(255, 255, 255, 0.5);
-  --tobiracast-nav-button-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.05),
+  --tobiracast-nav-button-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --tobiracast-nav-button-shadow-hover: 
-    0 8px 30px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.08),
+  --tobiracast-nav-button-shadow-hover:
+    0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --tobiracast-nav-button-text: #1a1a1a;
-  
+
   /* Login Button Specific */
-  --tobiracast-login-button-bg: linear-gradient(145deg, var(--tobiracast-primary-orange), var(--tobiracast-dark-orange));
-  --tobiracast-login-button-bg-hover: linear-gradient(145deg, var(--tobiracast-light-orange), var(--tobiracast-primary-orange));
+  --tobiracast-login-button-bg: linear-gradient(
+    145deg,
+    var(--tobiracast-primary-orange),
+    var(--tobiracast-dark-orange)
+  );
+  --tobiracast-login-button-bg-hover: linear-gradient(
+    145deg,
+    var(--tobiracast-light-orange),
+    var(--tobiracast-primary-orange)
+  );
   --tobiracast-login-button-border: 1.5px solid rgba(255, 255, 255, 0.2);
-  --tobiracast-login-button-shadow: 
-    0 4px 20px rgba(233, 104, 0, 0.3),
-    0 1px 3px rgba(233, 104, 0, 0.1),
+  --tobiracast-login-button-shadow:
+    0 4px 20px rgba(233, 104, 0, 0.3), 0 1px 3px rgba(233, 104, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  --tobiracast-login-button-shadow-hover: 
-    0 8px 30px rgba(233, 104, 0, 0.4),
-    0 2px 8px rgba(233, 104, 0, 0.2),
+  --tobiracast-login-button-shadow-hover:
+    0 8px 30px rgba(233, 104, 0, 0.4), 0 2px 8px rgba(233, 104, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  
+
   /* Text Shadows */
   --tobiracast-text-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.3);
   --tobiracast-text-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.3);
   --tobiracast-text-shadow-strong: 0 2px 8px rgba(0, 0, 0, 0.5);
   --tobiracast-text-shadow-nav: 0 1px 2px rgba(0, 0, 0, 0.3);
-  
+
   /* Overlay & Background Colors with Alpha */
-  --tobiracast-overlay-gradient: linear-gradient(135deg, rgba(23, 121, 222, 0.8), rgba(233, 104, 0, 0.8));
+  --tobiracast-overlay-gradient: linear-gradient(
+    135deg,
+    rgba(23, 121, 222, 0.8),
+    rgba(233, 104, 0, 0.8)
+  );
   --tobiracast-white-overlay-15: rgba(255, 255, 255, 0.15);
   --tobiracast-white-overlay-12: rgba(255, 255, 255, 0.12);
   --tobiracast-white-overlay-10: rgba(255, 255, 255, 0.1);
@@ -88,16 +105,16 @@
   --tobiracast-white-overlay-80: rgba(255, 255, 255, 0.8);
   --tobiracast-white-overlay-90: rgba(255, 255, 255, 0.9);
   --tobiracast-orange-overlay-30: rgba(233, 104, 0, 0.3);
-  
+
   /* Footer Colors */
   --tobiracast-footer-text-70: rgba(255, 255, 255, 0.7);
   --tobiracast-footer-text-50: rgba(255, 255, 255, 0.5);
   --tobiracast-footer-border: rgba(255, 255, 255, 0.1);
-  
+
   /* Modal & Search Colors */
   --tobiracast-modal-backdrop: rgba(0, 0, 0, 0.5);
   --tobiracast-search-selected-bg: rgba(241, 241, 239, 1);
-  
+
   /* Legacy Support - Deprecated but kept for compatibility */
   --tobiracast-shadow: var(--tobiracast-shadow-light);
   --tobiracast-shadow-hover: var(--tobiracast-shadow-medium);
