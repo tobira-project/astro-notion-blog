@@ -95,7 +95,7 @@ const [posts, numberOfPages] = await Promise.all([
     overflow: hidden;
     margin-bottom: 1.5rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--tobiracast-card-shadow-subtle);
     border-bottom: 1px solid var(--tobiracast-border);
     animation: fadeInUp 0.8s ease-out both;
     opacity: 0;
@@ -104,7 +104,7 @@ const [posts, numberOfPages] = await Promise.all([
 
   .post-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--tobiracast-card-shadow-subtle-hover);
   }
 
   .post-card:last-child {

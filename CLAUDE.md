@@ -92,8 +92,8 @@ npm run _fetch-notion-blocks
 ### Design Guidelines
 
 - **Primary Colors**:
-  - Blue: `#1779DE` (primary blue)
-  - Orange: `#FF811C` (primary orange)
+  - Blue: `#1779DE` (rgba(23, 121, 222, 1) - primary blue)
+  - Orange: `#E96800` (rgba(233, 104, 0, 1) - primary orange)
   - Use blue as the dominant color when in doubt
 - **Tone**: Neither too soft nor too hard
 - **UX Reference**: Note.com for premium content transition
@@ -247,6 +247,54 @@ This is an Astro-based static site generator that creates blogs from Notion data
   - Cleaned up Promise.all() calls to only fetch required data
   - Temporarily removed image-fade.js script to resolve parser errors
   - Files updated: `src/pages/index.astro`, `src/pages/posts/index.astro`, `src/pages/posts/page/[page].astro`, `src/pages/posts/[slug].astro`, `src/layouts/Layout.astro`
+
+- ✅ **Color Code Centralization & Management System**
+  - Implemented comprehensive CSS variable system for color management
+  - Eliminated all hardcoded color values throughout the project
+  - Updated primary orange color from `#FF811C` to `#E96800` (rgba(233, 104, 0, 1))
+  - Created semantic color variables organized by usage:
+    - Brand colors: `--tobiracast-primary-blue`, `--tobiracast-primary-orange`
+    - Shadow variations: `--tobiracast-card-shadow`, `--tobiracast-button-shadow-orange`
+    - Overlay colors: `--tobiracast-overlay-gradient`, `--tobiracast-white-overlay-*`
+    - Text shadows: `--tobiracast-text-shadow-light/medium/strong`
+    - Modal & UI colors: `--tobiracast-modal-backdrop`, `--tobiracast-search-selected-bg`
+  - Centralized color management in `src/styles/tobiracast.css`
+  - Benefits: Single-point color updates, consistent theming, improved maintainability
+  - Files updated: `src/styles/tobiracast.css`, `src/pages/index.astro`, `src/layouts/Layout.astro`, `src/components/ReadMoreLink.astro`, `src/pages/posts/index.astro`, `src/pages/posts/page/[page].astro`, `src/components/SearchModal.astro`, `src/components/notion-blocks/TableOfContents.astro`
+
+- ✅ **Enhanced .gitignore Configuration**
+  - Comprehensive .gitignore overhaul for better project hygiene
+  - Added cross-platform support (macOS, Windows, Linux specific files)
+  - Enhanced Node.js ecosystem coverage (npm, yarn, pnpm logs and caches)
+  - Added IDE and editor file exclusions (.vscode/, .idea/, swap files)
+  - Included deployment platform ignores (Vercel, Netlify)
+  - Added development tool caches (ESLint, TypeScript, Sharp image processing)
+  - Improved organization with clear section comments
+  - Maintained project-specific exclusions (Notion cache, Claude files, tmp directories)
+  - Benefits: Cleaner repository, faster git operations, reduced merge conflicts
+  - File updated: `.gitignore`
+
+- ✅ **Navigation UX Enhancement (2025-01-18)**
+  - **Problem**: Navigation buttons too small, excessive spacing between header and content
+  - **Solution**: Comprehensive navigation redesign for better user experience
+  - **Changes Made**:
+    - **Button Size Enhancement**: Increased padding from `12px 24px` to `16px 32px`
+    - **Typography Improvements**: Font size increased to `1.1rem`, weight to `700`
+    - **Visual Polish**: Border radius increased to `16px`, min-width to `140px`
+    - **Spacing Optimization**: Button gap increased to `1.5rem` for better separation
+    - **Layout Tightening**: 
+      - Hero section padding: `4rem 0` → `3rem 0 2rem`
+      - Description margin: `2rem` → `1.5rem`
+      - Navigation top margin: `3rem` → `1.5rem`
+      - Content area margin-top: `-20px` → `-80px` (major overlap increase)
+    - **Content Spacing**: Main content padding reduced from `3rem` to `2rem`
+  - **Impact**: 
+    - More prominent, clickable navigation buttons
+    - Significantly reduced white space between header and content
+    - Improved visual hierarchy and professional appearance
+    - Better mobile responsiveness maintained
+  - **File Updated**: `src/layouts/Layout.astro`
+  - **User Feedback**: "間が大きすぎる" (spacing too large) → resolved with -80px overlap
 
 ### Current Implementation Status
 
