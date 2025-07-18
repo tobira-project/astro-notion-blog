@@ -274,7 +274,7 @@ This is an Astro-based static site generator that creates blogs from Notion data
   - Benefits: Cleaner repository, faster git operations, reduced merge conflicts
   - File updated: `.gitignore`
 
-- ✅ **Navigation UX Enhancement (2025-01-18)**
+- ✅ **Navigation UX Enhancement (2025-07-18)**
   - **Problem**: Navigation buttons too small, excessive spacing between header and content
   - **Solution**: Comprehensive navigation redesign for better user experience
   - **Changes Made**:
@@ -295,6 +295,37 @@ This is an Astro-based static site generator that creates blogs from Notion data
     - Better mobile responsiveness maintained
   - **File Updated**: `src/layouts/Layout.astro`
   - **User Feedback**: "間が大きすぎる" (spacing too large) → resolved with -80px overlap
+
+- ✅ **Mobile Navigation UX Enhancement (2025-07-18)**
+  - **Problem**: Navigation buttons too large on mobile, stacked vertically, poor usability
+  - **Solution**: Implemented hamburger menu with modal-style dropdown for mobile devices
+  - **Changes Made**:
+    - **Hamburger Menu Button**: Added 3-line hamburger icon that transforms to X when active
+    - **Modal-Style Menu**: Fixed position menu appears in screen center (not hidden below fold)
+    - **Responsive Design**: Desktop keeps horizontal layout, mobile switches to hamburger at ≤768px
+    - **Menu Features**:
+      - Semi-transparent background with backdrop blur effect
+      - Smooth scale animation (0.9 → 1.0) with cubic-bezier easing
+      - Close button (X icon) in top-right corner of menu
+      - Auto-close on link click or outside tap
+      - Proper z-index (1000) to appear above all content
+    - **Accessibility**: ARIA labels for screen readers, keyboard navigation support
+    - **Visual Polish**: 
+      - Menu positioned with `position: fixed` and centered with `translate(-50%, -50%)`
+      - Max dimensions: 90vw width, 80vh height with scroll if needed
+      - Enhanced shadow effects and rounded corners
+      - Smooth hover effects on all interactive elements
+  - **Technical Implementation**:
+    - HTML: Added hamburger button and close button to navigation structure
+    - CSS: Comprehensive responsive styles with mobile-first approach
+    - JavaScript: Event listeners for menu toggle, outside click, and link navigation
+  - **Impact**: 
+    - Dramatically improved mobile navigation experience
+    - Compact header design saves screen real estate
+    - Professional modal-style menu interaction
+    - All menu items (including login button) now visible and accessible
+  - **File Updated**: `src/layouts/Layout.astro`
+  - **User Feedback**: "ナビゲーションボタンが大きいまま縦並びになってしまってみづらい" → resolved with hamburger menu
 
 ### Current Implementation Status
 

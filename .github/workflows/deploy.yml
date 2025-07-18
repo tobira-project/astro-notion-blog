@@ -2,7 +2,15 @@ name: Deploy
 
 on:
   schedule:
+    # 1日2回実行: 日本時間 8:00 (UTC 23:00) と 20:00 (UTC 11:00)
     - cron: '0 23 * * *' # 8am JST (23:00 UTC)
+    - cron: '0 11 * * *' # 8pm JST (11:00 UTC)
+  
+  # astro-notion-blogリポジトリの更新を監視
+  repository_dispatch:
+    types: [astro-notion-blog-update]
+  
+  # 手動実行も可能
   workflow_dispatch:
 jobs:
   curl:
