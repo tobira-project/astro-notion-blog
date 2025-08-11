@@ -2,25 +2,10 @@
 import { Icon } from 'astro-icon/components';
 ---
 
-<button class="tobiracast-btn tobiracast-btn-ghost open-search-modal" type="button"><Icon name="octicon:search-24" /><span>Search</span></button>
-
-<style>
-  /* Custom search button overrides */
-  .tobiracast-btn.open-search-modal {
-    display: flex;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    justify-content: flex-start;
-  }
-  .tobiracast-btn.open-search-modal svg {
-    width: 20px;
-    height: 20px;
-    margin-right: 0.2rem;
-  }
-  [astro-icon="octicon:search-24"] {
-    color: var(--fg);
-  }
-</style>
+<button class="btn-ghost open-search-modal flex w-full mb-2 justify-start" type="button">
+  <Icon name="octicon:search-24" class="w-5 h-5 mr-1" />
+  <span>Search</span>
+</button>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {

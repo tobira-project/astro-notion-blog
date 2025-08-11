@@ -1,0 +1,39 @@
+---
+export interface Props {
+  variant?: 'primary' | 'secondary' | 'nav' | 'coming-soon'
+  size?: 'sm' | 'md' | 'lg'
+  href?: string
+  disabled?: boolean
+  class?: string
+}
+
+const { variant = 'primary', size = 'md', href, disabled, class: className, ...props } = Astro.props
+
+const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95'
+
+const variants = {
+  primary: 'bg-tobiracast-blue hover:bg-tobiracast-dark-blue text-white shadow-tobiracast hover:shadow-tobiracast-hover',
+  secondary: 'bg-tobiracast-orange hover:bg-tobiracast-dark-orange text-white shadow-md hover:shadow-lg',
+  nav: 'bg-white/10 backdrop-blur-lg border-2 border-white/20 text-white hover:bg-white/20 hover:border-white/30 shadow-lg',
+  'coming-soon': 'bg-gray-500 text-gray-300 cursor-not-allowed shadow-md'
+}
+
+const sizes = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-8 py-4 text-base',
+  lg: 'px-12 py-6 text-lg'
+}
+
+const classes = [baseClasses, variants[variant], sizes[size], className].filter(Boolean).join(' ')
+
+const Component = href && !disabled ? 'a' : 'button'
+---
+
+<Component 
+  class={classes} 
+  href={href}
+  disabled={disabled}
+  {...props}
+>
+  <slot />
+</Component>

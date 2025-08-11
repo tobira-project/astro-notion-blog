@@ -4,20 +4,85 @@
 
 /* TOBIRACASTカラーはtobiracast.cssで統一管理 */
 
-/* カスタムTailwindクラス */
+/* Tailwind コンポーネントクラス - 最小限のカスタム定義 */
 @layer components {
+  /* ボタンシステム */
   .btn-primary {
-    @apply bg-tobiracast-orange hover:bg-tobiracast-dark-orange text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl;
+    @apply bg-primary hover:bg-tobiracast-dark-blue text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply bg-secondary hover:bg-tobiracast-dark-orange text-white font-semibold px-6 py-2 rounded-2xl transition-all duration-200 hover:-translate-y-0.5 shadow-tobiracast-button hover:shadow-tobiracast-button-hover;
+  }
+  .btn-outline {
+    @apply border-2 border-border bg-transparent hover:bg-surface-subtle hover:border-primary px-4 py-2 rounded-lg transition-all duration-200;
+  }
+  .btn-ghost {
+    @apply hover:bg-surface-muted px-4 py-2 rounded-lg transition-all duration-200;
+  }
+  .btn-full {
+    @apply w-full;
   }
 
-  .nav-link {
-    @apply block px-8 py-4 text-gray-800 no-underline rounded-2xl transition-all duration-300 font-bold text-lg border border-white/30 backdrop-blur-lg bg-white/95 hover:bg-white hover:border-white/50 shadow-lg hover:shadow-xl text-center min-w-[140px];
-    transform: translateY(0) scale(1);
+  /* フォームシステム */
+  .form-group {
+    @apply mb-6;
+  }
+  .form-label {
+    @apply block mb-2 text-gray-900 font-medium text-sm;
+  }
+  .form-input {
+    @apply w-full px-3 py-2 border-2 border-border-light rounded-lg bg-surface-primary text-gray-900 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 placeholder-gray-400;
   }
 
-  .nav-link:hover {
-    transform: translateY(-2px) scale(1.02);
+  /* カードシステム */
+  .card {
+    @apply bg-surface-primary border border-border-light rounded-xl p-6 shadow-tobiracast-card transition-all duration-300 hover:shadow-tobiracast-card-hover hover:-translate-y-1 hover:border-primary/20;
   }
+
+  /* ナビゲーション - 見やすさ重視で改善 */
+  .nav-button {
+    @apply 
+      /* サイズ・配置 */
+      px-8 py-4 min-w-[160px] text-center
+      /* 背景・境界 */
+      bg-white/90 hover:bg-white 
+      border-2 border-white/40 hover:border-white/70
+      /* テキスト */
+      text-gray-800 font-bold text-lg
+      /* エフェクト */
+      rounded-2xl backdrop-blur-md
+      shadow-lg hover:shadow-xl
+      /* アニメーション */
+      transition-all duration-300 ease-out
+      hover:-translate-y-1 hover:scale-[1.02];
+  }
+  
+  .nav-button-login {
+    @apply 
+      /* ベーススタイル継承 + オーバーライド */
+      bg-gradient-to-r from-secondary via-secondary to-tobiracast-dark-orange
+      hover:from-tobiracast-light-orange hover:via-secondary hover:to-tobiracast-dark-orange
+      text-white font-bold
+      border-white/30 hover:border-white/50
+      shadow-lg shadow-secondary/30 
+      hover:shadow-xl hover:shadow-secondary/40;
+  }
+
+  /* ページネーション */
+  .pagination {
+    @apply flex justify-center items-center gap-2 my-8;
+  }
+  .pagination-item {
+    @apply block w-10 h-12 leading-[3rem] text-center no-underline rounded-lg bg-surface-muted text-gray-900 text-sm font-medium transition-all duration-200 hover:bg-gray-300 hover:-translate-y-0.5;
+  }
+  .pagination-item.inactive {
+    @apply text-gray-400 cursor-default hover:bg-surface-muted hover:translate-y-0;
+  }
+
+  /* ユーティリティ */
+  .animate-fade-up { @apply opacity-0 animate-fade-in-up; }
+  .animate-fade-up-1 { @apply opacity-0 animate-fade-in-up-delay-1; }
+  .animate-fade-up-2 { @apply opacity-0 animate-fade-in-up-delay-2; }
 }
 
 /* 基本的なリセット */

@@ -9,8 +9,6 @@ export interface Props {
 const { post } = Astro.props
 ---
 
-<div class="tobiracast-text-center tobiracast-mt-6">
-  <a href={getPostLink(post.Slug)} class="tobiracast-btn tobiracast-btn-secondary">続きを読む →</a>
+<div class="text-center mt-6">
+  <a href={getPostLink(post.Slug)} class="btn-secondary inline-block">続きを読む →</a>
 </div>
-
-<!-- ReadMore button now uses unified tobiracast-btn styles -->

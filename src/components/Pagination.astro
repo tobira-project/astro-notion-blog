@@ -22,18 +22,16 @@ for (let i = startPage; i <= endPage; i++) {
 }
 ---
 
-<div class="tobiracast-pagination">
-  <a href={getPageLink(1, tag)} class={`tobiracast-pagination-item ${isFirstPage ? 'inactive' : ''}`}>&lt;&lt;</a>
+<div class="pagination">
+  <a href={getPageLink(1, tag)} class={`pagination-item ${isFirstPage ? 'inactive' : ''}`}>&lt;&lt;</a>
   {
     pages.map((p: number) => (
-      <a href={getPageLink(p, tag)} class={`tobiracast-pagination-item ${p === currentPage ? 'inactive' : ''}`}>
+      <a href={getPageLink(p, tag)} class={`pagination-item ${p === currentPage ? 'inactive' : ''}`}>
         {p}
       </a>
     ))
   }
-  <a href={getPageLink(numberOfPages, tag)} class={`tobiracast-pagination-item ${isLastPage ? 'inactive' : ''}`}
+  <a href={getPageLink(numberOfPages, tag)} class={`pagination-item ${isLastPage ? 'inactive' : ''}`}
     >&gt;&gt;</a
   >
 </div>
-
-<!-- Pagination styles now unified in tobiracast.css -->
