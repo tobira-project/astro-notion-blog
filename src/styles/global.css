@@ -41,8 +41,7 @@
 
   /* ナビゲーション - 見やすさ重視で改善 */
   .nav-button {
-    @apply 
-      /* サイズ・配置 */
+    @apply /* サイズ・配置 */
       px-8 py-4 min-w-[160px] text-center
       /* 背景・境界 */
       bg-white/90 hover:bg-white 
@@ -56,10 +55,9 @@
       transition-all duration-300 ease-out
       hover:-translate-y-1 hover:scale-[1.02];
   }
-  
+
   .nav-button-login {
-    @apply 
-      /* ベーススタイル継承 + オーバーライド */
+    @apply /* ベーススタイル継承 + オーバーライド */
       bg-gradient-to-r from-secondary via-secondary to-tobiracast-dark-orange
       hover:from-tobiracast-light-orange hover:via-secondary hover:to-tobiracast-dark-orange
       text-white font-bold
@@ -80,9 +78,15 @@
   }
 
   /* ユーティリティ */
-  .animate-fade-up { @apply opacity-0 animate-fade-in-up; }
-  .animate-fade-up-1 { @apply opacity-0 animate-fade-in-up-delay-1; }
-  .animate-fade-up-2 { @apply opacity-0 animate-fade-in-up-delay-2; }
+  .animate-fade-up {
+    @apply opacity-0 animate-fade-in-up;
+  }
+  .animate-fade-up-1 {
+    @apply opacity-0 animate-fade-in-up-delay-1;
+  }
+  .animate-fade-up-2 {
+    @apply opacity-0 animate-fade-in-up-delay-2;
+  }
 }
 
 /* 基本的なリセット */

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import type { ErrorMessage } from './AuthTemplate'
+import React, { useState } from 'react';
+import type { ErrorMessage } from './AuthTemplate';
 
 interface EmailAndPasswordSignUpProps {
-  title: string
-  buttonText: string
-  email: string
-  isSubmitting: boolean
-  authError: ErrorMessage
-  onClickBack: () => void
-  onClickSubmit: (email: string, password: string) => Promise<void>
+  title: string;
+  buttonText: string;
+  email: string;
+  isSubmitting: boolean;
+  authError: ErrorMessage;
+  onClickBack: () => void;
+  onClickSubmit: (email: string, password: string) => Promise<void>;
 }
 
 const EmailAndPasswordSignUp: React.FC<EmailAndPasswordSignUpProps> = ({
@@ -18,39 +18,39 @@ const EmailAndPasswordSignUp: React.FC<EmailAndPasswordSignUpProps> = ({
   isSubmitting,
   authError,
   onClickBack,
-  onClickSubmit
+  onClickSubmit,
 }) => {
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (password !== confirmPassword) {
-      setError('パスワードが一致しません')
-      return
+      setError('パスワードが一致しません');
+      return;
     }
-    
+
     if (password.length < 6) {
-      setError('パスワードは6文字以上にしてください')
-      return
+      setError('パスワードは6文字以上にしてください');
+      return;
     }
-    
-    setError(null)
-    await onClickSubmit(email, password)
-  }
+
+    setError(null);
+    await onClickSubmit(email, password);
+  };
 
   return (
     <div className="email-password-container">
       <button className="back-button" onClick={onClickBack}>
         ← 戻る
       </button>
-      
+
       <form onSubmit={handleSubmit} className="password-form">
         <h2>{title}</h2>
         <p className="email-display">{email}</p>
-        
+
         <input
           type="password"
           placeholder="パスワード（6文字以上）"
@@ -61,7 +61,7 @@ const EmailAndPasswordSignUp: React.FC<EmailAndPasswordSignUpProps> = ({
           required
           minLength={6}
         />
-        
+
         <input
           type="password"
           placeholder="パスワード（確認）"
@@ -71,13 +71,11 @@ const EmailAndPasswordSignUp: React.FC<EmailAndPasswordSignUpProps> = ({
           required
           minLength={6}
         />
-        
+
         {(error || authError) && (
-          <div className="error-message">
-            {error || authError?.message}
-          </div>
+          <div className="error-message">{error || authError?.message}</div>
         )}
-        
+
         <button
           type="submit"
           className="submit-button"
@@ -87,7 +85,7 @@ const EmailAndPasswordSignUp: React.FC<EmailAndPasswordSignUpProps> = ({
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EmailAndPasswordSignUp
+export default EmailAndPasswordSignUp;

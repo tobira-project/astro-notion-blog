@@ -3,11 +3,13 @@
 ## 📋 現在の状況
 
 ### プロジェクト概要
+
 - **プロジェクト名**: TOBIRACAST (astro-notion-blog)
 - **要件**: Tobiratoryアカウントのログイン機能を実装
 - **参考コード**: tobiratory-webプロジェクト（既存のログインシステム）
 
 ### 環境・技術スタック
+
 - **フレームワーク**: Astro + Notion API
 - **認証**: Firebase Authentication（実装予定）
 - **バックエンド**: Cloud Functions（Tobiratory既存API）
@@ -16,6 +18,7 @@
 ## 🎯 実装すべき機能
 
 ### 1. Firebase Authentication統合
+
 - [ ] Firebase SDKのインストールと設定
 - [ ] Firebase設定ファイルの作成（firebase.config.ts）
 - [ ] 環境変数の設定
@@ -27,6 +30,7 @@
 ### 2. 認証フロー実装
 
 #### 2.1 サインイン/サインアップ
+
 - [ ] ログインページの作成（/login）
 - [ ] サインイン処理の実装
   - Google認証
@@ -35,6 +39,7 @@
 - [ ] Firebase認証成功後の処理
 
 #### 2.2 アカウント作成フロー
+
 ```
 1. Firebase Auth でサインイン
    ↓
@@ -50,36 +55,40 @@
 ```
 
 ### 3. Tobiratoryアカウント作成
+
 - [ ] アカウント作成API呼び出し実装
   ```typescript
-  fetch(`${API_URL}/native/signup`)
+  fetch(`${API_URL}/native/signup`);
   ```
 - [ ] エラーハンドリング
 - [ ] 作成成功後の処理
 
 ### 4. Flowアカウント作成
+
 - [ ] Flowアカウント作成API呼び出し
   ```typescript
-  fetch(`${API_URL}/native/create-flow`)
+  fetch(`${API_URL}/native/create-flow`);
   ```
 - [ ] 作成状態の定期確認（10秒間隔）
   ```typescript
   const waitFlowAccountCreation = async () => {
     // 10秒ごとにプロフィール確認
-    fetch(`${API_URL}/native/my/profile`)
-  }
+    fetch(`${API_URL}/native/my/profile`);
+  };
   ```
 - [ ] ブラウザを閉じても継続できる仕組み
   - LocalStorageまたはSessionStorageの活用
   - 状態の永続化
 
 ### 5. ユーザー状態管理
+
 - [ ] 認証状態の管理（Context API or Zustand）
 - [ ] ユーザー情報の保存
 - [ ] ログアウト処理
 - [ ] セッション管理
 
 ### 6. UI/UXコンポーネント
+
 - [ ] ログインフォーム
 - [ ] ローディング表示
 - [ ] エラーメッセージ表示
@@ -89,6 +98,7 @@
 ## 📁 参考ファイル（tobiratory-web）
 
 ### 重要なファイル
+
 1. **認証関連**
    - `/packages/fetchers/firebase/client.ts` - Firebase設定
    - `/apps/admin/src/pages/authentication.tsx` - 管理画面ログイン
@@ -103,21 +113,23 @@
 ## 🔧 API仕様
 
 ### エンドポイント
+
 - **開発環境API_URL**: `https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net`
 
 ### APIレスポンス型
+
 ```typescript
 interface ProfileResponse {
-  status: "success" | "error";
+  status: 'success' | 'error';
   data: AccountInfo | ErrorType;
 }
 
-type ErrorType = 
-  | "account-not-exists"
-  | "flow-account-not-exists"
-  | "flow-address-creating"
-  | "flow-account-retrying"
-  | "flow-account-create-error";
+type ErrorType =
+  | 'account-not-exists'
+  | 'flow-account-not-exists'
+  | 'flow-address-creating'
+  | 'flow-account-retrying'
+  | 'flow-account-create-error';
 ```
 
 ## 📅 実装順序（推奨）

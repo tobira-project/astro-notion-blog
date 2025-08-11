@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import type { ErrorMessage } from './AuthTemplate'
+import React, { useState } from 'react';
+import type { ErrorMessage } from './AuthTemplate';
 
 interface EmailAndPasswordSignInProps {
-  email: string
-  loading: boolean
-  error: ErrorMessage
-  onClickBack: () => void
-  onClickPasswordReset: (email: string) => void
-  withMailSignIn: (email: string, password: string) => Promise<void>
+  email: string;
+  loading: boolean;
+  error: ErrorMessage;
+  onClickBack: () => void;
+  onClickPasswordReset: (email: string) => void;
+  withMailSignIn: (email: string, password: string) => Promise<void>;
 }
 
 const EmailAndPasswordSignIn: React.FC<EmailAndPasswordSignInProps> = ({
@@ -16,25 +16,25 @@ const EmailAndPasswordSignIn: React.FC<EmailAndPasswordSignInProps> = ({
   error,
   onClickBack,
   onClickPasswordReset,
-  withMailSignIn
+  withMailSignIn,
 }) => {
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await withMailSignIn(email, password)
-  }
+    e.preventDefault();
+    await withMailSignIn(email, password);
+  };
 
   return (
     <div className="email-password-container">
       <button className="back-button" onClick={onClickBack}>
         ← 戻る
       </button>
-      
+
       <form onSubmit={handleSubmit} className="password-form">
         <h2>パスワードを入力</h2>
         <p className="email-display">{email}</p>
-        
+
         <input
           type="password"
           placeholder="パスワード"
@@ -44,11 +44,9 @@ const EmailAndPasswordSignIn: React.FC<EmailAndPasswordSignInProps> = ({
           autoFocus
           required
         />
-        
-        {error && (
-          <div className="error-message">{error.message}</div>
-        )}
-        
+
+        {error && <div className="error-message">{error.message}</div>}
+
         <button
           type="submit"
           className="submit-button"
@@ -56,7 +54,7 @@ const EmailAndPasswordSignIn: React.FC<EmailAndPasswordSignInProps> = ({
         >
           {loading ? 'ログイン中...' : 'ログイン'}
         </button>
-        
+
         <button
           type="button"
           className="forgot-password-link"
@@ -66,7 +64,7 @@ const EmailAndPasswordSignIn: React.FC<EmailAndPasswordSignInProps> = ({
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default EmailAndPasswordSignIn
+export default EmailAndPasswordSignIn;

@@ -3,17 +3,20 @@
 ## 実装内容
 
 ### 1. Firebase SDK統合
+
 - ✅ Firebase SDKとReactをAstroプロジェクトに追加
 - ✅ Firebase設定ファイル作成 (`src/lib/firebase-client.ts`)
 - ✅ tobiratory-f6ae1プロジェクトとの連携設定
 
 ### 2. 認証フロー実装
+
 - ✅ **カスタムフック作成** (`src/hooks/useTobiratoryAuth.ts`)
   - tobiratory-webのコードを参考に実装
   - Googleログイン、メール/パスワード認証対応
   - アカウント作成フローの自動化
 
 ### 3. アカウント作成フロー
+
 ```
 1. Firebase Authでサインイン
 2. /native/my/profile でアカウント状態確認
@@ -24,6 +27,7 @@
 ```
 
 ### 4. UIコンポーネント
+
 - ✅ **ログインフォーム** (`src/components/LoginForm.tsx`)
   - Googleログインボタン
   - メール/パスワードログイン
@@ -36,6 +40,7 @@
   - レスポンシブ対応
 
 ### 5. ページ統合
+
 - ✅ `/login` ページ作成
 - ✅ ヘッダーナビゲーションに認証状態表示
 - ✅ モバイル対応（ハンバーガーメニュー）
@@ -43,7 +48,9 @@
 ## 使用方法
 
 ### 環境変数設定
+
 `.env`ファイルに以下を設定：
+
 ```env
 # Firebase設定（必須）
 PUBLIC_FIREBASE_API_KEY=your_api_key
@@ -58,11 +65,13 @@ PUBLIC_API_URL=https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net
 ```
 
 ### 開発サーバー起動
+
 ```bash
 npm run dev
 ```
 
 ### ログインテスト
+
 1. http://localhost:5000/login にアクセス
 2. Googleログインまたはメール/パスワードでログイン
 3. 初回ログイン時は自動的にアカウント作成
@@ -89,16 +98,19 @@ src/
 ## 特徴
 
 ### tobiratory-webとの統合
+
 - 既存のTobiratoryアカウントシステムを完全活用
 - APIエンドポイントをそのまま使用
 - 認証フローは自動化
 
 ### ユーザー体験
+
 - シンプルなログインフロー
 - アカウント作成は裏で自動実行
 - Flowアカウント作成中も継続可能
 
 ### 技術的特徴
+
 - React Hooksを活用した状態管理
 - TypeScript完全対応
 - レスポンシブデザイン
@@ -129,16 +141,18 @@ src/
 ## トラブルシューティング
 
 ### ログインできない場合
+
 1. Firebase設定を確認
 2. API URLが正しいか確認
 3. ネットワーク接続を確認
 
 ### アカウント作成が進まない場合
+
 1. Flowアカウント作成は時間がかかる
 2. 最大10分待つ
 3. エラーが表示されたら再ログイン
 
 ---
 
-実装完了！🚀 
+実装完了！🚀
 tobiratory-webのコードを効果的に活用し、シンプルで使いやすいログイン機能を実装しました。

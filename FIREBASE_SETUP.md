@@ -27,12 +27,14 @@ PUBLIC_FIREBASE_MEASUREMENT_ID=（上司から取得）
 ## 取得方法
 
 ### 方法1: Firebase Consoleから直接取得
+
 1. [Firebase Console](https://console.firebase.google.com/)にアクセス
 2. `tobiratory-f6ae1`プロジェクトを選択
 3. プロジェクト設定 → 全般タブ
 4. 「ウェブアプリ」セクションの設定値をコピー
 
 ### 方法2: tobiratory-webから取得
+
 tobiratory-webプロジェクトの`.env`ファイルや設定ファイルから同じ値をコピー
 
 ## 設定後の確認
@@ -49,14 +51,18 @@ tobiratory-webプロジェクトの`.env`ファイルや設定ファイルから
 ## トラブルシューティング
 
 ### エラー: "auth/invalid-api-key"
+
 → API_KEYが正しく設定されていません
 
 ### エラー: "auth/unauthorized-domain"
+
 → Firebase ConsoleでlocalHost:5000を許可ドメインに追加する必要があります
-   1. Firebase Console → Authentication → Settings → Authorized domains
-   2. `localhost`を追加
+
+1.  Firebase Console → Authentication → Settings → Authorized domains
+2.  `localhost`を追加
 
 ### エラー: CORSエラー
+
 → Cloud FunctionsのCORS設定を確認してください
 
 ## 注意事項

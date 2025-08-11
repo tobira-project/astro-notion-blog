@@ -1,12 +1,12 @@
 // tobiratory-webのコードを活用したカスタムフック
 import { useState, useEffect } from 'react'
-import { 
-  GoogleAuthProvider, 
+import {
+  GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
 } from 'firebase/auth'
 import type { User } from 'firebase/auth'
 import { auth, API_URL } from '../lib/firebase-client'
@@ -24,14 +24,14 @@ enum AccountStatus {
   FLOW_ACCOUNT_NOT_EXISTS = 'flow-account-not-exists',
   FLOW_ADDRESS_CREATING = 'flow-address-creating',
   FLOW_ACCOUNT_RETRYING = 'flow-account-retrying',
-  FLOW_ACCOUNT_CREATE_ERROR = 'flow-account-create-error'
+  FLOW_ACCOUNT_CREATE_ERROR = 'flow-account-create-error',
 }
 
 // Flowアカウントが処理中かどうか判定
 const isFlowAccountProcessing = (status: string) => {
   return [
     AccountStatus.FLOW_ADDRESS_CREATING,
-    AccountStatus.FLOW_ACCOUNT_RETRYING
+    AccountStatus.FLOW_ACCOUNT_RETRYING,
   ].includes(status as AccountStatus)
 }
 
@@ -58,15 +58,15 @@ export const useTobiratoryAuth = () => {
   const fetchMyProfile = async (): Promise<ProfileResponse> => {
     const idToken = await auth.currentUser?.getIdToken()
     if (!idToken) throw new Error('Not authenticated')
-    
+
     const response = await fetch(`${API_URL}/native/my/profile`, {
       method: 'GET',
       headers: {
-        'Authorization': idToken,
-        'Content-Type': 'application/json'
-      }
+        Authorization: idToken,
+        'Content-Type': 'application/json',
+      },
     })
-    
+
     return await response.json()
   }
 
@@ -75,7 +75,7 @@ export const useTobiratoryAuth = () => {
     try {
       const profileData = await fetchMyProfile()
       setProfile(profileData)
-      
+
       if (profileData.status === 'success') {
         setAccountStatus('complete')
         return profileData
@@ -96,30 +96,30 @@ export const useTobiratoryAuth = () => {
   const registerToTobiratoryAndFlowAccount = async () => {
     const idToken = await auth.currentUser?.getIdToken(true)
     if (!idToken) throw new Error('Not authenticated')
-    
+
     // Tobiratoryアカウント作成
     const signupRes = await fetch(`${API_URL}/native/signup`, {
       method: 'POST',
       headers: {
-        'Authorization': idToken,
-        'Content-Type': 'application/json'
-      }
+        Authorization: idToken,
+        'Content-Type': 'application/json',
+      },
     })
-    
+
     if (!signupRes.ok) {
       throw new Error('Tobiratory account creation failed')
     }
-    
+
     // Flowアカウント作成
     const flowRes = await fetch(`${API_URL}/native/create-flow`, {
       method: 'POST',
       headers: {
-        'Authorization': idToken,
-        'Content-Type': 'application/json'
+        Authorization: idToken,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ locale: 'ja' })
+      body: JSON.stringify({ locale: 'ja' }),
     })
-    
+
     return flowRes
   }
 
@@ -127,12 +127,12 @@ export const useTobiratoryAuth = () => {
   const waitFlowAccountCreation = async (): Promise<ProfileResponse | null> => {
     const maxRetry = 100
     const sleepTime = 10000 // 10秒
-    
+
     for (let i = 0; i < maxRetry; i++) {
-      await new Promise(resolve => setTimeout(resolve, sleepTime))
-      
+      await new Promise((resolve) => setTimeout(resolve, sleepTime))
+
       const profileData = await fetchMyProfile()
-      
+
       if (profileData.status === 'success') {
         return profileData
       } else if (profileData.data === AccountStatus.FLOW_ACCOUNT_CREATE_ERROR) {
@@ -142,15 +142,15 @@ export const useTobiratoryAuth = () => {
           await fetch(`${API_URL}/native/create-flow`, {
             method: 'POST',
             headers: {
-              'Authorization': idToken,
-              'Content-Type': 'application/json'
+              Authorization: idToken,
+              'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ locale: 'ja' })
+            body: JSON.stringify({ locale: 'ja' }),
           })
         }
       }
     }
-    
+
     return null
   }
 
@@ -158,7 +158,7 @@ export const useTobiratoryAuth = () => {
   const handleAccountRegistration = async (status: string) => {
     setIsCreatingAccount(true)
     setError(null)
-    
+
     try {
       switch (status) {
         case AccountStatus.ACCOUNT_NOT_EXISTS:
@@ -170,18 +170,20 @@ export const useTobiratoryAuth = () => {
             setAccountStatus('complete')
           }
           break
-          
+
         case AccountStatus.FLOW_ACCOUNT_NOT_EXISTS:
         case AccountStatus.FLOW_ADDRESS_CREATING:
         case AccountStatus.FLOW_ACCOUNT_RETRYING:
-          setAccountStatus('Flowアカウントを作成中（時間がかかる場合があります）...')
+          setAccountStatus(
+            'Flowアカウントを作成中（時間がかかる場合があります）...'
+          )
           const waitResult = await waitFlowAccountCreation()
           if (waitResult && waitResult.status === 'success') {
             setProfile(waitResult)
             setAccountStatus('complete')
           }
           break
-          
+
         case AccountStatus.FLOW_ACCOUNT_CREATE_ERROR:
           setAccountStatus('Flowアカウント作成エラー。再試行中...')
           // 再作成を試みる
@@ -190,10 +192,10 @@ export const useTobiratoryAuth = () => {
             await fetch(`${API_URL}/native/create-flow`, {
               method: 'POST',
               headers: {
-                'Authorization': idToken,
-                'Content-Type': 'application/json'
+                Authorization: idToken,
+                'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ locale: 'ja' })
+              body: JSON.stringify({ locale: 'ja' }),
             })
             const retryResult = await waitFlowAccountCreation()
             if (retryResult && retryResult.status === 'success') {
@@ -215,7 +217,7 @@ export const useTobiratoryAuth = () => {
   const signInWithGoogle = async () => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
@@ -233,7 +235,7 @@ export const useTobiratoryAuth = () => {
   const signInWithEmail = async (email: string, password: string) => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const result = await signInWithEmailAndPassword(auth, email, password)
       // onAuthStateChangedが自動的にcheckProfileを呼ぶ
@@ -256,7 +258,7 @@ export const useTobiratoryAuth = () => {
   const signUpWithEmail = async (email: string, password: string) => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password)
       // onAuthStateChangedが自動的にcheckProfileを呼ぶ
@@ -297,6 +299,6 @@ export const useTobiratoryAuth = () => {
     signInWithEmail,
     signUpWithEmail,
     logout,
-    setError
+    setError,
   }
 }

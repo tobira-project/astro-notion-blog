@@ -23,8 +23,16 @@
   --tobiracast-black: #000000;
 
   /* 背景グラデーション */
-  --tobiracast-bg-gradient-light: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
-  --tobiracast-bg-gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --tobiracast-bg-gradient-light: linear-gradient(
+    135deg,
+    #f8fbff 0%,
+    #e3f2fd 100%
+  );
+  --tobiracast-bg-gradient-dark: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #2d2d2d 100%
+  );
 
   /* シャドウ */
   --tobiracast-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
@@ -232,15 +240,15 @@
   .page-container {
     padding: 1rem 0.5rem;
   }
-  
+
   .card {
     padding: 2rem 1.5rem;
   }
-  
+
   .page-title {
     font-size: 2rem;
   }
-  
+
   .link-row {
     flex-direction: column;
     text-align: center;
