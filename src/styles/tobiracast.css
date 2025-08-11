@@ -2,7 +2,7 @@
   /* ========================================
      TOBIRACAST Design Token System
      ======================================== */
-  
+
   /* TOBIRACAST Brand Colors */
   --tobiracast-primary-blue: #1779de;
   --tobiracast-primary-orange: #e96800;
@@ -10,7 +10,7 @@
   --tobiracast-light-orange: #ff9a4d;
   --tobiracast-dark-blue: #004c99;
   --tobiracast-dark-orange: #cc5500;
-  
+
   /* Extended Color Palette */
   --tobiracast-white: #ffffff;
   --tobiracast-black: #000000;
@@ -31,8 +31,16 @@
   --tobiracast-bg-premium: #fff9f0;
   --tobiracast-bg-subtle: var(--tobiracast-gray-50);
   --tobiracast-bg-muted: var(--tobiracast-gray-100);
-  --tobiracast-bg-gradient-light: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
-  --tobiracast-bg-gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --tobiracast-bg-gradient-light: linear-gradient(
+    135deg,
+    #f8fbff 0%,
+    #e3f2fd 100%
+  );
+  --tobiracast-bg-gradient-dark: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #2d2d2d 100%
+  );
 
   /* Text Colors */
   --tobiracast-text-primary: var(--tobiracast-gray-900);
@@ -47,44 +55,44 @@
   --tobiracast-border-premium: #ffe4cc;
   --tobiracast-border-light: var(--tobiracast-gray-200);
   --tobiracast-border-subtle: var(--tobiracast-gray-100);
-  
+
   /* Typography Scale */
-  --tobiracast-font-xs: 0.75rem;     /* 12px */
-  --tobiracast-font-sm: 0.875rem;    /* 14px */
-  --tobiracast-font-base: 1rem;      /* 16px */
-  --tobiracast-font-lg: 1.125rem;    /* 18px */
-  --tobiracast-font-xl: 1.25rem;     /* 20px */
-  --tobiracast-font-2xl: 1.5rem;     /* 24px */
-  --tobiracast-font-3xl: 1.875rem;   /* 30px */
-  --tobiracast-font-4xl: 2.25rem;    /* 36px */
-  --tobiracast-font-5xl: 3rem;       /* 48px */
-  
+  --tobiracast-font-xs: 0.75rem; /* 12px */
+  --tobiracast-font-sm: 0.875rem; /* 14px */
+  --tobiracast-font-base: 1rem; /* 16px */
+  --tobiracast-font-lg: 1.125rem; /* 18px */
+  --tobiracast-font-xl: 1.25rem; /* 20px */
+  --tobiracast-font-2xl: 1.5rem; /* 24px */
+  --tobiracast-font-3xl: 1.875rem; /* 30px */
+  --tobiracast-font-4xl: 2.25rem; /* 36px */
+  --tobiracast-font-5xl: 3rem; /* 48px */
+
   /* Font Weight Scale */
   --tobiracast-font-normal: 400;
   --tobiracast-font-medium: 500;
   --tobiracast-font-semibold: 600;
   --tobiracast-font-bold: 700;
-  
+
   /* Spacing Scale (8px base) */
-  --tobiracast-space-1: 0.25rem;   /* 4px */
-  --tobiracast-space-2: 0.5rem;    /* 8px */
-  --tobiracast-space-3: 0.75rem;   /* 12px */
-  --tobiracast-space-4: 1rem;      /* 16px */
-  --tobiracast-space-5: 1.25rem;   /* 20px */
-  --tobiracast-space-6: 1.5rem;    /* 24px */
-  --tobiracast-space-8: 2rem;      /* 32px */
-  --tobiracast-space-10: 2.5rem;   /* 40px */
-  --tobiracast-space-12: 3rem;     /* 48px */
-  --tobiracast-space-16: 4rem;     /* 64px */
-  --tobiracast-space-20: 5rem;     /* 80px */
-  --tobiracast-space-24: 6rem;     /* 96px */
-  
+  --tobiracast-space-1: 0.25rem; /* 4px */
+  --tobiracast-space-2: 0.5rem; /* 8px */
+  --tobiracast-space-3: 0.75rem; /* 12px */
+  --tobiracast-space-4: 1rem; /* 16px */
+  --tobiracast-space-5: 1.25rem; /* 20px */
+  --tobiracast-space-6: 1.5rem; /* 24px */
+  --tobiracast-space-8: 2rem; /* 32px */
+  --tobiracast-space-10: 2.5rem; /* 40px */
+  --tobiracast-space-12: 3rem; /* 48px */
+  --tobiracast-space-16: 4rem; /* 64px */
+  --tobiracast-space-20: 5rem; /* 80px */
+  --tobiracast-space-24: 6rem; /* 96px */
+
   /* Border Radius Scale */
-  --tobiracast-radius-sm: 0.25rem;   /* 4px */
-  --tobiracast-radius-md: 0.5rem;    /* 8px */
-  --tobiracast-radius-lg: 0.75rem;   /* 12px */
-  --tobiracast-radius-xl: 1rem;      /* 16px */
-  --tobiracast-radius-2xl: 1.5rem;   /* 24px */
+  --tobiracast-radius-sm: 0.25rem; /* 4px */
+  --tobiracast-radius-md: 0.5rem; /* 8px */
+  --tobiracast-radius-lg: 0.75rem; /* 12px */
+  --tobiracast-radius-xl: 1rem; /* 16px */
+  --tobiracast-radius-2xl: 1.5rem; /* 24px */
   --tobiracast-radius-full: 9999px;
 
   /* Shadow Colors - Base Values */
@@ -181,11 +189,11 @@
   --tobiracast-modal-backdrop: rgba(0, 0, 0, 0.5);
   --tobiracast-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   --tobiracast-search-selected-bg: rgba(241, 241, 239, 1);
-  
+
   /* Additional Overlay Colors */
   --tobiracast-white-overlay-98: rgba(255, 255, 255, 0.98);
   --tobiracast-white-overlay-40: rgba(255, 255, 255, 0.4);
-  
+
   /* Code & Highlight Colors */
   --tobiracast-code-bg: rgba(135, 131, 120, 0.15);
   --tobiracast-code-text: #eb5757;
