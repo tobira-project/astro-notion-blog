@@ -1,9 +1,6 @@
+/* TOBIRACAST - CSS変数とコンポーネントシステム */
 :root {
-  /* ========================================
-     TOBIRACAST Design Token System
-     ======================================== */
-
-  /* TOBIRACAST Brand Colors */
+  /* ブランド色 */
   --tobiracast-primary-blue: #1779de;
   --tobiracast-primary-orange: #e96800;
   --tobiracast-light-blue: #4d94ff;
@@ -11,9 +8,7 @@
   --tobiracast-dark-blue: #004c99;
   --tobiracast-dark-orange: #cc5500;
 
-  /* Extended Color Palette */
-  --tobiracast-white: #ffffff;
-  --tobiracast-black: #000000;
+  /* グレースケール */
   --tobiracast-gray-50: #f9fafb;
   --tobiracast-gray-100: #f4f4f4;
   --tobiracast-gray-200: #e4e4e4;
@@ -24,626 +19,231 @@
   --tobiracast-gray-700: #333;
   --tobiracast-gray-800: #222;
   --tobiracast-gray-900: #1a1a1a;
+  --tobiracast-white: #ffffff;
+  --tobiracast-black: #000000;
 
-  /* Background Colors */
-  --tobiracast-bg-primary: var(--tobiracast-white);
-  --tobiracast-bg-secondary: #f5f8fa;
-  --tobiracast-bg-premium: #fff9f0;
-  --tobiracast-bg-subtle: var(--tobiracast-gray-50);
-  --tobiracast-bg-muted: var(--tobiracast-gray-100);
-  --tobiracast-bg-gradient-light: linear-gradient(
-    135deg,
-    #f8fbff 0%,
-    #e3f2fd 100%
-  );
-  --tobiracast-bg-gradient-dark: linear-gradient(
-    135deg,
-    #1a1a1a 0%,
-    #2d2d2d 100%
-  );
+  /* 背景グラデーション */
+  --tobiracast-bg-gradient-light: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
+  --tobiracast-bg-gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
 
-  /* Text Colors */
-  --tobiracast-text-primary: var(--tobiracast-gray-900);
-  --tobiracast-text-secondary: var(--tobiracast-gray-600);
-  --tobiracast-text-muted: var(--tobiracast-gray-400);
-  --tobiracast-text-dark: var(--tobiracast-gray-800);
-  --tobiracast-text-light: var(--tobiracast-gray-500);
-  --tobiracast-text-white: var(--tobiracast-white);
-
-  /* Border Colors */
-  --tobiracast-border: #e1e8ed;
-  --tobiracast-border-premium: #ffe4cc;
-  --tobiracast-border-light: var(--tobiracast-gray-200);
-  --tobiracast-border-subtle: var(--tobiracast-gray-100);
-
-  /* Typography Scale */
-  --tobiracast-font-xs: 0.75rem; /* 12px */
-  --tobiracast-font-sm: 0.875rem; /* 14px */
-  --tobiracast-font-base: 1rem; /* 16px */
-  --tobiracast-font-lg: 1.125rem; /* 18px */
-  --tobiracast-font-xl: 1.25rem; /* 20px */
-  --tobiracast-font-2xl: 1.5rem; /* 24px */
-  --tobiracast-font-3xl: 1.875rem; /* 30px */
-  --tobiracast-font-4xl: 2.25rem; /* 36px */
-  --tobiracast-font-5xl: 3rem; /* 48px */
-
-  /* Font Weight Scale */
-  --tobiracast-font-normal: 400;
-  --tobiracast-font-medium: 500;
-  --tobiracast-font-semibold: 600;
-  --tobiracast-font-bold: 700;
-
-  /* Spacing Scale (8px base) */
-  --tobiracast-space-1: 0.25rem; /* 4px */
-  --tobiracast-space-2: 0.5rem; /* 8px */
-  --tobiracast-space-3: 0.75rem; /* 12px */
-  --tobiracast-space-4: 1rem; /* 16px */
-  --tobiracast-space-5: 1.25rem; /* 20px */
-  --tobiracast-space-6: 1.5rem; /* 24px */
-  --tobiracast-space-8: 2rem; /* 32px */
-  --tobiracast-space-10: 2.5rem; /* 40px */
-  --tobiracast-space-12: 3rem; /* 48px */
-  --tobiracast-space-16: 4rem; /* 64px */
-  --tobiracast-space-20: 5rem; /* 80px */
-  --tobiracast-space-24: 6rem; /* 96px */
-
-  /* Border Radius Scale */
-  --tobiracast-radius-sm: 0.25rem; /* 4px */
-  --tobiracast-radius-md: 0.5rem; /* 8px */
-  --tobiracast-radius-lg: 0.75rem; /* 12px */
-  --tobiracast-radius-xl: 1rem; /* 16px */
-  --tobiracast-radius-2xl: 1.5rem; /* 24px */
-  --tobiracast-radius-full: 9999px;
-
-  /* Shadow Colors - Base Values */
-  --tobiracast-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --tobiracast-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --tobiracast-shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.2);
-
-  /* Card Shadows */
+  /* シャドウ */
   --tobiracast-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   --tobiracast-card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
-  --tobiracast-card-shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.06);
-  --tobiracast-card-shadow-subtle-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
-
-  /* Button Shadows */
-  --tobiracast-button-shadow-orange: 0 2px 8px rgba(233, 104, 0, 0.2);
-  --tobiracast-button-shadow-orange-hover: 0 4px 12px rgba(233, 104, 0, 0.3);
-  --tobiracast-button-shadow-orange-strong: 0 4px 15px rgba(233, 104, 0, 0.3);
-  --tobiracast-button-shadow-orange-strong-hover: 0 8px 25px
-    rgba(233, 104, 0, 0.4);
-
-  /* Header & Navigation Shadows */
-  --tobiracast-nav-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  --tobiracast-nav-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.2);
-  --tobiracast-content-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
-
-  /* Navigation Button Specific */
-  --tobiracast-nav-button-bg: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.95),
-    rgba(255, 255, 255, 0.85)
-  );
-  --tobiracast-nav-button-bg-hover: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0.95)
-  );
-  --tobiracast-nav-button-border: 1.5px solid rgba(255, 255, 255, 0.3);
-  --tobiracast-nav-button-border-hover: 1.5px solid rgba(255, 255, 255, 0.5);
-  --tobiracast-nav-button-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --tobiracast-nav-button-shadow-hover:
-    0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  --tobiracast-nav-button-text: #1a1a1a;
-
-  /* Login Button Specific */
-  --tobiracast-login-button-bg: linear-gradient(
-    145deg,
-    var(--tobiracast-primary-orange),
-    var(--tobiracast-dark-orange)
-  );
-  --tobiracast-login-button-bg-hover: linear-gradient(
-    145deg,
-    var(--tobiracast-light-orange),
-    var(--tobiracast-primary-orange)
-  );
-  --tobiracast-login-button-border: 1.5px solid rgba(255, 255, 255, 0.2);
-  --tobiracast-login-button-shadow:
-    0 4px 20px rgba(233, 104, 0, 0.3), 0 1px 3px rgba(233, 104, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  --tobiracast-login-button-shadow-hover:
-    0 8px 30px rgba(233, 104, 0, 0.4), 0 2px 8px rgba(233, 104, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-
-  /* Text Shadows */
-  --tobiracast-text-shadow-light: 0 1px 4px rgba(0, 0, 0, 0.3);
-  --tobiracast-text-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --tobiracast-text-shadow-strong: 0 2px 8px rgba(0, 0, 0, 0.5);
-  --tobiracast-text-shadow-nav: 0 1px 2px rgba(0, 0, 0, 0.3);
-
-  /* Overlay & Background Colors with Alpha */
-  --tobiracast-overlay-gradient: linear-gradient(
-    135deg,
-    rgba(23, 121, 222, 0.8),
-    rgba(233, 104, 0, 0.8)
-  );
-  --tobiracast-white-overlay-15: rgba(255, 255, 255, 0.15);
-  --tobiracast-white-overlay-12: rgba(255, 255, 255, 0.12);
-  --tobiracast-white-overlay-10: rgba(255, 255, 255, 0.1);
-  --tobiracast-white-overlay-05: rgba(255, 255, 255, 0.05);
-  --tobiracast-white-overlay-20: rgba(255, 255, 255, 0.2);
-  --tobiracast-white-overlay-30: rgba(255, 255, 255, 0.3);
-  --tobiracast-white-overlay-80: rgba(255, 255, 255, 0.8);
-  --tobiracast-white-overlay-90: rgba(255, 255, 255, 0.9);
-  --tobiracast-orange-overlay-30: rgba(233, 104, 0, 0.3);
-
-  /* Footer Colors */
-  --tobiracast-footer-text-70: rgba(255, 255, 255, 0.7);
-  --tobiracast-footer-text-50: rgba(255, 255, 255, 0.5);
-  --tobiracast-footer-border: rgba(255, 255, 255, 0.1);
-
-  /* Modal & Search Colors */
-  --tobiracast-modal-backdrop: rgba(0, 0, 0, 0.5);
-  --tobiracast-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  --tobiracast-search-selected-bg: rgba(241, 241, 239, 1);
-
-  /* Additional Overlay Colors */
-  --tobiracast-white-overlay-98: rgba(255, 255, 255, 0.98);
-  --tobiracast-white-overlay-40: rgba(255, 255, 255, 0.4);
-
-  /* Code & Highlight Colors */
-  --tobiracast-code-bg: rgba(135, 131, 120, 0.15);
-  --tobiracast-code-text: #eb5757;
-  --tobiracast-highlight-bg: rgba(247, 212, 255, 0.8);
-  --tobiracast-success: #690;
-
-  /* Legacy Support - Deprecated but kept for compatibility */
-  --tobiracast-shadow: var(--tobiracast-shadow-light);
-  --tobiracast-shadow-hover: var(--tobiracast-shadow-medium);
+  --tobiracast-button-shadow: 0 2px 8px rgba(233, 104, 0, 0.2);
+  --tobiracast-button-shadow-hover: 0 4px 12px rgba(233, 104, 0, 0.3);
 }
 
-/* ========================================
-   UNIFIED COMPONENT STYLES
-   ======================================== */
+/* 共通コンポーネントクラス */
+.page-container {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeInUp 0.8s ease-out;
+}
 
-/* Button System */
-.tobiracast-btn {
-  /* Base button styles */
-  padding: var(--tobiracast-space-3) var(--tobiracast-space-4);
-  border: none;
-  border-radius: var(--tobiracast-radius-md);
-  font-size: var(--tobiracast-font-base);
-  font-weight: var(--tobiracast-font-semibold);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: var(--tobiracast-card-shadow);
+  border: 1px solid var(--tobiracast-gray-100);
+}
+
+.page-header {
   text-align: center;
-  line-height: 1.5;
+  margin-bottom: 2rem;
 }
 
-.tobiracast-btn-primary {
-  background: var(--tobiracast-primary-blue);
-  color: var(--tobiracast-text-white);
-  box-shadow: var(--tobiracast-shadow-light);
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--tobiracast-primary-blue);
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.tobiracast-btn-primary:hover {
-  background: var(--tobiracast-dark-blue);
-  transform: translateY(-1px);
-  box-shadow: var(--tobiracast-shadow-medium);
+.page-description {
+  color: var(--tobiracast-gray-600);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
 }
 
-.tobiracast-btn-secondary {
-  background: var(--tobiracast-primary-orange);
-  color: var(--tobiracast-text-white);
-  box-shadow: var(--tobiracast-button-shadow-orange);
-  border-radius: var(
-    --tobiracast-radius-2xl
-  ); /* ReadMoreボタン用の丸みを保持 */
+.content-section {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
-.tobiracast-btn-secondary:hover {
-  background: var(--tobiracast-dark-orange);
-  transform: translateY(-1px);
-  box-shadow: var(--tobiracast-button-shadow-orange-hover);
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-.tobiracast-btn-outline {
-  background: transparent;
-  color: var(--tobiracast-text-primary);
-  border: 2px solid var(--tobiracast-border);
-}
-
-.tobiracast-btn-outline:hover {
-  background: var(--tobiracast-bg-subtle);
-  border-color: var(--tobiracast-primary-blue);
-}
-
-.tobiracast-btn-ghost {
-  background: transparent;
-  color: var(--tobiracast-text-secondary);
-  border: none;
-}
-
-.tobiracast-btn-ghost:hover {
-  background: var(--tobiracast-bg-muted);
-  color: var(--tobiracast-text-primary);
-}
-
-/* Button Sizes */
-.tobiracast-btn-sm {
-  padding: var(--tobiracast-space-2) var(--tobiracast-space-3);
-  font-size: var(--tobiracast-font-sm);
-}
-
-.tobiracast-btn-lg {
-  padding: var(--tobiracast-space-4) var(--tobiracast-space-6);
-  font-size: var(--tobiracast-font-lg);
-}
-
-.tobiracast-btn-full {
-  width: 100%;
-}
-
-/* Form System */
-.tobiracast-form-group {
-  margin-bottom: var(--tobiracast-space-6);
-}
-
-.tobiracast-form-label {
+.form-label {
   display: block;
-  margin-bottom: var(--tobiracast-space-2);
-  color: var(--tobiracast-text-primary);
-  font-weight: var(--tobiracast-font-medium);
-  font-size: var(--tobiracast-font-sm);
+  margin-bottom: 0.5rem;
+  color: var(--tobiracast-gray-800);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.tobiracast-form-input {
+.form-input {
   width: 100%;
-  padding: var(--tobiracast-space-3);
-  border: 2px solid var(--tobiracast-border);
-  border-radius: var(--tobiracast-radius-md);
-  font-size: var(--tobiracast-font-base);
-  background: var(--tobiracast-bg-primary);
-  color: var(--tobiracast-text-primary);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  padding: 1rem;
+  border: 2px solid var(--tobiracast-gray-200);
+  border-radius: 12px;
+  background: white;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  color: var(--tobiracast-gray-800);
 }
 
-.tobiracast-form-input:focus {
+.form-input:focus {
   outline: none;
   border-color: var(--tobiracast-primary-blue);
-  box-shadow: 0 0 0 3px rgba(23, 121, 222, 0.1);
+  box-shadow: 0 0 0 4px rgba(23, 121, 222, 0.1);
 }
 
-.tobiracast-form-input::placeholder {
-  color: var(--tobiracast-text-muted);
+.form-input::placeholder {
+  color: var(--tobiracast-gray-400);
 }
 
-/* Card System */
-.tobiracast-card {
-  background: var(--tobiracast-bg-primary);
-  border: 1px solid var(--tobiracast-border);
-  border-radius: var(--tobiracast-radius-lg);
-  padding: var(--tobiracast-space-6);
-  box-shadow: var(--tobiracast-card-shadow);
+.btn-primary {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--tobiracast-primary-blue);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--tobiracast-button-shadow);
 }
 
-.tobiracast-card:hover {
+.btn-primary:hover {
+  background: var(--tobiracast-dark-blue);
   transform: translateY(-2px);
-  box-shadow: var(--tobiracast-card-shadow-hover);
-  border-color: var(--tobiracast-primary-blue);
+  box-shadow: var(--tobiracast-button-shadow-hover);
 }
 
-.tobiracast-card-header {
-  margin-bottom: var(--tobiracast-space-4);
-  padding-bottom: var(--tobiracast-space-4);
-  border-bottom: 1px solid var(--tobiracast-border-subtle);
-}
-
-.tobiracast-card-title {
-  font-size: var(--tobiracast-font-lg);
-  font-weight: var(--tobiracast-font-bold);
-  color: var(--tobiracast-text-primary);
-  margin: 0 0 var(--tobiracast-space-2) 0;
-}
-
-.tobiracast-card-subtitle {
-  font-size: var(--tobiracast-font-sm);
-  color: var(--tobiracast-text-secondary);
-  margin: 0;
-}
-
-.tobiracast-card-body {
-  margin-bottom: var(--tobiracast-space-4);
-}
-
-.tobiracast-card-footer {
-  margin-top: var(--tobiracast-space-4);
-  padding-top: var(--tobiracast-space-4);
-  border-top: 1px solid var(--tobiracast-border-subtle);
-}
-
-/* Navigation System */
-.tobiracast-nav-button {
-  padding: var(--tobiracast-space-4) var(--tobiracast-space-6);
-  background: var(--tobiracast-nav-button-bg);
-  border: var(--tobiracast-nav-button-border);
-  border-radius: var(--tobiracast-radius-xl);
-  color: var(--tobiracast-nav-button-text);
-  font-weight: var(--tobiracast-font-bold);
-  font-size: var(--tobiracast-font-lg);
-  text-decoration: none;
-  text-align: center;
-  min-width: 140px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--tobiracast-nav-button-shadow);
-}
-
-.tobiracast-nav-button:hover {
-  background: var(--tobiracast-nav-button-bg-hover);
-  border: var(--tobiracast-nav-button-border-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--tobiracast-nav-button-shadow-hover);
-}
-
-.tobiracast-nav-button-login {
-  background: var(--tobiracast-login-button-bg);
-  border: var(--tobiracast-login-button-border);
-  color: var(--tobiracast-text-white);
-  box-shadow: var(--tobiracast-login-button-shadow);
-}
-
-.tobiracast-nav-button-login:hover {
-  background: var(--tobiracast-login-button-bg-hover);
-  box-shadow: var(--tobiracast-login-button-shadow-hover);
-}
-
-/* Pagination System */
-.tobiracast-pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--tobiracast-space-2);
-  margin: var(--tobiracast-space-8) 0;
-}
-
-.tobiracast-pagination-item {
-  display: block;
-  width: 2.5rem;
-  height: 3rem;
-  line-height: 3rem;
-  text-align: center;
-  text-decoration: none;
-  border-radius: var(--tobiracast-radius-md);
-  background: var(--tobiracast-bg-muted);
-  color: var(--tobiracast-text-primary);
-  font-size: var(--tobiracast-font-sm);
-  font-weight: var(--tobiracast-font-medium);
-  transition: all 0.2s ease;
-}
-
-.tobiracast-pagination-item:hover:not(.inactive) {
-  background: var(--tobiracast-gray-300);
-  transform: translateY(-1px);
-}
-
-.tobiracast-pagination-item.inactive {
-  color: var(--tobiracast-text-muted);
-  cursor: default;
-}
-
-/* Utility Classes */
-.tobiracast-text-center {
-  text-align: center;
-}
-.tobiracast-text-left {
-  text-align: left;
-}
-.tobiracast-text-right {
-  text-align: right;
-}
-
-.tobiracast-mb-4 {
-  margin-bottom: var(--tobiracast-space-4);
-}
-.tobiracast-mb-6 {
-  margin-bottom: var(--tobiracast-space-6);
-}
-.tobiracast-mb-8 {
-  margin-bottom: var(--tobiracast-space-8);
-}
-
-.tobiracast-mt-4 {
-  margin-top: var(--tobiracast-space-4);
-}
-.tobiracast-mt-6 {
-  margin-top: var(--tobiracast-space-6);
-}
-.tobiracast-mt-8 {
-  margin-top: var(--tobiracast-space-8);
-}
-
-.tobiracast-flex {
-  display: flex;
-}
-.tobiracast-flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.tobiracast-flex-between {
+.link-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.tobiracast-animate-fade-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+.link-secondary {
+  color: var(--tobiracast-gray-500);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .tobiracast-btn-lg {
-    padding: var(--tobiracast-space-3) var(--tobiracast-space-4);
-    font-size: var(--tobiracast-font-base);
-  }
-
-  .tobiracast-nav-button {
-    padding: var(--tobiracast-space-3) var(--tobiracast-space-4);
-    font-size: var(--tobiracast-font-base);
-    min-width: 120px;
-  }
-
-  .tobiracast-card {
-    padding: var(--tobiracast-space-4);
-  }
+.link-secondary:hover {
+  color: var(--tobiracast-primary-blue);
 }
 
-/* Premium Content Styles */
-.premium-divider {
-  margin: 3rem 0;
-  text-align: center;
+.link-primary {
+  color: var(--tobiracast-primary-orange);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.link-primary:hover {
+  color: var(--tobiracast-dark-orange);
+}
+
+.divider {
   position: relative;
+  text-align: center;
+  margin: 2rem 0 1.5rem;
 }
 
-.premium-divider::before {
+.divider::before {
   content: '';
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--tobiracast-border-premium);
+  background: var(--tobiracast-gray-200);
 }
 
-.premium-label {
-  background: var(--tobiracast-bg-primary);
-  padding: 0.5rem 2rem;
-  display: inline-block;
+.divider span {
+  background: white;
+  padding: 0 1rem;
+  color: var(--tobiracast-gray-500);
+  font-size: 0.9rem;
   position: relative;
-  border: 2px solid var(--tobiracast-primary-orange);
-  border-radius: 25px;
-  color: var(--tobiracast-primary-orange);
-  font-weight: bold;
-  font-size: 0.875rem;
 }
 
-.premium-content {
-  background: var(--tobiracast-bg-premium);
-  border: 1px solid var(--tobiracast-border-premium);
-  border-radius: 8px;
-  padding: 2rem;
-  margin-top: 2rem;
-}
-
-.premium-locked {
-  filter: blur(5px);
-  user-select: none;
-  pointer-events: none;
-}
-
-.premium-unlock-message {
-  text-align: center;
-  padding: 3rem 2rem;
-  background: var(--tobiracast-bg-secondary);
-  border-radius: 8px;
-  margin: 2rem 0;
-}
-
-.premium-unlock-message h3 {
-  color: var(--tobiracast-primary-blue);
-  margin-bottom: 1rem;
-}
-
-.premium-unlock-message p {
-  color: var(--tobiracast-text-secondary);
-  margin-bottom: 1.5rem;
-}
-
-.premium-unlock-button {
-  background: var(--tobiracast-primary-orange);
-  color: white;
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.premium-unlock-button:hover {
-  background: var(--tobiracast-dark-orange);
-  transform: translateY(-2px);
-  box-shadow: var(--tobiracast-shadow-hover);
-}
-
-/* Home Page Latest Articles Grid */
-.latest-articles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.article-card {
-  background: var(--tobiracast-bg-primary);
-  border: 1px solid var(--tobiracast-border);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.article-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--tobiracast-shadow-hover);
-  border-color: var(--tobiracast-primary-blue);
-}
-
-.article-card-image {
+.social-btn {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--tobiracast-gray-200);
+  border-radius: 12px;
+  background: white;
+  color: var(--tobiracast-gray-700);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
 }
 
-.article-card-content {
-  padding: 1.5rem;
+.social-btn:hover {
+  background: var(--tobiracast-gray-50);
+  border-color: var(--tobiracast-gray-300);
+  transform: translateY(-1px);
 }
 
-.article-card-title {
-  color: var(--tobiracast-text-primary);
-  font-size: 1.125rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
+.social-btn.github {
+  background: #1a1a1a;
+  color: white;
+  border-color: #1a1a1a;
 }
 
-.article-card-date {
-  color: var(--tobiracast-text-muted);
-  font-size: 0.875rem;
+.social-btn.github:hover {
+  background: #333;
+  border-color: #333;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .latest-articles {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-
-  .premium-content {
-    padding: 1.5rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .premium-unlock-message {
+@media (max-width: 640px) {
+  .page-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .card {
     padding: 2rem 1.5rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .link-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
   }
 }

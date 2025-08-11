@@ -414,27 +414,27 @@ if (database.Icon && database.Icon.Type === 'file') {
   .main-nav a {
     display: block;
     padding: 16px 32px;
-    color: var(--tobiracast-nav-button-text);
+    color: white;
     text-decoration: none;
     border-radius: 16px;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-weight: 700;
     font-size: 1.1rem;
-    border: var(--tobiracast-nav-button-border);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
-    background: var(--tobiracast-nav-button-bg);
-    box-shadow: var(--tobiracast-nav-button-shadow);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     text-shadow: none;
     min-width: 140px;
     text-align: center;
   }
 
   .main-nav a:hover {
-    background: var(--tobiracast-nav-button-bg-hover);
-    border: var(--tobiracast-nav-button-border-hover);
-    color: var(--tobiracast-nav-button-text);
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
     transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--tobiracast-nav-button-shadow-hover);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
   }
 
   .main-nav a:focus {
@@ -443,17 +443,17 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .main-nav a.login-btn {
-    background: var(--tobiracast-login-button-bg);
-    border: var(--tobiracast-login-button-border);
+    background: var(--tobiracast-primary-orange);
+    border: 2px solid var(--tobiracast-primary-orange);
     color: white;
-    box-shadow: var(--tobiracast-login-button-shadow);
+    box-shadow: 0 8px 32px rgba(233, 104, 0, 0.3);
   }
 
   .main-nav a.login-btn:hover {
-    background: var(--tobiracast-login-button-bg-hover);
-    border: var(--tobiracast-login-button-border);
+    background: #d45a00;
+    border: 2px solid #d45a00;
     transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--tobiracast-login-button-shadow-hover);
+    box-shadow: 0 12px 48px rgba(233, 104, 0, 0.4);
   }
 
   .full-width-container {
