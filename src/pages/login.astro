@@ -13,46 +13,484 @@ import Layout from '../layouts/Layout.astro'
       </header>
 
       <div class="content-section">
-        <form style="margin-bottom: 2rem;">
-          <div class="form-group">
-            <label for="email" class="form-label">メールアドレス</label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" class="form-input" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="password" class="form-label">パスワード</label>
-            <input type="password" id="password" name="password" placeholder="パスワードを入力" class="form-input" required>
+        <!-- 認証エラー表示 -->
+        <div id="auth-error" class="error-message" style="display: none;"></div>
+        
+        <!-- アカウント作成中表示 -->
+        <div id="account-creating" class="loading-container" style="display: none;">
+          <div class="spinner"></div>
+          <h2>アカウントを準備中...</h2>
+          <p id="status-message">アカウント確認中...</p>
+          <p class="status-note">
+            この処理には時間がかかる場合があります。<br>
+            ブラウザを閉じても、次回ログイン時に続きから処理されます。
+          </p>
+        </div>
+
+        <!-- ログインフォーム -->
+        <div id="login-form">
+          <!-- Googleログインボタン -->
+          <button id="google-login" class="social-btn google-btn" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <span>ログイン中...</span>
+          </button>
+
+          <!-- Appleログインボタン -->
+          <button id="apple-login" class="social-btn apple-btn" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <span>ログイン中...</span>
+          </button>
+
+          <div class="divider">
+            <span>または</span>
           </div>
 
-          <button type="submit" class="btn-primary">ログイン</button>
+          <!-- メール認証フォーム（Magic Link方式） -->
+          <form id="email-login-form">
+            <div class="form-group">
+              <label class="form-label">メールアドレス</label>
+              <input
+                type="email"
+                id="email-input"
+                placeholder="your@email.com"
+                required
+                class="form-input"
+              />
+            </div>
+            <button type="submit" class="btn-primary">メールでログイン</button>
+            <p class="magic-link-note">
+              入力したメールアドレスにログインリンクを送信します
+            </p>
+          </form>
 
           <div class="link-row">
             <a href="/forgot-password" class="link-secondary">パスワードを忘れた方</a>
             <a href="/signup" class="link-primary">新規アカウント作成</a>
           </div>
-        </form>
-
-        <div class="divider">
-          <span>または</span>
         </div>
-        
-        <button class="social-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Googleでログイン
-        </button>
-        
-        <button class="social-btn github">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-          GitHubでログイン
-        </button>
       </div>
     </div>
   </div>
 </Layout>
+
+<style>
+  .error-message {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #dc2626;
+    font-size: 0.875rem;
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid var(--tobiracast-primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-container h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+
+  .loading-container p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+  }
+
+  .status-note {
+    font-size: 0.875rem;
+    color: #9ca3af !important;
+  }
+
+  .social-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+    border: none;
+  }
+
+  .google-btn {
+    border: 2px solid #e5e7eb;
+    background-color: #ffffff;
+    color: #374151;
+  }
+
+  .google-btn:hover:not(:disabled) {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+  }
+
+  .apple-btn {
+    border: 2px solid #1f2937;
+    background-color: #111827;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+  }
+
+  .apple-btn:hover:not(:disabled) {
+    background-color: #1f2937;
+    transform: translateY(-1px);
+  }
+
+  .social-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .divider {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+  }
+
+  .divider span {
+    position: relative;
+    display: block;
+    text-align: center;
+    background-color: white;
+    padding: 0 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+
+  .link-row {
+    text-align: center;
+    font-size: 0.875rem;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .link-secondary {
+    color: #6b7280;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .link-secondary:hover {
+    color: var(--tobiracast-primary-blue);
+  }
+
+  .link-primary {
+    color: var(--tobiracast-primary-orange);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .link-primary:hover {
+    color: #d97706;
+  }
+
+  .magic-link-note {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+</style>
+
+<script>
+  import { initializeApp } from 'firebase/app'
+  import { 
+    getAuth,
+    GoogleAuthProvider,
+    OAuthProvider,
+    signInWithPopup,
+    sendSignInLinkToEmail,
+    isSignInWithEmailLink,
+    signInWithEmailLink,
+    onAuthStateChanged
+  } from 'firebase/auth'
+
+  // Firebase設定
+  const firebaseConfig = {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID
+  }
+
+  const app = initializeApp(firebaseConfig)
+  const auth = getAuth(app)
+  const API_URL = import.meta.env.PUBLIC_API_URL || '/backend/api/functions'
+
+  // Magic Link設定（tobiratory-webと同じ）
+  const actionCodeSettings = {
+    url: window.location.origin + '/login',
+    handleCodeInApp: true,
+  }
+
+  // DOM要素
+  const authError = document.getElementById('auth-error')
+  const accountCreating = document.getElementById('account-creating')
+  const loginForm = document.getElementById('login-form')
+  const statusMessage = document.getElementById('status-message')
+  const googleLoginBtn = document.getElementById('google-login')
+  const appleLoginBtn = document.getElementById('apple-login')
+  const emailForm = document.getElementById('email-login-form')
+
+  // エラー表示
+  function showError(message: string) {
+    authError.textContent = message
+    authError.style.display = 'block'
+  }
+
+  // エラー非表示
+  function hideError() {
+    authError.style.display = 'none'
+  }
+
+  // ロード中表示
+  function showLoading(message: string) {
+    hideError()
+    loginForm.style.display = 'none'
+    accountCreating.style.display = 'block'
+    statusMessage.textContent = message
+  }
+
+  // フォーム表示
+  function showForm() {
+    accountCreating.style.display = 'none'
+    loginForm.style.display = 'block'
+    googleLoginBtn.disabled = false
+    appleLoginBtn.disabled = false
+    googleLoginBtn.querySelector('span').textContent = 'Googleでログイン'
+    appleLoginBtn.querySelector('span').textContent = 'Appleでログイン'
+  }
+
+  // tobiratory-webと同じ認証フロー
+  async function handleTobiratoryAccountSetup() {
+    try {
+      showLoading('プロフィール確認中...')
+      
+      const idToken = await auth.currentUser?.getIdToken()
+      if (!idToken) throw new Error('認証されていません')
+      
+      // プロフィール取得
+      const profileResponse = await fetch(`${API_URL}/native/my/profile`, {
+        method: 'GET',
+        headers: {
+          'Authorization': idToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      const profile = await profileResponse.json()
+      
+      if (profile.status === 'success') {
+        showLoading('ログイン完了')
+        setTimeout(() => window.location.href = '/', 1000)
+        return
+      }
+      
+      // アカウント作成が必要
+      showLoading('Tobiratoryアカウントを作成中...')
+      
+      // Tobiratoryアカウント作成
+      const signupResponse = await fetch(`${API_URL}/native/signup`, {
+        method: 'POST',
+        headers: {
+          'Authorization': idToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (!signupResponse.ok) {
+        throw new Error('Tobiratoryアカウント作成に失敗しました')
+      }
+      
+      // Flowアカウント作成
+      showLoading('Flowアカウントを作成中（時間がかかる場合があります）...')
+      
+      const flowResponse = await fetch(`${API_URL}/native/create-flow`, {
+        method: 'POST',
+        headers: {
+          'Authorization': idToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ locale: 'ja' })
+      })
+      
+      // 作成完了まで待機
+      const maxRetry = 100
+      const sleepTime = 10000
+      
+      for (let i = 0; i < maxRetry; i++) {
+        await new Promise(resolve => setTimeout(resolve, sleepTime))
+        
+        const checkResponse = await fetch(`${API_URL}/native/my/profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': await auth.currentUser?.getIdToken(),
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        const checkProfile = await checkResponse.json()
+        
+        if (checkProfile.status === 'success') {
+          showLoading('アカウント作成完了')
+          setTimeout(() => window.location.href = '/', 1000)
+          return
+        }
+      }
+      
+      throw new Error('アカウント作成がタイムアウトしました')
+      
+    } catch (error) {
+      console.error('Account setup error:', error)
+      showForm()
+      showError(error.message || 'アカウント作成に失敗しました')
+    }
+  }
+
+  // Firebase認証状態監視
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await handleTobiratoryAccountSetup()
+    } else {
+      showForm()
+    }
+  })
+
+  // Googleログイン
+  googleLoginBtn.addEventListener('click', async () => {
+    hideError()
+    googleLoginBtn.disabled = true
+    googleLoginBtn.querySelector('span').textContent = 'ログイン中...'
+    
+    try {
+      const provider = new GoogleAuthProvider()
+      await signInWithPopup(auth, provider)
+    } catch (error) {
+      showForm()
+      if (error.code === 'auth/popup-closed-by-user') {
+        showError('ログインがキャンセルされました')
+      } else {
+        showError('Googleログインに失敗しました')
+      }
+    }
+  })
+
+  // Appleログイン
+  appleLoginBtn.addEventListener('click', async () => {
+    hideError()
+    appleLoginBtn.disabled = true
+    appleLoginBtn.querySelector('span').textContent = 'ログイン中...'
+    
+    try {
+      const provider = new OAuthProvider('apple.com')
+      await signInWithPopup(auth, provider)
+    } catch (error) {
+      showForm()
+      if (error.code === 'auth/popup-closed-by-user') {
+        showError('ログインがキャンセルされました')
+      } else {
+        showError('Appleログインに失敗しました')
+      }
+    }
+  })
+
+  // Magic Linkメール認証（tobiratory-webと同じ）
+  emailForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    hideError()
+    
+    const email = (document.getElementById('email-input') as HTMLInputElement).value
+    
+    try {
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      // メールアドレスを保存
+      window.localStorage.setItem('emailForSignIn', email)
+      showError('ログインリンクを送信しました。メールをご確認ください。')
+      // この場合はエラーではなく成功メッセージとして表示
+      authError.style.backgroundColor = '#f0fdf4'
+      authError.style.borderColor = '#bbf7d0'
+      authError.style.color = '#16a34a'
+    } catch (error) {
+      if (error.code === 'auth/invalid-email') {
+        showError('メールアドレスの形式が正しくありません')
+      } else if (error.code === 'auth/missing-email') {
+        showError('メールアドレスを入力してください')
+      } else {
+        showError('メール送信に失敗しました。もう一度お試しください。')
+      }
+    }
+  })
+
+  // ページ読み込み時にMagic Linkをチェック（tobiratory-webと同じ）
+  window.addEventListener('load', async () => {
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem('emailForSignIn')
+      if (!email) {
+        // ユーザーがメールリンクを別のデバイスで開いた場合
+        email = window.prompt('確認のためメールアドレスを入力してください：')
+      }
+      
+      if (email) {
+        try {
+          showLoading('メールリンクでログイン中...')
+          await signInWithEmailLink(auth, email, window.location.href)
+          window.localStorage.removeItem('emailForSignIn')
+          // onAuthStateChangedが自動的にhandleTobiratoryAccountSetupを呼ぶ
+        } catch (error) {
+          showForm()
+          showError('メールリンクでのログインに失敗しました')
+        }
+      } else {
+        showForm()
+        showError('メールアドレスが必要です')
+      }
+    }
+  })
+</script>
