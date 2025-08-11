@@ -1,0 +1,46 @@
+---
+import ArticleCard from './ArticleCard.astro'
+import NoContents from './NoContents.astro'
+import Pagination from './Pagination.astro'
+
+export interface Props {
+  posts: any[]
+  currentPage: number
+  numberOfPages: number
+  title?: string
+}
+
+const { posts, currentPage, numberOfPages, title } = Astro.props
+---
+
+<div class="w-full">
+  <div class="max-w-7xl mx-auto px-4">
+  {title && (
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold mb-4 relative inline-block" style="color: var(--tobiracast-primary-blue);">
+        {title}
+        <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 rounded-sm" style="background: linear-gradient(to right, var(--tobiracast-primary-blue), var(--tobiracast-primary-orange));"></div>
+      </h1>
+    </header>
+  )}
+
+  {posts.length === 0 ? (
+    <NoContents contents={posts} />
+  ) : (
+    <div class="space-y-8">
+      {posts.map((post, index) => (
+        <ArticleCard post={post} layout="list" index={index} />
+      ))}
+    </div>
+  )}
+
+  {numberOfPages > 1 && (
+    <div class="mt-12 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.6s_forwards]">
+      <Pagination
+        currentPage={currentPage}
+        numberOfPages={numberOfPages}
+      />
+    </div>
+  )}
+  </div>
+</div>

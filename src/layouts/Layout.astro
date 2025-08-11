@@ -358,7 +358,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .mobile-menu-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--tobiracast-white-overlay-10);
   }
 
   .mobile-menu-toggle.active span:nth-child(1) {
@@ -403,7 +403,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .menu-close-btn:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: var(--tobiracast-white-overlay-10);
     transform: rotate(90deg);
   }
 
@@ -497,7 +497,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .site-footer {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    background: var(--tobiracast-bg-gradient-dark);
     color: white;
     padding: 2rem 0 1rem;
     margin-top: 3rem;
@@ -527,7 +527,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .footer-brand p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--tobiracast-footer-text-70);
     font-size: 0.85rem;
     margin: 0;
   }
@@ -539,7 +539,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   .footer-links a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--tobiracast-footer-text-70);
     text-decoration: none;
     transition: color 0.3s ease;
     font-size: 0.9rem;
@@ -553,11 +553,11 @@ if (database.Icon && database.Icon.Type === 'file') {
   .footer-bottom {
     text-align: center;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--tobiracast-footer-border);
   }
 
   .footer-bottom p {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--tobiracast-footer-text-50);
     font-size: 0.8rem;
     margin: 0;
   }
@@ -604,11 +604,11 @@ if (database.Icon && database.Icon.Type === 'file') {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.98);
+      background: var(--tobiracast-white-overlay-98);
       backdrop-filter: blur(20px);
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--tobiracast-modal-shadow);
       flex-direction: column;
       gap: 0.75rem;
       align-items: center;
@@ -652,7 +652,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     }
     
     .nav-menu a:hover {
-      background: rgba(59, 130, 246, 0.1);
+      background: var(--tobiracast-white-overlay-10);
       border-color: var(--tobiracast-primary-blue);
       transform: none;
       box-shadow: none;
@@ -717,13 +717,13 @@ if (database.Icon && database.Icon.Type === 'file') {
     --gap: 1rem;
     --gap-double: 2rem;
 
-    --bg: #fff;
-    --fg: #333;
-    --accents-1: #666;
-    --accents-2: #666;
-    --accents-3: #666;
-    --geist-foreground: #000;
-    --geist-success: #690;
+    --bg: var(--tobiracast-white);
+    --fg: var(--tobiracast-gray-700);
+    --accents-1: var(--tobiracast-gray-600);
+    --accents-2: var(--tobiracast-gray-600);
+    --accents-3: var(--tobiracast-gray-600);
+    --geist-foreground: var(--tobiracast-black);
+    --geist-success: var(--tobiracast-success, #690);
 
     --radius: 4px;
 
@@ -748,7 +748,7 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
+    background: var(--tobiracast-bg-gradient-light);
     color: var(--fg);
     font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Helvetica, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
@@ -777,7 +777,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   
   /* 画像読み込み中のみ背景色を表示 */
   img[loading="lazy"]:not(.loaded) {
-    background: #f5f5f5;
+    background: var(--tobiracast-gray-100);
   }
 
   img[loading="lazy"] {
@@ -801,7 +801,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, var(--tobiracast-white-overlay-40), transparent);
     transform: translateX(-100%);
     animation: shimmer 1.5s infinite;
     z-index: 1;
@@ -823,7 +823,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   figure {
     margin: 0;
     font-size: 0.85rem;
-    color: #999;
+    color: var(--tobiracast-gray-400);
     line-height: 1.8rem;
   }
 
@@ -838,7 +838,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   mark {
     padding: var(--gap-quarter);
     border-radius: var(--radius);
-    background: rgba(247, 212, 255, 0.8);
+    background: var(--tobiracast-highlight-bg, rgba(247, 212, 255, 0.8));
   }
 
   h1 {
@@ -855,14 +855,14 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   ol {
-    color: #222;
+    color: var(--tobiracast-gray-800);
     font-weight: 400;
     font-size: 0.9rem;
     line-height: 1.8rem;
   }
   p,
   ul {
-    color: #222;
+    color: var(--tobiracast-gray-800);
     font-weight: 400;
     font-size: 1rem;
     line-height: 1.8rem;
@@ -887,13 +887,13 @@ if (database.Icon && database.Icon.Type === 'file') {
     height: 1px;
     border: 0;
     margin: 0.3rem 0;
-    background-color: #333;
+    background-color: var(--tobiracast-gray-700);
   }
 
   code {
     font-size: 0.9rem;
-    background: rgba(135, 131, 120, 0.15);
-    color: #eb5757;
+    background: var(--tobiracast-code-bg, rgba(135, 131, 120, 0.15));
+    color: var(--tobiracast-code-text, #eb5757);
     padding: 0.25rem;
     border-radius: var(--radius);
     font-family: var(--font-mono);
@@ -912,13 +912,13 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   table th {
     font-weight: 600;
-    background-color: #f4f4f4;
+    background-color: var(--tobiracast-gray-100);
   }
 
   table td,
   table th {
     font-size: 0.9rem;
-    border: 1px solid #e4e4e4;
+    border: 1px solid var(--tobiracast-gray-200);
     padding: 0.5rem 1rem;
     text-align: left;
     line-height: 1.2rem;
