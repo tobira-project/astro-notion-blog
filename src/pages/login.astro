@@ -14,17 +14,17 @@ import Layout from '../layouts/Layout.astro'
 
       <div class="login-form-container">
         <div class="login-form">
-          <div class="form-group">
-            <label for="email">メールアドレス</label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          <div class="tobiracast-form-group">
+            <label for="email" class="tobiracast-form-label">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" class="tobiracast-form-input" required>
           </div>
           
-          <div class="form-group">
-            <label for="password">パスワード</label>
-            <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+          <div class="tobiracast-form-group">
+            <label for="password" class="tobiracast-form-label">パスワード</label>
+            <input type="password" id="password" name="password" placeholder="パスワードを入力" class="tobiracast-form-input" required>
           </div>
 
-          <button type="submit" class="login-button">
+          <button type="submit" class="tobiracast-btn tobiracast-btn-primary tobiracast-btn-full">
             ログイン
           </button>
 
@@ -98,47 +98,9 @@ import Layout from '../layouts/Layout.astro'
     transform: translateY(20px);
   }
 
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--tobiracast-text-primary);
-    font-weight: 500;
-  }
-
-  .form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--tobiracast-border);
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-  }
-
-  .form-group input:focus {
-    outline: none;
-    border-color: var(--tobiracast-primary-blue);
-  }
-
-  .login-button {
-    width: 100%;
-    padding: 1rem;
-    background: var(--tobiracast-primary-blue);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    margin-bottom: 1.5rem;
-  }
-
-  .login-button:hover {
-    background: var(--tobiracast-dark-blue);
+  /* Form and button styles now unified in tobiracast.css */
+  .tobiracast-btn-full {
+    margin-bottom: var(--tobiracast-space-6);
   }
 
   .login-links {
