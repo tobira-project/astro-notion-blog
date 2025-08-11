@@ -262,7 +262,7 @@ import Layout from '../layouts/Layout.astro'
 
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
-  const API_URL = import.meta.env.PUBLIC_API_URL || '/backend/api/functions'
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
 
   // Magic Link設定（tobiratory-webと同じ）
   const actionCodeSettings = {
@@ -308,6 +308,75 @@ import Layout from '../layouts/Layout.astro'
     appleLoginBtn.querySelector('span').textContent = 'Appleでログイン'
   }
 
+  // Tobiratoryアカウント作成
+  async function createTobiratoryAccount(idToken: string) {
+    const signupResponse = await fetch(`${API_URL}/native/signup`, {
+      method: 'POST',
+      headers: {
+        'Authorization': idToken,
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    if (!signupResponse.ok) {
+      throw new Error('Tobiratoryアカウント作成に失敗しました')
+    }
+  }
+
+  // Flowアカウント作成
+  async function createFlowAccount(idToken: string) {
+    const flowResponse = await fetch(`${API_URL}/native/create-flow`, {
+      method: 'POST',
+      headers: {
+        'Authorization': idToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ locale: 'ja' })
+    })
+    
+    if (!flowResponse.ok) {
+      throw new Error('Flowアカウント作成リクエストに失敗しました')
+    }
+    
+    // 作成完了まで待機
+    await pollForCompletion(idToken)
+  }
+
+  // ポーリングによる完了待機
+  async function pollForCompletion(idToken: string) {
+    const maxRetry = 100
+    const sleepTime = 10000
+    
+    for (let i = 0; i < maxRetry; i++) {
+      await new Promise(resolve => setTimeout(resolve, sleepTime))
+      
+      const currentIdToken = await auth.currentUser?.getIdToken()
+      const checkResponse = await fetch(`${API_URL}/native/my/profile`, {
+        method: 'GET',
+        headers: {
+          'Authorization': currentIdToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      const checkProfile = await checkResponse.json()
+      
+      // 上司の指示通りのレスポンス形式に対応
+      if (checkProfile.status === 'success') {
+        showLoading('アカウント作成完了')
+        setTimeout(() => window.location.href = '/', 1000)
+        return
+      } else if (checkProfile.status === 'error' && checkProfile.data === 'flow-account-create-error') {
+        // エラー時は再試行
+        showLoading('エラー発生 - Flowアカウント再作成中...')
+        await createFlowAccount(currentIdToken)
+        return
+      }
+    }
+    
+    throw new Error('アカウント作成がタイムアウトしました')
+  }
+
   // tobiratory-webと同じ認証フロー
   async function handleTobiratoryAccountSetup() {
     try {
@@ -327,65 +396,44 @@ import Layout from '../layouts/Layout.astro'
       
       const profile = await profileResponse.json()
       
+      // 上司の指示通りのレスポンス形式に対応
       if (profile.status === 'success') {
         showLoading('ログイン完了')
         setTimeout(() => window.location.href = '/', 1000)
         return
       }
       
-      // アカウント作成が必要
-      showLoading('Tobiratoryアカウントを作成中...')
-      
-      // Tobiratoryアカウント作成
-      const signupResponse = await fetch(`${API_URL}/native/signup`, {
-        method: 'POST',
-        headers: {
-          'Authorization': idToken,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (!signupResponse.ok) {
-        throw new Error('Tobiratoryアカウント作成に失敗しました')
-      }
-      
-      // Flowアカウント作成
-      showLoading('Flowアカウントを作成中（時間がかかる場合があります）...')
-      
-      const flowResponse = await fetch(`${API_URL}/native/create-flow`, {
-        method: 'POST',
-        headers: {
-          'Authorization': idToken,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ locale: 'ja' })
-      })
-      
-      // 作成完了まで待機
-      const maxRetry = 100
-      const sleepTime = 10000
-      
-      for (let i = 0; i < maxRetry; i++) {
-        await new Promise(resolve => setTimeout(resolve, sleepTime))
-        
-        const checkResponse = await fetch(`${API_URL}/native/my/profile`, {
-          method: 'GET',
-          headers: {
-            'Authorization': await auth.currentUser?.getIdToken(),
-            'Content-Type': 'application/json'
-          }
-        })
-        
-        const checkProfile = await checkResponse.json()
-        
-        if (checkProfile.status === 'success') {
-          showLoading('アカウント作成完了')
-          setTimeout(() => window.location.href = '/', 1000)
-          return
+      // エラーレスポンスの場合のデータ処理
+      if (profile.status === 'error') {
+        switch (profile.data) {
+          case 'account-not-exists':
+            // Tobiratory AccountとFlowアカウントを作る
+            showLoading('Tobiratoryアカウントを作成中...')
+            await createTobiratoryAccount(idToken)
+            showLoading('Flowアカウントを作成中...')
+            await createFlowAccount(idToken)
+            return
+            
+          case 'flow-account-not-exists':
+            // Flowアカウントを作る
+            showLoading('Flowアカウントを作成中...')
+            await createFlowAccount(idToken)
+            return
+            
+          case 'flow-address-creating':
+          case 'flow-account-retrying':
+            // 作成中/再試行中 - 完了を待つ
+            showLoading('Flowアカウント作成中（処理継続中）...')
+            await pollForCompletion(idToken)
+            return
+            
+          case 'flow-account-create-error':
+            // エラー発生 - Flowアカウントを作り直し
+            showLoading('エラー発生 - Flowアカウント再作成中...')
+            await createFlowAccount(idToken)
+            return
         }
       }
-      
-      throw new Error('アカウント作成がタイムアウトしました')
       
     } catch (error) {
       console.error('Account setup error:', error)
