@@ -58,26 +58,6 @@ import Layout from '../layouts/Layout.astro'
         </div>
       </div>
     </div>
-    
-    <div class="login-help">
-      <h3>ログインについて</h3>
-      <p>
-        Tobiratoryアカウントでログインすると、以下の機能をご利用いただけます：
-      </p>
-      <ul>
-        <li>有料コンテンツへのアクセス</li>
-        <li>限定動画の視聴</li>
-        <li>コミュニティへの参加</li>
-        <li>お気に入り機能</li>
-      </ul>
-    </div>
-    
-    <div class="support-info">
-      <h3>サポート</h3>
-      <p>
-        ログインでお困りの場合は、<a href="/support">サポートページ</a>をご確認ください。
-      </p>
-    </div>
   </div>
 </Layout>
 
@@ -241,72 +221,7 @@ import Layout from '../layouts/Layout.astro'
     color: #333;
   }
 
-  .login-help {
-    background: var(--tobiracast-bg-secondary);
-    padding: 2rem;
-    border-radius: 8px;
-    margin: 3rem auto 2rem;
-    max-width: 600px;
-  }
 
-  .login-help h3 {
-    color: var(--tobiracast-primary-blue);
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .login-help p {
-    text-align: center;
-    color: var(--tobiracast-text-secondary);
-    margin-bottom: 1.5rem;
-  }
-
-  .login-help ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
-  .login-help li {
-    background: var(--tobiracast-bg-primary);
-    padding: 1rem;
-    border-radius: 6px;
-    color: var(--tobiracast-text-primary);
-    text-align: center;
-    border: 1px solid var(--tobiracast-border);
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .login-help li::before {
-    content: "✓";
-    position: absolute;
-    left: 0.75rem;
-    color: var(--tobiracast-primary-orange);
-    font-weight: bold;
-  }
-
-  .support-info {
-    background: var(--tobiracast-bg-primary);
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-    border: 1px solid var(--tobiracast-border);
-  }
-
-  .support-info h3 {
-    color: var(--tobiracast-primary-blue);
-    margin-bottom: 1rem;
-  }
-
-  .support-info p {
-    color: var(--tobiracast-text-secondary);
-    font-size: 0.875rem;
-  }
 
   @keyframes fadeInUp {
     from {

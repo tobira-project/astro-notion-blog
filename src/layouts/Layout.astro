@@ -226,12 +226,6 @@ if (database.Icon && database.Icon.Type === 'file') {
 <style>
   .container {
     min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    position: relative;
   }
 
   .site-header {
@@ -500,16 +494,13 @@ if (database.Icon && database.Icon.Type === 'file') {
     position: relative;
     z-index: 1;
     box-shadow: var(--tobiracast-content-shadow);
-    flex-grow: 1;
-    width: 100%;
   }
 
   .site-footer {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     color: white;
-    padding: 2rem 0 0;
-    width: 100%;
-    margin-top: auto;
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
   }
 
   .footer-content {
@@ -561,7 +552,7 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   .footer-bottom {
     text-align: center;
-    padding: 1.5rem 0;
+    padding-top: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -748,15 +739,14 @@ if (database.Icon && database.Icon.Type === 'file') {
     word-break: break-word;
   }
 
-  * {
-    margin: 0;
+  html,
+  body {
     padding: 0;
+    margin: 0;
+    font-size: 16px;
   }
 
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 16px;
+  body {
     min-height: 100vh;
     background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
     color: var(--fg);
