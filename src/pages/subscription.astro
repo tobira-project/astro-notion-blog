@@ -4,13 +4,6 @@ import Layout from '../layouts/Layout.astro'
 
 <Layout title="プラン加入" path="/subscription">
   <div slot="main" class="subscription-page">
-    <header>
-      <h1 class="page-title">プラン加入</h1>
-      <p class="page-description">
-        有料プランに加入して、限定コンテンツや特典をお楽しみください。
-      </p>
-    </header>
-
     <div class="coming-soon-container">
       <div class="coming-soon-card">
         <div class="coming-soon-icon">🚀</div>
@@ -19,118 +12,6 @@ import Layout from '../layouts/Layout.astro'
           現在、より充実したコンテンツをお届けするため<br>
           有料プランの準備を進めております。
         </p>
-        <div class="coming-soon-features">
-          <h3>提供予定の機能</h3>
-          <ul>
-            <li>プレミアム記事の閲覧</li>
-            <li>限定動画コンテンツ</li>
-            <li>メンバー限定コミュニティ</li>
-            <li>オンラインセミナーへの参加</li>
-            <li>個別相談・サポート</li>
-          </ul>
-        </div>
-        <div class="notify-section">
-          <p>サービス開始のお知らせをご希望の方は<br>メールアドレスをご登録ください。</p>
-          <div class="notify-form">
-            <input type="email" placeholder="メールアドレスを入力" class="notify-input" disabled>
-            <button class="notify-button" disabled>通知を受け取る</button>
-          </div>
-          <p class="notify-note">※ 現在準備中のため、通知登録は後日開始予定です</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="plans-preview">
-      <h3>提供予定のプラン</h3>
-      <div class="plans-container">
-        <div class="plan-card preview" style="animation-delay: 0.2s">
-          <div class="preview-badge">準備中</div>
-          <div class="plan-header">
-            <h2 class="plan-name">ベーシックプラン</h2>
-            <div class="plan-price">
-              <span class="price">¥500</span>
-              <span class="period">/月（予定）</span>
-            </div>
-          </div>
-          <ul class="plan-features">
-            <li>全ての記事の有料部分を閲覧可能</li>
-            <li>限定動画コンテンツの視聴</li>
-            <li>月1回の限定ウェビナー参加権</li>
-            <li>コミュニティへの参加</li>
-          </ul>
-          <button class="plan-button" disabled>
-            準備中
-          </button>
-        </div>
-
-        <div class="plan-card preview featured" style="animation-delay: 0.3s">
-          <div class="preview-badge recommended">準備中</div>
-          <div class="plan-header">
-            <h2 class="plan-name">プレミアムプラン</h2>
-            <div class="plan-price">
-              <span class="price">¥1,200</span>
-              <span class="period">/月（予定）</span>
-            </div>
-          </div>
-          <ul class="plan-features">
-            <li>ベーシックプランの全特典</li>
-            <li>月2回の限定ウェビナー参加権</li>
-            <li>個別質問・相談の権利</li>
-            <li>限定資料のダウンロード</li>
-            <li>早期アクセス特典</li>
-          </ul>
-          <button class="plan-button primary" disabled>
-            準備中
-          </button>
-        </div>
-
-        <div class="plan-card preview" style="animation-delay: 0.4s">
-          <div class="preview-badge">準備中</div>
-          <div class="plan-header">
-            <h2 class="plan-name">エンタープライズ</h2>
-            <div class="plan-price">
-              <span class="price">¥3,000</span>
-              <span class="period">/月（予定）</span>
-            </div>
-          </div>
-          <ul class="plan-features">
-            <li>プレミアムプランの全特典</li>
-            <li>月4回の限定ウェビナー参加権</li>
-            <li>1対1メンタリングセッション</li>
-            <li>カスタムコンテンツ制作</li>
-            <li>優先サポート</li>
-          </ul>
-          <button class="plan-button" disabled>
-            準備中
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="payment-info">
-      <h3>お支払いについて</h3>
-      <p>
-        お支払いはStripeを通じて安全に処理されます。<br>
-        クレジットカード、デビットカードをご利用いただけます。<br>
-        いつでもキャンセル可能です。
-      </p>
-    </div>
-    
-    <div class="subscription-help">
-      <h3>よくある質問</h3>
-      <div class="faq-container">
-        <div class="faq-item">
-          <h4>いつでもキャンセルできますか？</h4>
-          <p>はい、いつでもキャンセル可能です。</p>
-        </div>
-        <div class="faq-item">
-          <h4>支払い方法は？</h4>
-          <p>クレジットカード、デビットカードでお支払いいただけます。</p>
-        </div>
-        <div class="faq-item">
-          <h4>領収書は発行されますか？</h4>
-          <p>Stripeから自動的に領収書が発行されます。</p>
-        </div>
       </div>
     </div>
   </div>
@@ -138,217 +19,46 @@ import Layout from '../layouts/Layout.astro'
 
 <style>
   .subscription-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
-  .page-title {
-    color: var(--tobiracast-primary-blue);
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    animation: fadeInUp 0.8s ease-out;
-  }
-
-  .page-description {
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--tobiracast-text-secondary);
-    margin-bottom: 3rem;
-    animation: fadeInUp 0.8s ease-out 0.1s both;
-  }
-
-  .plans-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  .plan-card {
-    background: var(--tobiracast-bg-primary);
-    border: 2px solid var(--tobiracast-border);
-    border-radius: 12px;
-    padding: 2rem;
-    position: relative;
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.8s ease-out both;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .plan-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--tobiracast-shadow-hover);
-  }
-
-  .plan-card.featured {
-    border-color: var(--tobiracast-primary-orange);
-    background: linear-gradient(135deg, var(--tobiracast-bg-primary) 0%, var(--tobiracast-bg-secondary) 100%);
-  }
-
-  .plan-card.preview {
-    opacity: 0.7;
-    position: relative;
-  }
-
-  .plan-card.preview button {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .preview-badge {
-    position: absolute;
-    top: -10px;
-    right: 20px;
-    background: #999;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: bold;
-  }
-
-  .preview-badge.recommended {
-    background: var(--tobiracast-primary-orange);
-  }
-
-  .plan-badge {
-    position: absolute;
-    top: -10px;
-    right: 20px;
-    background: var(--tobiracast-primary-orange);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: bold;
-  }
-
-  /* Coming Soon Section */
   .coming-soon-container {
-    margin-bottom: 4rem;
-    animation: fadeInUp 0.8s ease-out 0.2s both;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    animation: fadeInUp 0.8s ease-out;
+    width: 100%;
   }
 
   .coming-soon-card {
     background: linear-gradient(135deg, var(--tobiracast-primary-blue) 0%, var(--tobiracast-light-blue) 100%);
     color: white;
-    padding: 3rem 2rem;
-    border-radius: 16px;
+    padding: 4rem 2rem;
     text-align: center;
     box-shadow: var(--tobiracast-card-shadow);
+    width: 100%;
+    margin: 0 -2rem;
   }
 
   .coming-soon-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
     animation: bounce 2s infinite;
   }
 
   .coming-soon-title {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-shadow: var(--tobiracast-text-shadow-medium);
   }
 
   .coming-soon-description {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
     line-height: 1.8;
-  }
-
-  .coming-soon-features {
-    background: var(--tobiracast-white-overlay-20);
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-  }
-
-  .coming-soon-features h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-  }
-
-  .coming-soon-features ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    text-align: left;
-  }
-
-  .coming-soon-features li {
-    position: relative;
-    padding-left: 1.5rem;
-  }
-
-  .coming-soon-features li::before {
-    content: "✨";
-    position: absolute;
-    left: 0;
-  }
-
-  .notify-section {
-    background: var(--tobiracast-white-overlay-10);
-    padding: 2rem;
-    border-radius: 12px;
-  }
-
-  .notify-section p {
-    margin-bottom: 1rem;
-  }
-
-  .notify-form {
-    display: flex;
-    gap: 1rem;
-    max-width: 500px;
-    margin: 0 auto 1rem;
-  }
-
-  .notify-input {
-    flex: 1;
-    padding: 0.8rem 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-radius: 8px;
-    font-size: 1rem;
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .notify-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .notify-button {
-    padding: 0.8rem 2rem;
-    background: var(--tobiracast-primary-orange);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .notify-note {
-    font-size: 0.875rem;
-    opacity: 0.8;
-  }
-
-  .plans-preview {
-    margin-bottom: 3rem;
-  }
-
-  .plans-preview h3 {
-    text-align: center;
-    font-size: 1.8rem;
-    color: var(--tobiracast-primary-blue);
-    margin-bottom: 2rem;
+    opacity: 0.9;
   }
 
   @keyframes bounce {
@@ -358,134 +68,6 @@ import Layout from '../layouts/Layout.astro'
     50% {
       transform: translateY(-10px);
     }
-  }
-
-  .plan-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .plan-name {
-    font-size: 1.5rem;
-    color: var(--tobiracast-text-primary);
-    margin-bottom: 1rem;
-  }
-
-  .plan-price {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .price {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--tobiracast-primary-blue);
-  }
-
-  .period {
-    font-size: 1rem;
-    color: var(--tobiracast-text-secondary);
-  }
-
-  .plan-features {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 2rem;
-  }
-
-  .plan-features li {
-    padding: 0.5rem 0;
-    position: relative;
-    padding-left: 1.5rem;
-  }
-
-  .plan-features li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: var(--tobiracast-primary-orange);
-    font-weight: bold;
-  }
-
-  .plan-button {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid var(--tobiracast-primary-blue);
-    background: white;
-    color: var(--tobiracast-primary-blue);
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .plan-button:hover {
-    background: var(--tobiracast-primary-blue);
-    color: white;
-  }
-
-  .plan-button.primary {
-    background: var(--tobiracast-primary-orange);
-    border-color: var(--tobiracast-primary-orange);
-    color: white;
-  }
-
-  .plan-button.primary:hover {
-    background: var(--tobiracast-dark-orange);
-    border-color: var(--tobiracast-dark-orange);
-  }
-
-  .payment-info {
-    background: var(--tobiracast-bg-secondary);
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-  }
-
-  .payment-info h3 {
-    color: var(--tobiracast-primary-blue);
-    margin-bottom: 1rem;
-  }
-
-  .subscription-help {
-    background: var(--tobiracast-bg-secondary);
-    padding: 2rem;
-    border-radius: 8px;
-    margin-top: 3rem;
-  }
-
-  .subscription-help h3 {
-    color: var(--tobiracast-primary-blue);
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  .faq-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .faq-item {
-    background: var(--tobiracast-bg-primary);
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--tobiracast-border);
-  }
-
-  .faq-item h4 {
-    color: var(--tobiracast-text-primary);
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-  }
-
-  .faq-item p {
-    color: var(--tobiracast-text-secondary);
-    font-size: 0.875rem;
-    line-height: 1.4;
   }
 
   @keyframes fadeInUp {
@@ -501,20 +83,36 @@ import Layout from '../layouts/Layout.astro'
 
   /* Responsive Design */
   @media (max-width: 768px) {
-    .page-title {
+    .coming-soon-card {
+      padding: 3rem 1.5rem;
+      margin: 0 -1rem;
+    }
+
+    .coming-soon-icon {
+      font-size: 4rem;
+    }
+
+    .coming-soon-title {
       font-size: 2rem;
     }
 
-    .plans-container {
-      grid-template-columns: 1fr;
+    .coming-soon-description {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .coming-soon-card {
+      padding: 2.5rem 1rem;
+      margin: 0 -1rem;
     }
 
-    .plan-card {
-      padding: 1.5rem;
+    .coming-soon-title {
+      font-size: 1.75rem;
     }
 
-    .price {
-      font-size: 2rem;
+    .coming-soon-description {
+      font-size: 1rem;
     }
   }
 </style>
