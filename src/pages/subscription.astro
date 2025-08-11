@@ -11,65 +11,99 @@ import Layout from '../layouts/Layout.astro'
       </p>
     </header>
 
-    <div class="plans-container">
-      <div class="plan-card" style="animation-delay: 0.2s">
-        <div class="plan-header">
-          <h2 class="plan-name">ベーシックプラン</h2>
-          <div class="plan-price">
-            <span class="price">¥500</span>
-            <span class="period">/月</span>
-          </div>
+    <div class="coming-soon-container">
+      <div class="coming-soon-card">
+        <div class="coming-soon-icon">🚀</div>
+        <h2 class="coming-soon-title">有料プラン準備中</h2>
+        <p class="coming-soon-description">
+          現在、より充実したコンテンツをお届けするため<br>
+          有料プランの準備を進めております。
+        </p>
+        <div class="coming-soon-features">
+          <h3>提供予定の機能</h3>
+          <ul>
+            <li>プレミアム記事の閲覧</li>
+            <li>限定動画コンテンツ</li>
+            <li>メンバー限定コミュニティ</li>
+            <li>オンラインセミナーへの参加</li>
+            <li>個別相談・サポート</li>
+          </ul>
         </div>
-        <ul class="plan-features">
-          <li>全ての記事の有料部分を閲覧可能</li>
-          <li>限定動画コンテンツの視聴</li>
-          <li>月1回の限定ウェビナー参加権</li>
-          <li>コミュニティへの参加</li>
-        </ul>
-        <button class="plan-button">
-          プランを選択
-        </button>
+        <div class="notify-section">
+          <p>サービス開始のお知らせをご希望の方は<br>メールアドレスをご登録ください。</p>
+          <div class="notify-form">
+            <input type="email" placeholder="メールアドレスを入力" class="notify-input" disabled>
+            <button class="notify-button" disabled>通知を受け取る</button>
+          </div>
+          <p class="notify-note">※ 現在準備中のため、通知登録は後日開始予定です</p>
+        </div>
       </div>
+    </div>
 
-      <div class="plan-card featured" style="animation-delay: 0.3s">
-        <div class="plan-badge">おすすめ</div>
-        <div class="plan-header">
-          <h2 class="plan-name">プレミアムプラン</h2>
-          <div class="plan-price">
-            <span class="price">¥1,200</span>
-            <span class="period">/月</span>
+    <div class="plans-preview">
+      <h3>提供予定のプラン</h3>
+      <div class="plans-container">
+        <div class="plan-card preview" style="animation-delay: 0.2s">
+          <div class="preview-badge">準備中</div>
+          <div class="plan-header">
+            <h2 class="plan-name">ベーシックプラン</h2>
+            <div class="plan-price">
+              <span class="price">¥500</span>
+              <span class="period">/月（予定）</span>
+            </div>
           </div>
+          <ul class="plan-features">
+            <li>全ての記事の有料部分を閲覧可能</li>
+            <li>限定動画コンテンツの視聴</li>
+            <li>月1回の限定ウェビナー参加権</li>
+            <li>コミュニティへの参加</li>
+          </ul>
+          <button class="plan-button" disabled>
+            準備中
+          </button>
         </div>
-        <ul class="plan-features">
-          <li>ベーシックプランの全特典</li>
-          <li>月2回の限定ウェビナー参加権</li>
-          <li>個別質問・相談の権利</li>
-          <li>限定資料のダウンロード</li>
-          <li>早期アクセス特典</li>
-        </ul>
-        <button class="plan-button primary">
-          プランを選択
-        </button>
-      </div>
 
-      <div class="plan-card" style="animation-delay: 0.4s">
-        <div class="plan-header">
-          <h2 class="plan-name">エンタープライズ</h2>
-          <div class="plan-price">
-            <span class="price">¥3,000</span>
-            <span class="period">/月</span>
+        <div class="plan-card preview featured" style="animation-delay: 0.3s">
+          <div class="preview-badge recommended">準備中</div>
+          <div class="plan-header">
+            <h2 class="plan-name">プレミアムプラン</h2>
+            <div class="plan-price">
+              <span class="price">¥1,200</span>
+              <span class="period">/月（予定）</span>
+            </div>
           </div>
+          <ul class="plan-features">
+            <li>ベーシックプランの全特典</li>
+            <li>月2回の限定ウェビナー参加権</li>
+            <li>個別質問・相談の権利</li>
+            <li>限定資料のダウンロード</li>
+            <li>早期アクセス特典</li>
+          </ul>
+          <button class="plan-button primary" disabled>
+            準備中
+          </button>
         </div>
-        <ul class="plan-features">
-          <li>プレミアムプランの全特典</li>
-          <li>月4回の限定ウェビナー参加権</li>
-          <li>1対1メンタリングセッション</li>
-          <li>カスタムコンテンツ制作</li>
-          <li>優先サポート</li>
-        </ul>
-        <button class="plan-button">
-          プランを選択
-        </button>
+
+        <div class="plan-card preview" style="animation-delay: 0.4s">
+          <div class="preview-badge">準備中</div>
+          <div class="plan-header">
+            <h2 class="plan-name">エンタープライズ</h2>
+            <div class="plan-price">
+              <span class="price">¥3,000</span>
+              <span class="period">/月（予定）</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>プレミアムプランの全特典</li>
+            <li>月4回の限定ウェビナー参加権</li>
+            <li>1対1メンタリングセッション</li>
+            <li>カスタムコンテンツ制作</li>
+            <li>優先サポート</li>
+          </ul>
+          <button class="plan-button" disabled>
+            準備中
+          </button>
+        </div>
       </div>
     </div>
 
@@ -154,6 +188,32 @@ import Layout from '../layouts/Layout.astro'
     background: linear-gradient(135deg, var(--tobiracast-bg-primary) 0%, var(--tobiracast-bg-secondary) 100%);
   }
 
+  .plan-card.preview {
+    opacity: 0.7;
+    position: relative;
+  }
+
+  .plan-card.preview button {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .preview-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #999;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .preview-badge.recommended {
+    background: var(--tobiracast-primary-orange);
+  }
+
   .plan-badge {
     position: absolute;
     top: -10px;
@@ -164,6 +224,140 @@ import Layout from '../layouts/Layout.astro'
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: bold;
+  }
+
+  /* Coming Soon Section */
+  .coming-soon-container {
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .coming-soon-card {
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue) 0%, var(--tobiracast-light-blue) 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: var(--tobiracast-card-shadow);
+  }
+
+  .coming-soon-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+  }
+
+  .coming-soon-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: var(--tobiracast-text-shadow-medium);
+  }
+
+  .coming-soon-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .coming-soon-features {
+    background: var(--tobiracast-white-overlay-20);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .coming-soon-features h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .coming-soon-features ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .coming-soon-features li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .coming-soon-features li::before {
+    content: "✨";
+    position: absolute;
+    left: 0;
+  }
+
+  .notify-section {
+    background: var(--tobiracast-white-overlay-10);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .notify-section p {
+    margin-bottom: 1rem;
+  }
+
+  .notify-form {
+    display: flex;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto 1rem;
+  }
+
+  .notify-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .notify-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .notify-button {
+    padding: 0.8rem 2rem;
+    background: var(--tobiracast-primary-orange);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .notify-note {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .plans-preview {
+    margin-bottom: 3rem;
+  }
+
+  .plans-preview h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--tobiracast-primary-blue);
+    margin-bottom: 2rem;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 
   .plan-header {

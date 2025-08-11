@@ -34,3 +34,6 @@ public/notion/*
 
 # Claude AI assistant files
 .claude/
+
+# Tobiratory Web project (temporary)
+tobiratory-web/
