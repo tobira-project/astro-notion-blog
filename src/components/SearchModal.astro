@@ -139,7 +139,9 @@
 
     function select() {
       const a = document.querySelector('.search-result ul > li.selected a')
-      a.click()
+      if (a) {
+        a.click()
+      }
     }
 
     function selectFirst() {

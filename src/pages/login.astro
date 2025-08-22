@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro'
 ---
 
-<Layout title="ログイン" path="/login">
+<Layout title="ログイン / 新規登録" path="/login">
   <div slot="main" class="page-container">
     <div class="card">
       <header class="page-header">
-        <h1 class="page-title">ログイン</h1>
+        <h1 class="page-title">ログイン / 新規登録</h1>
         <p class="page-description">
-          Tobiratoryアカウントでログインして、限定コンテンツにアクセスしましょう。
+          Tobiratoryアカウントでログインまたは新規登録して、限定コンテンツにアクセスしましょう。
         </p>
       </header>
 
@@ -68,16 +68,13 @@ import Layout from '../layouts/Layout.astro'
                 class="form-input"
               />
             </div>
-            <button type="submit" class="btn-primary">メールでログイン</button>
+            <button type="submit" class="btn-primary">メールでログイン / 新規登録</button>
             <p class="magic-link-note">
-              入力したメールアドレスにログインリンクを送信します
+              入力したメールアドレスにログインリンクを送信します<br>
+              新規の方は自動的にアカウントが作成されます
             </p>
           </form>
 
-          <div class="link-row">
-            <a href="/forgot-password" class="link-secondary">パスワードを忘れた方</a>
-            <a href="/signup" class="link-primary">新規アカウント作成</a>
-          </div>
         </div>
       </div>
     </div>
@@ -341,8 +338,14 @@ import Layout from '../layouts/Layout.astro'
       }
     })
     
+    // 409 Conflict = すでにアカウントが存在する場合はOKとして扱う
+    if (signupResponse.status === 409) {
+      console.log('Tobiratoryアカウントは既に存在します')
+      return
+    }
+    
     if (!signupResponse.ok) {
-      throw new Error('Tobiratoryアカウント作成に失敗しました')
+      throw new Error(`Tobiratoryアカウント作成に失敗しました (${signupResponse.status})`)
     }
   }
 
@@ -357,8 +360,15 @@ import Layout from '../layouts/Layout.astro'
       body: JSON.stringify({ locale: 'ja' })
     })
     
+    // 409 Conflict = すでにFlowアカウントが存在する場合はポーリングを実行
+    if (flowResponse.status === 409) {
+      console.log('Flowアカウントは既に存在するか作成中です')
+      await pollForCompletion(idToken)
+      return
+    }
+    
     if (!flowResponse.ok) {
-      throw new Error('Flowアカウント作成リクエストに失敗しました')
+      throw new Error(`Flowアカウント作成リクエストに失敗しました (${flowResponse.status})`)
     }
     
     // 作成完了まで待機
