@@ -25,6 +25,10 @@ import Layout from '../layouts/Layout.astro'
             この処理には時間がかかる場合があります。<br>
             ブラウザを閉じても、次回ログイン時に続きから処理されます。
           </p>
+          <!-- リトライボタン -->
+          <button id="retry-button" class="retry-btn" style="display: none;">
+            もう一度試す
+          </button>
         </div>
 
         <!-- ログインフォーム -->
@@ -234,6 +238,24 @@ import Layout from '../layouts/Layout.astro'
     margin-top: 0.5rem;
     line-height: 1.4;
   }
+
+  .retry-btn {
+    margin-top: 1.5rem;
+    padding: 0.75rem 2rem;
+    background-color: var(--tobiracast-primary-orange);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .retry-btn:hover {
+    background-color: #d97706;
+    transform: translateY(-1px);
+  }
 </style>
 
 <script>
@@ -278,6 +300,7 @@ import Layout from '../layouts/Layout.astro'
   const googleLoginBtn = document.getElementById('google-login')
   const appleLoginBtn = document.getElementById('apple-login')
   const emailForm = document.getElementById('email-login-form')
+  const retryButton = document.getElementById('retry-button')
 
   // エラー表示
   function showError(message: string) {
@@ -344,8 +367,11 @@ import Layout from '../layouts/Layout.astro'
 
   // ポーリングによる完了待機
   async function pollForCompletion(idToken: string) {
-    const maxRetry = 100
-    const sleepTime = 10000
+    // テスト用に調整可能な設定
+    const maxRetry = import.meta.env.DEV ? 6 : 100  // 開発環境では6回（1分）
+    const sleepTime = import.meta.env.DEV ? 10000 : 10000  // 10秒
+    
+    console.log(`ポーリング開始: maxRetry=${maxRetry}, sleepTime=${sleepTime}ms`)
     
     for (let i = 0; i < maxRetry; i++) {
       await new Promise(resolve => setTimeout(resolve, sleepTime))
@@ -360,6 +386,7 @@ import Layout from '../layouts/Layout.astro'
       })
       
       const checkProfile = await checkResponse.json()
+      console.log(`ポーリング ${i+1}/${maxRetry}:`, checkProfile)
       
       // 上司の指示通りのレスポンス形式に対応
       if (checkProfile.status === 'success') {
@@ -372,6 +399,9 @@ import Layout from '../layouts/Layout.astro'
         await createFlowAccount(currentIdToken)
         return
       }
+      
+      // 進捗表示の更新
+      showLoading(`アカウント作成中... (${i+1}/${maxRetry})`)
     }
     
     throw new Error('アカウント作成がタイムアウトしました')
@@ -437,8 +467,16 @@ import Layout from '../layouts/Layout.astro'
       
     } catch (error) {
       console.error('Account setup error:', error)
-      showForm()
-      showError(error.message || 'アカウント作成に失敗しました')
+      
+      // エラー時はリトライボタンを表示
+      accountCreating.style.display = 'block'
+      loginForm.style.display = 'none'
+      statusMessage.textContent = error.message || 'アカウント作成に失敗しました'
+      retryButton.style.display = 'block'
+      
+      // スピナーを隠す
+      const spinner = accountCreating.querySelector('.spinner')
+      if (spinner) spinner.style.display = 'none'
     }
   }
 
@@ -489,8 +527,26 @@ import Layout from '../layouts/Layout.astro'
     }
   })
 
+  // リトライボタン
+  retryButton.addEventListener('click', async () => {
+    console.log('リトライボタンがクリックされました')
+    
+    // UIリセット
+    retryButton.style.display = 'none'
+    const spinner = accountCreating.querySelector('.spinner')
+    if (spinner) spinner.style.display = 'block'
+    
+    // 再度認証フローを実行
+    if (auth.currentUser) {
+      await handleTobiratoryAccountSetup()
+    } else {
+      showForm()
+      showError('ログインしてください')
+    }
+  })
+
   // Magic Linkメール認証（tobiratory-webと同じ）
-  emailForm.addEventListener('submit', async (e) => {
+  emailForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
     hideError()
     
