@@ -1,0 +1,317 @@
+---
+// 有料コンテンツ表示コンポーネント
+export interface Props {
+  content: string
+  isUserPremium: boolean
+  postSlug: string
+}
+
+const { content, isUserPremium, postSlug } = Astro.props
+
+// premium-content-parserを使ってコンテンツを分離
+import { parsePremiumContent, extractPreviewText } from '../lib/premium-content-parser'
+
+const { freeContent, premiumContent, hasPremium } = parsePremiumContent(content)
+
+// プレビューテキストを生成（有料部分の最初の200文字）
+const previewText = hasPremium ? extractPreviewText(premiumContent, 200) : ''
+---
+
+<article class="post-content">
+  <!-- 無料コンテンツ部分 -->
+  <div class="free-content" set:html={freeContent} />
+  
+  {hasPremium && (
+    <div class="premium-section">
+      {isUserPremium ? (
+        <!-- 有料会員向け：そのまま表示 -->
+        <div class="premium-content" set:html={premiumContent} />
+      ) : (
+        <!-- 無料ユーザー向け：ペイウォール表示 -->
+        <div class="paywall">
+          <div class="paywall-gradient"></div>
+          
+          <!-- ぼかしたプレビュー -->
+          <div class="premium-preview">
+            <p class="preview-text">{previewText}</p>
+          </div>
+          
+          <!-- ペイウォールメッセージ -->
+          <div class="paywall-message">
+            <div class="lock-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0110 0v4"></path>
+              </svg>
+            </div>
+            
+            <h3>ここから先は有料会員限定コンテンツです</h3>
+            <p class="description">
+              月額プランに登録すると、すべての有料記事が読み放題になります
+            </p>
+            
+            <div class="cta-buttons">
+              <a href="/subscription" class="subscribe-btn primary">
+                <span>月額プランを見る</span>
+                <span class="price">月額 ¥980〜</span>
+              </a>
+              
+              <a href="/login" class="subscribe-btn secondary">
+                すでに会員の方はログイン
+              </a>
+            </div>
+            
+            <div class="benefits">
+              <h4>有料会員特典</h4>
+              <ul>
+                <li>✓ すべての有料記事が読み放題</li>
+                <li>✓ 限定コンテンツへのアクセス</li>
+                <li>✓ メンバー限定コミュニティ参加権</li>
+                <li>✓ 月次トークン配布</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )}
+</article>
+
+<style>
+  .post-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .free-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+
+  /* ペイウォールセクション */
+  .premium-section {
+    position: relative;
+    margin-top: 3rem;
+  }
+
+  .premium-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+
+  /* ペイウォール */
+  .paywall {
+    position: relative;
+    margin-top: 2rem;
+  }
+
+  /* グラデーション効果 */
+  .paywall-gradient {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* プレビュー部分（ぼかし表示） */
+  .premium-preview {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: -50px;
+    filter: blur(4px);
+    opacity: 0.3;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .preview-text {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #666;
+  }
+
+  /* ペイウォールメッセージ */
+  .paywall-message {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border: 2px solid var(--tobiracast-primary-orange, #E96800);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(233, 104, 0, 0.15);
+  }
+
+  .lock-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, 
+      var(--tobiracast-primary-orange, #E96800) 0%, 
+      #FF811C 100%
+    );
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    color: white;
+  }
+
+  .paywall-message h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  .paywall-message .description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  /* CTAボタン */
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .subscribe-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.2rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .subscribe-btn.primary {
+    background: linear-gradient(135deg, 
+      var(--tobiracast-primary-orange, #E96800) 0%, 
+      #FF811C 100%
+    );
+    color: white;
+    box-shadow: 0 4px 20px rgba(233, 104, 0, 0.3);
+  }
+
+  .subscribe-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(233, 104, 0, 0.4);
+  }
+
+  .subscribe-btn.primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.3), 
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .subscribe-btn.primary:hover::before {
+    left: 100%;
+  }
+
+  .subscribe-btn.primary span:first-child {
+    font-size: 1.2rem;
+  }
+
+  .subscribe-btn.primary .price {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 0.3rem;
+  }
+
+  .subscribe-btn.secondary {
+    background: white;
+    color: var(--tobiracast-primary-blue, #1779DE);
+    border: 2px solid var(--tobiracast-primary-blue, #1779DE);
+  }
+
+  .subscribe-btn.secondary:hover {
+    background: var(--tobiracast-primary-blue, #1779DE);
+    color: white;
+  }
+
+  /* 特典リスト */
+  .benefits {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .benefits h4 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .benefits li {
+    padding: 0.5rem 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+
+  /* モバイル対応 */
+  @media (max-width: 768px) {
+    .post-content {
+      padding: 1rem;
+    }
+
+    .paywall-message {
+      padding: 2rem 1rem;
+    }
+
+    .paywall-message h3 {
+      font-size: 1.4rem;
+    }
+
+    .lock-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .cta-buttons {
+      max-width: 100%;
+    }
+
+    .benefits {
+      max-width: 100%;
+    }
+  }
+</style>

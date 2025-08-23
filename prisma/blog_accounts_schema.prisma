@@ -1,0 +1,106 @@
+// blog_accountsテーブル設計
+// このテーブルはTOBIRACASTブログ専用のアカウント管理テーブルです
+// accountsテーブルとは独立して管理され、削除時も影響を受けません
+
+model blog_accounts {
+  id                String    @id @default(cuid())
+  account_id        String?   @unique // accountsテーブルとの関連（削除されても残る）
+  
+  // Stripe関連
+  stripe_customer_id String?  @unique // Stripe顧客ID
+  stripe_subscription_id String? // Stripeサブスクリプション ID
+  subscription_status String  @default("inactive") // active, inactive, canceled, past_due
+  subscription_plan  String?  // basic, premium, enterprise など
+  subscription_started_at DateTime? // サブスクリプション開始日
+  subscription_ends_at DateTime? // サブスクリプション終了日
+  
+  // 有料会員フラグ
+  is_premium        Boolean   @default(false) // 有料会員かどうか
+  premium_level     Int       @default(0) // 0: 無料, 1: ベーシック, 2: プレミアム, 3: エンタープライズ
+  
+  // 支払い情報
+  last_payment_date DateTime? // 最終支払日
+  next_payment_date DateTime? // 次回支払日
+  payment_method    String?   // card, bank_transfer など
+  
+  // トークン関連（将来の実装用）
+  token_balance     Int       @default(0) // 保有トークン数
+  tokens_earned     Int       @default(0) // 累計獲得トークン数
+  tokens_spent      Int       @default(0) // 累計使用トークン数
+  
+  // メタデータ
+  display_name      String?   // 表示名
+  profile_image_url String?   // プロフィール画像URL
+  bio              String?    // 自己紹介
+  
+  
+  // システム情報
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  deleted_at        DateTime? // ソフトデリート用
+  
+  // インデックス
+  @@index([account_id])
+  @@index([stripe_customer_id])
+  @@index([subscription_status])
+  @@index([is_premium])
+  @@index([created_at])
+}
+
+// 支払い履歴テーブル
+model payment_history {
+  id                String    @id @default(cuid())
+  blog_account_id   String    // blog_accountsのID
+  
+  stripe_payment_intent_id String? // Stripe支払いインテントID
+  amount            Int       // 金額（円）
+  currency          String    @default("jpy") // 通貨
+  payment_type      String    // subscription, token_purchase
+  payment_status    String    // succeeded, pending, failed
+  
+  description       String?   // 支払い内容の説明
+  invoice_url       String?   // 請求書URL
+  receipt_url       String?   // 領収書URL
+  
+  created_at        DateTime  @default(now())
+  
+  @@index([blog_account_id])
+  @@index([payment_status])
+  @@index([created_at])
+}
+
+// サブスクリプションプラン定義
+model subscription_plans {
+  id                String    @id @default(cuid())
+  
+  plan_id           String    @unique // basic, premium, enterprise
+  display_name      String    // 表示名
+  description       String?   // プランの説明
+  
+  // 価格情報
+  price_monthly     Int       // 月額料金（円）
+  price_yearly      Int?      // 年額料金（円）
+  
+  // Stripe関連
+  stripe_price_id_monthly String? // Stripe月額価格ID
+  stripe_price_id_yearly  String? // Stripe年額価格ID
+  
+  // 特典
+  features          String[]  // プランの機能リスト
+  premium_level     Int       // プレミアムレベル（blog_accountsと対応）
+  monthly_tokens    Int       @default(0) // 月次付与トークン数
+  
+  // 表示順
+  sort_order        Int       @default(0)
+  
+  // フラグ
+  is_active         Boolean   @default(true)
+  is_recommended    Boolean   @default(false)
+  
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  
+  @@index([is_active])
+  @@index([sort_order])
+}
+
