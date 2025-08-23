@@ -18,25 +18,25 @@ export interface ParsedContent {
 export function parsePremiumContent(htmlContent: string): ParsedContent {
   // 区切り線のパターン
   const dividerPattern = /<hr\s+class="divider"[^>]*>/i
-  
+
   // 区切り線で分割
   const parts = htmlContent.split(dividerPattern)
-  
+
   if (parts.length === 1) {
     // 区切り線がない場合は全て無料コンテンツ
     return {
       freeContent: htmlContent,
       premiumContent: '',
-      hasPremium: false
+      hasPremium: false,
     }
   }
-  
+
   // 最初の部分が無料、それ以降が有料
   // 複数の区切り線がある場合は、最初の区切り線のみを境界とする
   return {
     freeContent: parts[0],
     premiumContent: parts.slice(1).join('<hr class="divider">'), // 2つ目以降の区切り線は有料部分に含める
-    hasPremium: true
+    hasPremium: true,
   }
 }
 
@@ -52,22 +52,22 @@ export function parsePremiumContentDOM(container: HTMLElement): {
 } {
   const children = Array.from(container.children)
   const dividerIndex = children.findIndex(
-    el => el.tagName === 'HR' && el.classList.contains('divider')
+    (el) => el.tagName === 'HR' && el.classList.contains('divider')
   )
-  
+
   if (dividerIndex === -1) {
     // 区切り線がない場合
     return {
       freeElements: children,
       premiumElements: [],
-      hasPremium: false
+      hasPremium: false,
     }
   }
-  
+
   return {
     freeElements: children.slice(0, dividerIndex),
     premiumElements: children.slice(dividerIndex + 1),
-    hasPremium: true
+    hasPremium: true,
   }
 }
 
@@ -80,22 +80,20 @@ export function parseNotionBlocks(blocks: any[]): {
   premiumBlocks: any[]
   hasPremium: boolean
 } {
-  const dividerIndex = blocks.findIndex(
-    block => block.type === 'divider'
-  )
-  
+  const dividerIndex = blocks.findIndex((block) => block.type === 'divider')
+
   if (dividerIndex === -1) {
     return {
       freeBlocks: blocks,
       premiumBlocks: [],
-      hasPremium: false
+      hasPremium: false,
     }
   }
-  
+
   return {
     freeBlocks: blocks.slice(0, dividerIndex),
     premiumBlocks: blocks.slice(dividerIndex + 1),
-    hasPremium: true
+    hasPremium: true,
   }
 }
 
@@ -105,24 +103,27 @@ export function parseNotionBlocks(blocks: any[]): {
  * @param maxLength - 最大文字数
  * @returns プレーンテキストのプレビュー
  */
-export function extractPreviewText(htmlContent: string, maxLength: number = 200): string {
+export function extractPreviewText(
+  htmlContent: string,
+  maxLength: number = 200
+): string {
   // HTMLタグを除去
   const text = htmlContent.replace(/<[^>]*>/g, '')
-  
+
   // 改行と余分な空白を正規化
   const normalized = text.replace(/\s+/g, ' ').trim()
-  
+
   if (normalized.length <= maxLength) {
     return normalized
   }
-  
+
   // 単語の途中で切らないように調整
   const truncated = normalized.substring(0, maxLength)
   const lastSpace = truncated.lastIndexOf(' ')
-  
+
   if (lastSpace > maxLength * 0.8) {
     return truncated.substring(0, lastSpace) + '...'
   }
-  
+
   return truncated + '...'
 }
