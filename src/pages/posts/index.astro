@@ -1,0 +1,21 @@
+---
+import { getPostsByPage, getNumberOfPages } from '../../lib/notion/client.ts'
+import Layout from '../../layouts/Layout.astro'
+import PostsList from '../../components/PostsList.astro'
+
+const [posts, numberOfPages] = await Promise.all([
+  getPostsByPage(1),
+  getNumberOfPages(),
+])
+---
+
+<Layout title="記事一覧" path="/posts">
+  <div slot="main">
+    <PostsList 
+      posts={posts}
+      currentPage={1}
+      numberOfPages={numberOfPages}
+      title="記事一覧"
+    />
+  </div>
+</Layout>

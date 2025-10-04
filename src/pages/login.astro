@@ -1,0 +1,327 @@
+---
+import Layout from '../layouts/Layout.astro'
+import TobiratoryLogin from '../components/TobiratoryLogin.tsx'
+---
+
+<Layout title="ログイン" path="/login">
+  <div slot="main" class="login-page">
+    <TobiratoryLogin client:load redirectUrl="/" />
+  </div>
+</Layout>
+
+<style>
+  .login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 2rem;
+    animation: fadeInUp 0.8s ease-out;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 20px;
+    margin: 2rem auto;
+    max-width: 1200px;
+  }
+
+</style>
+
+<style is:global>
+  /* Auth Layout */
+  .auth-layout {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Auth Template Styles */
+  .auth-template {
+    background: white;
+    border-radius: 40px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .logo-container {
+    margin-bottom: 2rem;
+  }
+
+  .logo-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), var(--tobiracast-primary-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+  }
+
+  .button-container {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .social-button {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .social-button:hover {
+    background: #f8f9fa;
+    border-color: var(--tobiracast-primary-blue);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .social-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .divider-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    position: relative;
+  }
+
+  .divider-container::before,
+  .divider-container::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e5e5e5;
+  }
+
+  .divider-text {
+    font-size: 1.25rem;
+    color: #999;
+    font-weight: 400;
+    padding: 0 0.5rem;
+  }
+
+  .input-container {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .email-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: white;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .email-input:focus {
+    outline: none;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3), 0 0 0 2px var(--tobiracast-primary-blue);
+  }
+
+  .error-container {
+    min-height: 30px;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+  }
+
+  .submit-button {
+    padding: 1rem 3.5rem;
+    background: var(--tobiracast-primary-orange);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(233, 104, 0, 0.2);
+  }
+
+  .submit-button:hover {
+    background: #ff7a00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(233, 104, 0, 0.3);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .spinner-container {
+    padding: 1rem;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--tobiracast-primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+
+  .prompt-container {
+    margin-top: 1rem;
+  }
+
+  .prompt-link {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .prompt-link:hover {
+    color: var(--tobiracast-primary-blue);
+    text-decoration: underline;
+  }
+
+  /* Email and Password Sign In/Up */
+  .email-password-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .back-button {
+    background: none;
+    border: none;
+    color: var(--tobiracast-primary-blue);
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .back-button:hover {
+    opacity: 0.8;
+  }
+
+  .password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .password-form h2 {
+    text-align: center;
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .email-display {
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .password-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .password-input:focus {
+    outline: none;
+    border-color: var(--tobiracast-primary-blue);
+  }
+
+  .forgot-password-link {
+    background: none;
+    border: none;
+    color: var(--tobiracast-primary-blue);
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  .forgot-password-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Auth Creating */
+  .auth-creating {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .auth-creating h2 {
+    color: var(--tobiracast-primary-blue);
+    margin: 1.5rem 0 1rem;
+  }
+
+  .auth-creating p {
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+
+  .auth-creating .note {
+    font-size: 0.85rem;
+    color: #999;
+    line-height: 1.4;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .auth-template {
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+    }
+
+    .logo-text {
+      font-size: 2rem;
+    }
+
+    .social-button {
+      font-size: 1rem;
+      padding: 0.75rem;
+    }
+  }
+</style>

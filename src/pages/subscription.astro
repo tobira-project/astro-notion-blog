@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Card from '../components/ui/Card.astro'
+import FadeInUp from '../components/ui/FadeInUp.astro'
+---
+
+<Layout title="プラン加入" path="/subscription">
+  <div slot="main" class="w-full">
+    <FadeInUp class="flex justify-center items-center min-h-[60vh] w-full">
+      <Card variant="gradient" class="w-full py-16 px-8 text-center -mx-8 md:-mx-4">
+        <div class="text-8xl mb-6 animate-bounce-slow">🚀</div>
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg">有料プラン準備中</h2>
+        <p class="text-xl md:text-2xl leading-relaxed opacity-90">
+          現在、より充実したコンテンツをお届けするため<br>
+          有料プランの準備を進めております。
+        </p>
+      </Card>
+    </FadeInUp>
+  </div>
+</Layout>
