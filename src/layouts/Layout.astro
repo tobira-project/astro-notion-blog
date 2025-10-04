@@ -1,11 +1,11 @@
 ---
-import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX } from '../server-constants.ts'
+import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX, SITE_TITLE, SITE_DESCRIPTION } from '../server-constants.ts'
 import { getDatabase } from '../lib/notion/client.ts'
 import { getNavLink, getStaticFilePath, filePath } from '../lib/blog-helpers.ts'
 import '../styles/syntax-coloring.css'
+import '../styles/tobiracast.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
 import SearchModal from '../components/SearchModal.astro'
-import SearchButton from '../components/SearchButton.astro'
 
 export interface Props {
   title: string
@@ -18,8 +18,8 @@ const { title = '', description = '', path = '/', ogImage = '' } = Astro.props
 
 const database = await getDatabase()
 
-const siteTitle = title ? `${title} - ${database.Title}` : database.Title
-const siteDescription = description ? description : database.Description
+const siteTitle = title ? `${title} - ${SITE_TITLE}` : SITE_TITLE
+const siteDescription = description ? description : SITE_DESCRIPTION
 const siteURL = new URL(getNavLink(path), Astro.site).toString()
 const siteOGImage = new URL(
   getStaticFilePath('/default-og-image.png'),
@@ -50,7 +50,7 @@ if (database.Icon && database.Icon.Type === 'file') {
 ---
 
 <!DOCTYPE html>
-<html lang="en" prefix="og: https://ogp.me/ns#">
+<html lang="ja" prefix="og: https://ogp.me/ns#">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="max-image-preview:large" />
@@ -62,7 +62,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     <meta property="og:url" content={siteURL} />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteDescription} />
-    <meta property="og:site_name" content={database.Title} />
+    <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:image" content={ogImage || siteOGImage} />
     <meta name="twitter:title" content={siteTitle} />
     <meta name="twitter:description" content={siteDescription} />
@@ -78,7 +78,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   <body>
     <GoogleAnalytics trackingId={PUBLIC_GA_TRACKING_ID} />
     <div class="container">
-      <header>
+      <header class="site-header">
         {
           coverImageURL && (
             <div class="cover">
@@ -86,71 +86,140 @@ if (database.Icon && database.Icon.Type === 'file') {
             </div>
           )
         }
+
+        <div class="hero-section">
+          <div class="hero-content">
+            <h1 class="hero-title">
+              <a href={getNavLink('/')}>
+                {
+                  database.Icon && database.Icon.Type === 'emoji' ? (
+                    <>
+                      <span>{database.Icon.Emoji}</span>
+                      {SITE_TITLE}
+                    </>
+                  ) : database.Icon && database.Icon.Type === 'external' ? (
+                    <>
+                      <img src={database.Icon.Url} alt="Site icon image" />
+                      {SITE_TITLE}
+                    </>
+                  ) : database.Icon && database.Icon.Type === 'file' ? (
+                    <>
+                      <img
+                        src={customIconURL}
+                        class="custom-icon"
+                        alt="Site icon image"
+                      />
+                      {SITE_TITLE}
+                    </>
+                  ) : (
+                    SITE_TITLE
+                  )
+                }
+              </a>
+            </h1>
+            <div class="hero-description">
+              {SITE_DESCRIPTION}
+            </div>
+
+            <nav class="main-nav">
+              <button class="mobile-menu-toggle" aria-label="メニューを開く">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+              <ul class="nav-menu">
+                <li class="menu-header">
+                  <button class="menu-close-btn" aria-label="メニューを閉じる">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </li>
+                <li><a href={getNavLink('/')}>ホーム</a></li>
+                <li><a href={getNavLink('/posts')}>記事一覧</a></li>
+                <li><a href={getNavLink('/subscription')}>プラン加入</a></li>
+                <li><a href={getNavLink('/login')} class="login-btn">ログイン</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </header>
 
-      <div>
+      <div class="full-width-container">
         <main>
           <div class="content">
-            <header>
-              <h1>
-                <a href={getNavLink('/')}>
-                  {
-                    database.Icon && database.Icon.Type === 'emoji' ? (
-                      <>
-                        <span>{database.Icon.Emoji}</span>
-                        {database.Title}
-                      </>
-                    ) : database.Icon && database.Icon.Type === 'external' ? (
-                      <>
-                        <img src={database.Icon.Url} alt="Site icon image" />
-                        {database.Title}
-                      </>
-                    ) : database.Icon && database.Icon.Type === 'file' ? (
-                      <>
-                        <img
-                          src={customIconURL}
-                          class="custom-icon"
-                          alt="Site icon image"
-                        />
-                        {database.Title}
-                      </>
-                    ) : (
-                      database.Title
-                    )
-                  }
-                </a>
-              </h1>
-              <div class="description">
-                {database.Description}
-              </div>
-            </header>
 
             <slot name="main" />
 
-            <footer>
-              <div>
-                <span>Powered by&nbsp;</span>
-                <a href="https://github.com/otoyo/astro-notion-blog"
-                  >astro-notion-blog</a
-                >
+            <footer class="site-footer">
+              <div class="footer-content">
+                <div class="footer-main">
+                  <div class="footer-brand">
+                    <h3>TOBIRACAST</h3>
+                    <p>Tobiratory公式ポータルサイト</p>
+                  </div>
+                  <div class="footer-links">
+                    <a href={getNavLink('/posts')}>記事一覧</a>
+                    <a href={getNavLink('/subscription')}>プラン加入</a>
+                    <a href={getNavLink('/login')}>ログイン</a>
+                    <a href="mailto:support@tobiratory.com">お問い合わせ</a>
+                  </div>
+                </div>
+                <div class="footer-bottom">
+                  <p>© 2024 TOBIRACAST | Powered by <a href="https://github.com/otoyo/astro-notion-blog">astro-notion-blog</a></p>
+                </div>
               </div>
             </footer>
           </div>
         </main>
-
-        <aside>
-          <SearchButton />
-          <slot name="aside" />
-        </aside>
       </div>
     </div>
 
     <SearchModal />
     {
       ENABLE_LIGHTBOX && (
-        <script src={getStaticFilePath('/scripts/fslightbox.js')} />
+        <script src={getStaticFilePath('/scripts/fslightbox.js')}></script>
       )
     }
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        const menuCloseBtn = document.querySelector('.menu-close-btn');
+
+        function closeMenu() {
+          mobileMenuToggle.classList.remove('active');
+          navMenu.classList.remove('active');
+        }
+
+        if (mobileMenuToggle && navMenu) {
+          // ハンバーガーボタンクリック
+          mobileMenuToggle.addEventListener('click', function() {
+            mobileMenuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+          });
+
+          // 閉じるボタンクリック
+          if (menuCloseBtn) {
+            menuCloseBtn.addEventListener('click', closeMenu);
+          }
+
+          // メニュー外をクリックしたときにメニューを閉じる
+          document.addEventListener('click', function(event) {
+            if (!mobileMenuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+              closeMenu();
+            }
+          });
+
+          // メニューリンクをクリックしたときにメニューを閉じる
+          const navLinks = navMenu.querySelectorAll('a');
+          navLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+          });
+        }
+      });
+    </script>
   </body>
 </html>
 
@@ -159,114 +228,485 @@ if (database.Icon && database.Icon.Type === 'file') {
     min-height: 100vh;
   }
 
-  .container > div {
-    display: flex;
-    max-width: 1280px;
-  }
-  @media (max-width: 640px) {
-    .container > div {
-      display: block;
-    }
-  }
-
-  main {
-    flex: 1;
-    order: 2;
-    justify-content: space-between;
-  }
-  @media (max-width: 640px) {
-    main {
-      order: 1;
-    }
+  .site-header {
+    position: relative;
+    background:
+      linear-gradient(135deg,
+        var(--tobiracast-primary-blue) 0%,
+        var(--tobiracast-light-blue) 30%,
+        var(--tobiracast-primary-orange) 70%,
+        var(--tobiracast-dark-orange) 100%
+      );
+    color: white;
+    overflow: hidden;
+    min-height: 400px;
   }
 
-  aside {
-    order: 1;
-    width: 300px;
-    padding: 20px 20px;
-    background-color: #f4f4f4;
-  }
-  @media (max-width: 640px) {
-    aside {
-      order: 2;
-      width: 100%;
-    }
-  }
-
-  div.cover {
-  }
-  div.cover img {
-    display: block;
-    width: 100%;
-    height: 20vh;
-    object-fit: cover;
-    object-position: center 60%;
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 30%, var(--tobiracast-white-overlay-15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, var(--tobiracast-white-overlay-12) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, var(--tobiracast-white-overlay-10) 0%, transparent 60%),
+      radial-gradient(circle at 90% 90%, var(--tobiracast-orange-overlay-30) 0%, transparent 30%),
+      linear-gradient(45deg, transparent 0%, var(--tobiracast-white-overlay-05) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
   }
 
-  div.content {
-    padding: 20px 40px;
-  }
-  @media (max-width: 640px) {
-    div.content {
-      padding: 0 18px;
-    }
+  .hero-section {
+    position: relative;
+    z-index: 2;
+    padding: 3rem 0 2rem;
+    text-align: center;
   }
 
-  main header {
-    padding: 20px 0 20px;
+  .hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
-  main header h1 {
+
+  .hero-title {
+    font-size: 3rem;
     font-weight: 700;
-    color: #333;
+    margin-bottom: 1rem;
+    text-shadow: var(--tobiracast-text-shadow-strong);
+    animation: fadeInUp 0.8s ease-out;
   }
-  main header h1 a {
-    display: block;
-    color: inherit;
+
+  .hero-title a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
   }
-  main header h1 a:hover {
-    color: inherit;
+
+  .hero-title a:hover {
+    color: var(--tobiracast-white-overlay-90);
+    transform: translateY(-2px);
   }
-  main header h1 a span,
-  main header h1 a img {
+
+  .hero-title a span,
+  .hero-title a img {
     display: inline-block;
     font-size: 1.1em;
   }
-  main header h1 a span {
+
+  .hero-title a span {
     margin-right: 0.3em;
     margin-left: -0.1rem;
   }
-  main header h1 a img {
+
+  .hero-title a img {
     width: 1.2em;
     height: 1.2em;
     margin-right: 0.2em;
     margin-left: -0.3rem;
     vertical-align: sub;
   }
-  main header h1 a img.custom-icon {
+
+  .hero-title a img.custom-icon {
     border-radius: var(--radius);
   }
 
-  main header div.description {
-    padding: 0.3rem 0 0.6rem;
-    font-size: 0.95rem;
+  .hero-description {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: var(--tobiracast-text-shadow-light);
+    animation: fadeInUp 0.8s ease-out 0.1s both;
   }
 
-  main footer {
-    margin: 30px 0 10px;
-    text-align: center;
-    font-size: 0.75rem;
+  .main-nav {
+    margin-top: 1.5rem;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
   }
-  @media (max-width: 640px) {
-    main footer {
-      margin: 0 auto 30px;
+
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin: 0 auto;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .menu-header {
+    display: none;
+  }
+
+  .menu-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    color: var(--tobiracast-primary-blue);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+  }
+
+  .menu-close-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: rotate(90deg);
+  }
+
+  .main-nav li {
+    margin: 0;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 16px 32px;
+    color: var(--tobiracast-nav-button-text);
+    text-decoration: none;
+    border-radius: 16px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: var(--tobiracast-nav-button-border);
+    backdrop-filter: blur(10px);
+    background: var(--tobiracast-nav-button-bg);
+    box-shadow: var(--tobiracast-nav-button-shadow);
+    text-shadow: none;
+    min-width: 140px;
+    text-align: center;
+  }
+
+  .main-nav a:hover {
+    background: var(--tobiracast-nav-button-bg-hover);
+    border: var(--tobiracast-nav-button-border-hover);
+    color: var(--tobiracast-nav-button-text);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--tobiracast-nav-button-shadow-hover);
+  }
+
+  .main-nav a:focus {
+    outline: 2px solid var(--tobiracast-primary-blue);
+    outline-offset: 2px;
+  }
+
+  .main-nav a.login-btn {
+    background: var(--tobiracast-login-button-bg);
+    border: var(--tobiracast-login-button-border);
+    color: white;
+    box-shadow: var(--tobiracast-login-button-shadow);
+  }
+
+  .main-nav a.login-btn:hover {
+    background: var(--tobiracast-login-button-bg-hover);
+    border: var(--tobiracast-login-button-border);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--tobiracast-login-button-shadow-hover);
+  }
+
+  .full-width-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  main {
+    width: 100%;
+  }
+
+  div.cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    mix-blend-mode: multiply;
+  }
+
+  div.cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+    opacity: 0.15;
+    filter: blur(2px);
+  }
+
+  div.content {
+    padding: 2rem 2rem;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    margin-top: -80px;
+    position: relative;
+    z-index: 1;
+    box-shadow: var(--tobiracast-content-shadow);
+  }
+
+  .site-footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: white;
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .footer-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-brand {
+    flex: 1;
+  }
+
+  .footer-brand h3 {
+    color: var(--tobiracast-primary-blue);
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .footer-brand p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .footer-links a:hover {
+    color: var(--tobiracast-primary-blue);
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-bottom p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .footer-bottom a {
+    color: var(--tobiracast-primary-orange);
+    text-decoration: none;
+  }
+
+  .footer-bottom a:hover {
+    color: var(--tobiracast-light-orange);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
-  main footer span {
-    color: #777;
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 2rem 0;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+    }
+
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      min-width: 240px;
+      max-width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, -50%) scale(0.9);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000;
+    }
+
+    .menu-header {
+      display: flex !important;
+      width: 100%;
+      justify-content: flex-end;
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .nav-menu a {
+      padding: 12px 24px;
+      width: 100%;
+      text-align: center;
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--tobiracast-primary-blue);
+      background: transparent;
+      border: 2px solid transparent;
+      box-shadow: none;
+    }
+
+    .nav-menu a:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: var(--tobiracast-primary-blue);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .nav-menu a.login-btn {
+      background: var(--tobiracast-primary-blue);
+      color: white;
+      border-color: var(--tobiracast-primary-blue);
+    }
+
+    .nav-menu a.login-btn:hover {
+      background: var(--tobiracast-dark-blue);
+      border-color: var(--tobiracast-dark-blue);
+    }
+
+    div.content {
+      padding: 2rem 1rem;
+    }
+
+    .footer-main {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-links {
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
-  main footer a {
-    color: inherit;
-    text-decoration: underline;
+
+  @media (max-width: 640px) {
+    .hero-content {
+      padding: 0 1rem;
+    }
+
+    .hero-title {
+      font-size: 1.75rem;
+    }
+
+    .hero-description {
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+    }
   }
 </style>
 
@@ -308,7 +748,7 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   body {
     min-height: 100vh;
-    background: var(--bg);
+    background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
     color: var(--fg);
     font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Helvetica, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
@@ -328,6 +768,58 @@ if (database.Icon && database.Icon.Type === 'file') {
     -webkit-text-size-adjust: 100%;
   }
 
+  /* 画像読み込み時のフラッシュ効果を防ぐ */
+  img {
+    background: transparent;
+    transition: opacity 0.5s ease;
+    border-radius: 4px;
+  }
+
+  /* 画像読み込み中のみ背景色を表示 */
+  img[loading="lazy"]:not(.loaded) {
+    background: #f5f5f5;
+  }
+
+  img[loading="lazy"] {
+    opacity: 0;
+  }
+
+  img[loading="lazy"].loaded {
+    opacity: 1;
+  }
+
+  /* 画像読み込み中のプレースホルダー効果 */
+  .featured-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 1.5s infinite;
+    z-index: 1;
+  }
+
+  .featured-image img.loaded + .featured-image::before {
+    display: none;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
   figure {
     margin: 0;
     font-size: 0.85rem;
@@ -336,11 +828,11 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   a {
-    color: var(--accents-1);
+    color: var(--tobiracast-primary-orange);
     text-decoration: none;
   }
   a:hover {
-    color: var(--accents-1);
+    color: var(--tobiracast-light-orange);
   }
 
   mark {
