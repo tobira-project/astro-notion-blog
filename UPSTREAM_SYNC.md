@@ -20,6 +20,7 @@ git fetch upstream
 ```
 
 確認:
+
 ```bash
 git remote -v
 # origin    https://github.com/tobira-project/astro-notion-blog (fetch)
@@ -54,6 +55,7 @@ git diff HEAD..upstream/main -- src/lib/notion/client.ts
 ### 3. 変更内容を精査
 
 以下の項目をチェック:
+
 - ✅ **バグ修正**: 取り込むべき
 - ✅ **新機能（Notion API関連）**: 取り込むべき
 - ✅ **パフォーマンス改善**: 取り込むべき
