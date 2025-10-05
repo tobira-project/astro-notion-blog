@@ -1,20 +1,118 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Card from '../components/ui/Card.astro'
-import FadeInUp from '../components/ui/FadeInUp.astro'
 ---
 
 <Layout title="プラン加入" path="/subscription">
-  <div slot="main" class="w-full">
-    <FadeInUp class="flex justify-center items-center min-h-[60vh] w-full">
-      <Card variant="gradient" class="w-full py-16 px-8 text-center -mx-8 md:-mx-4">
-        <div class="text-8xl mb-6 animate-bounce-slow">🚀</div>
-        <h2 class="text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg">有料プラン準備中</h2>
-        <p class="text-xl md:text-2xl leading-relaxed opacity-90">
+  <div slot="main" class="subscription-page">
+    <div class="coming-soon-container">
+      <div class="coming-soon-card">
+        <div class="coming-soon-icon">🚀</div>
+        <h2 class="coming-soon-title">有料プラン準備中</h2>
+        <p class="coming-soon-description">
           現在、より充実したコンテンツをお届けするため<br>
           有料プランの準備を進めております。
         </p>
-      </Card>
-    </FadeInUp>
+      </div>
+    </div>
   </div>
 </Layout>
+
+<style>
+  .subscription-page {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .coming-soon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    animation: fadeInUp 0.8s ease-out;
+    width: 100%;
+  }
+
+  .coming-soon-card {
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue) 0%, var(--tobiracast-light-blue) 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: var(--tobiracast-card-shadow);
+    width: 100%;
+    margin: 0 -2rem;
+  }
+
+  .coming-soon-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s infinite;
+  }
+
+  .coming-soon-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: var(--tobiracast-text-shadow-medium);
+  }
+
+  .coming-soon-description {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    opacity: 0.9;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .coming-soon-card {
+      padding: 3rem 1.5rem;
+      margin: 0 -1rem;
+    }
+
+    .coming-soon-icon {
+      font-size: 4rem;
+    }
+
+    .coming-soon-title {
+      font-size: 2rem;
+    }
+
+    .coming-soon-description {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .coming-soon-card {
+      padding: 2.5rem 1rem;
+      margin: 0 -1rem;
+    }
+
+    .coming-soon-title {
+      font-size: 1.75rem;
+    }
+
+    .coming-soon-description {
+      font-size: 1rem;
+    }
+  }
+</style>
