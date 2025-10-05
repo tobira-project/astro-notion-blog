@@ -380,7 +380,6 @@ import Layout from '../layouts/Layout.astro'
 
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
 
   // Magic Link設定（tobiratory-webと同じ）
   const actionCodeSettings = {
@@ -437,7 +436,7 @@ import Layout from '../layouts/Layout.astro'
 
   // Tobiratoryアカウント作成
   async function createTobiratoryAccount(idToken: string) {
-    const signupResponse = await fetch(`${API_URL}/native/signup`, {
+    const signupResponse = await fetch('/api/native/signup', {
       method: 'POST',
       headers: {
         'Authorization': idToken,
@@ -458,7 +457,7 @@ import Layout from '../layouts/Layout.astro'
 
   // Flowアカウント作成
   async function createFlowAccount(idToken: string) {
-    const flowResponse = await fetch(`${API_URL}/native/create-flow`, {
+    const flowResponse = await fetch('/api/native/create-flow', {
       method: 'POST',
       headers: {
         'Authorization': idToken,
@@ -494,7 +493,7 @@ import Layout from '../layouts/Layout.astro'
       await new Promise(resolve => setTimeout(resolve, sleepTime))
       
       const currentIdToken = await auth.currentUser?.getIdToken()
-      const checkResponse = await fetch(`${API_URL}/native/my/profile`, {
+      const checkResponse = await fetch('/api/native/my/profile', {
         method: 'GET',
         headers: {
           'Authorization': currentIdToken,
@@ -533,7 +532,7 @@ import Layout from '../layouts/Layout.astro'
       if (!idToken) throw new Error('認証されていません')
       
       // プロフィール取得
-      const profileResponse = await fetch(`${API_URL}/native/my/profile`, {
+      const profileResponse = await fetch('/api/native/my/profile', {
         method: 'GET',
         headers: {
           'Authorization': idToken,

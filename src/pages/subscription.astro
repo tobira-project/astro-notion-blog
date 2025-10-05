@@ -409,7 +409,6 @@ import Layout from '../layouts/Layout.astro'
 
   // Stripe設定
   const stripePromise = loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
 
   // DOM要素
   const subscribeButtons = document.querySelectorAll('[data-price-id]')
@@ -437,7 +436,7 @@ import Layout from '../layouts/Layout.astro'
       throw new Error('無効なプランが選択されました')
     }
 
-    const response = await fetch(`${API_URL}/create-checkout-session`, {
+    const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
         'Authorization': idToken,
