@@ -23,23 +23,31 @@ const [posts, numberOfPages] = await Promise.all([
 <Layout title="記事一覧" path="/posts">
   <div slot="main" class={styles.main}>
     <header>
-      <div class="page-container">記事一覧 1/{numberOfPages}</div>
+      <h1 class="page-title">記事一覧</h1>
     </header>
 
     {
       posts.length === 0 ? (
         <NoContents contents={posts} />
       ) : (
-        posts.map((post) => (
-          <div class={styles.post} key={post.Slug}>
-            <PostDate post={post} />
-            <PostTags post={post} />
-            <PostTitle post={post} />
-            <PostFeaturedImage post={post} />
-            <PostExcerpt post={post} />
-            <ReadMoreLink post={post} />
-          </div>
-        ))
+        <div class="posts-list">
+          {posts.map((post, index) => (
+            <article class="post-card" key={post.Slug} style={`animation-delay: ${index * 0.1}s`}>
+              <div class="post-card-image">
+                <PostFeaturedImage post={post} />
+              </div>
+              <div class="post-card-content">
+                <div class="post-meta">
+                  <PostDate post={post} />
+                  <PostTags post={post} />
+                </div>
+                <PostTitle post={post} />
+                <PostExcerpt post={post} />
+                <ReadMoreLink post={post} />
+              </div>
+            </article>
+          ))}
+        </div>
       )
     }
 
@@ -53,16 +61,246 @@ const [posts, numberOfPages] = await Promise.all([
 </Layout>
 
 <style>
-  .page-container {
-    margin: 0 0 2rem 0;
-    line-height: 1.3;
-    font-size: 1.5rem;
-    font-weight: 600;
+  .page-title {
+    color: var(--tobiracast-primary-blue);
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--tobiracast-primary-blue), var(--tobiracast-primary-orange));
+    border-radius: 2px;
+  }
+
+  .posts-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .post-card {
+    display: flex;
+    background: var(--tobiracast-bg-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid var(--tobiracast-border);
+    animation: fadeInUp 0.8s ease-out both;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .post-card-image {
+    flex: 0 0 200px;
+    overflow: hidden;
+  }
+
+  .post-card-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Override PostFeaturedImage styles */
+  .post-card-image :global(.featured-image) {
+    margin: 0;
+    width: 100%;
+    height: 140px;
+  }
+
+  .post-card-image :global(.featured-image img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .post-card:hover .post-card-image :global(.featured-image img) {
+    transform: scale(1.05);
+  }
+
+  /* Override PostTitle styles */
+  .post-card-content :global(.post-title) {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .post-card-content :global(.post-title a) {
+    color: var(--tobiracast-text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .post-card-content :global(.post-title a:hover) {
     color: var(--tobiracast-primary-blue);
   }
-  @media (max-width: 640px) {
-    .page-container {
+
+  /* Override PostExcerpt styles */
+  .post-card-content :global(.post-excerpt) {
+    font-size: 0.9rem;
+    color: var(--tobiracast-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Override PostDate styles */
+  .post-meta :global(.post-date) {
+    font-size: 0.85rem;
+    color: var(--tobiracast-text-muted);
+    margin: 0;
+  }
+
+  /* Override PostTags styles */
+  .post-meta :global(.post-tags) {
+    margin: 0;
+  }
+
+  .post-meta :global(.post-tags a) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--tobiracast-bg-secondary);
+    color: var(--tobiracast-text-secondary);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-right: 0.5rem;
+  }
+
+  .post-meta :global(.post-tags a:hover) {
+    background: var(--tobiracast-primary-blue);
+    color: white;
+  }
+
+  /* Override ReadMoreLink styles */
+  .post-card-content :global(.read-more-link) {
+    margin-top: auto;
+    text-align: left;
+  }
+
+  .post-card-content :global(.read-more-link a) {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-card {
+      flex-direction: column;
+      margin-bottom: 1.25rem;
+    }
+
+    .post-card-image {
+      flex: none;
+      height: 180px;
+    }
+
+    .post-card-image :global(.featured-image) {
+      height: 180px;
+    }
+
+    .post-card-content {
+      padding: 1.25rem;
+    }
+
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-title {
       font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-card {
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    .post-card-image {
+      height: 160px;
+    }
+
+    .post-card-image :global(.featured-image) {
+      height: 160px;
+    }
+
+    .post-card-content {
+      padding: 1rem;
+    }
+
+    .post-card-content :global(.post-title) {
+      font-size: 1rem;
+    }
+
+    .post-card-content :global(.post-excerpt) {
+      font-size: 0.85rem;
     }
   }
 </style>
