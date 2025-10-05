@@ -388,6 +388,14 @@ import Layout from '../layouts/Layout.astro'
     handleCodeInApp: true,
   }
 
+  // デバッグ: 設定を確認
+  console.log('Firebase Config:', {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY ? '設定済み' : '未設定',
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  })
+  console.log('Action Code Settings:', actionCodeSettings)
+
   // DOM要素
   const authError = document.getElementById('auth-error')
   const accountCreating = document.getElementById('account-creating')
