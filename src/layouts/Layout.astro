@@ -252,8 +252,9 @@ if (database.Icon && database.Icon.Type === 'file') {
         var(--tobiracast-dark-orange) 100%
       );
     color: white;
-    overflow: hidden;
+    overflow: visible;
     min-height: 400px;
+    z-index: 1;
   }
 
   .site-header::before {
@@ -638,9 +639,9 @@ if (database.Icon && database.Icon.Type === 'file') {
 
     .nav-menu {
       position: fixed;
-      top: 20px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       background: #ffffff;
       border: 3px solid var(--tobiracast-primary-blue);
       backdrop-filter: blur(20px);
@@ -650,13 +651,12 @@ if (database.Icon && database.Icon.Type === 'file') {
       flex-direction: column;
       gap: 0.5rem;
       align-items: stretch;
-      min-width: 260px;
+      width: 280px;
       max-width: 90vw;
-      max-height: calc(100vh - 40px);
+      max-height: 70vh;
       overflow-y: auto;
       opacity: 0;
       visibility: hidden;
-      transform: translateX(-50%) translateY(-20px) scale(0.95);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 99999 !important;
     }
@@ -671,7 +671,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     .nav-menu.active {
       opacity: 1;
       visibility: visible;
-      transform: translateX(-50%) translateY(0) scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .nav-menu a {
