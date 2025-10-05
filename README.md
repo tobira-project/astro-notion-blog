@@ -24,7 +24,6 @@ TOBIRACASTは、[Tobiratory](https://tobiratory.com)の公式ポータルサイ�
 - 🚀 **圧倒的な高速表示** - 静的サイト生成による最適化されたパフォーマンス
 - ✍️ **Notionで記事管理** - 使い慣れたNotionエディタで簡単コンテンツ作成
 - 🎨 **カスタムデザイン** - TOBIRACAST独自のブランドカラーとレイアウト
-- 🔐 **有料コンテンツ対応** - Firebase Auth + Stripe連携（実装予定）
 - 📱 **完全レスポンシブ** - モバイルファーストデザイン
 - 🔄 **自動同期なし** - 手動での選択的アップデート（カスタムデザイン保護）
 
@@ -36,8 +35,6 @@ TOBIRACASTは、[Tobiratory](https://tobiratory.com)の公式ポータルサイ�
 | ------------------ | ----------------------------------- |
 | **フレームワーク** | Astro 5.x                           |
 | **CMS**            | Notion API (`@notionhq/client`)     |
-| **認証**           | Firebase Auth（実装予定）           |
-| **決済**           | Stripe（実装予定）                  |
 | **スタイリング**   | CSS Variables + Astro Scoped Styles |
 | **デプロイ**       | Cloudflare Pages / Vercel           |
 | **画像処理**       | Sharp.js                            |
@@ -215,19 +212,6 @@ REQUEST_TIMEOUT_MS=10000                   # APIタイムアウト
 NODE_VERSION=20.18.1                       # Node.jsバージョン
 ```
 
-### 今後実装予定
-
-```env
-# Firebase Auth
-FIREBASE_PROJECT_ID=your-project
-FIREBASE_API_KEY=your-api-key
-
-# Stripe
-STRIPE_PUBLIC_KEY=pk_live_xxxxx
-STRIPE_SECRET_KEY=sk_live_xxxxx
-STRIPE_WEBHOOK_SECRET=whsec_xxxxx
-```
-
 ---
 
 ## 🚀 デプロイ
@@ -251,44 +235,11 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxx
 
 ---
 
-## 🗺️ ロードマップ
-
-### Phase 1: デザイン・基盤 ✅
-
-- [x] TOBIRACASTブランディング
-- [x] カスタムヘッダー/フッター
-- [x] レスポンシブデザイン
-- [x] ハンバーガーメニュー
-- [x] 記事一覧ページ
-- [x] 上流同期ガイド作成
-
-### Phase 2: 有料コンテンツ（進行中）
-
-- [ ] Notion DBスキーマ拡張（`IsPremium`, `PremiumContent`）
-- [ ] 記事詳細ページにペイウォール実装
-- [ ] Firebase Auth統合
-- [ ] Stripe決済統合
-- [ ] サブスクリプション管理
-
-### Phase 3: 高度な機能
-
-- [ ] トークン配布システム
-- [ ] カスタム動画ホスティング
-- [ ] 分析ダッシュボード
-- [ ] メンバー限定機能
-
 ---
 
 ## 🤝 コントリビューション
 
 このプロジェクトはTobiratoryの内部プロジェクトです。
-
-### 開発メンバー
-
-- **Ray**: プライマリ開発者
-- **tererun**: フルスタック開発者、Blockchain専門
-- **jonosuke**: テクニカルアドバイザー
-- **Inuta**: プロダクトオーナー、コンテンツクリエイター
 
 ---
 
