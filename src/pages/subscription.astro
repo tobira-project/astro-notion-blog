@@ -27,10 +27,9 @@ import Layout from '../layouts/Layout.astro'
             </div>
           </div>
           <ul class="plan-features">
-            <li>✓ 一般記事の閲覧</li>
-            <li>✓ 限定記事へのアクセス</li>
-            <li>✗ 限定動画コンテンツ</li>
-            <li>✗ 優先サポート</li>
+            <li><span class="check-icon">✓</span>全ての記事へのアクセス</li>
+            <li><span class="check-icon">✓</span>コミュニティ参加</li>
+            <li><span class="check-icon">✓</span>月1回のオンラインイベント</li>
           </ul>
           <button class="plan-button basic-button" data-price-id="basic">
             このプランに加入する
@@ -39,7 +38,7 @@ import Layout from '../layouts/Layout.astro'
 
         <!-- スタンダードプラン (¥1,980) -->
         <div class="plan-card standard-plan">
-          <div class="plan-badge">人気</div>
+          <div class="plan-badge">おすすめ</div>
           <div class="plan-header">
             <h2 class="plan-name">スタンダード</h2>
             <div class="plan-price">
@@ -48,11 +47,10 @@ import Layout from '../layouts/Layout.astro'
             </div>
           </div>
           <ul class="plan-features">
-            <li>✓ 一般記事の閲覧</li>
-            <li>✓ 限定記事へのアクセス</li>
-            <li>✓ 限定動画コンテンツ</li>
-            <li>✓ 新機能への早期アクセス</li>
-            <li>✗ 優先サポート</li>
+            <li><span class="check-icon">✓</span>ベーシックの全機能</li>
+            <li><span class="check-icon">✓</span>限定動画コンテンツ</li>
+            <li><span class="check-icon">✓</span>限定教材・資料ダウンロード</li>
+            <li><span class="check-icon">✓</span>月2回のオンラインイベント</li>
           </ul>
           <button class="plan-button standard-button" data-price-id="standard">
             このプランに加入する
@@ -61,7 +59,6 @@ import Layout from '../layouts/Layout.astro'
 
         <!-- プレミアムプラン (¥9,800) -->
         <div class="plan-card premium-plan">
-          <div class="plan-badge">最上位</div>
           <div class="plan-header">
             <h2 class="plan-name">プレミアム</h2>
             <div class="plan-price">
@@ -70,12 +67,12 @@ import Layout from '../layouts/Layout.astro'
             </div>
           </div>
           <ul class="plan-features">
-            <li>✓ 全ての機能へのアクセス</li>
-            <li>✓ 限定記事へのアクセス</li>
-            <li>✓ 限定動画コンテンツ</li>
-            <li>✓ 新機能への早期アクセス</li>
-            <li>✓ 優先サポート</li>
-            <li>✓ 月次個別相談セッション</li>
+            <li><span class="check-icon">✓</span>スタンダードの全機能</li>
+            <li><span class="check-icon">✓</span>月1回の個別相談（60分）</li>
+            <li><span class="check-icon">✓</span>優先サポート（24時間以内）</li>
+            <li><span class="check-icon">✓</span>限定クローズドイベント</li>
+            <li><span class="check-icon">✓</span>新機能への早期アクセス</li>
+            <li><span class="check-icon">✓</span>限定グループチャット</li>
           </ul>
           <button class="plan-button premium-button" data-price-id="premium">
             このプランに加入する
@@ -162,6 +159,8 @@ import Layout from '../layouts/Layout.astro'
     transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
     animation: fadeInUp 0.8s ease-out;
+    display: flex;
+    flex-direction: column;
   }
 
   .plan-card:nth-child(1) {
@@ -239,6 +238,7 @@ import Layout from '../layouts/Layout.astro'
     list-style: none;
     padding: 0;
     margin: 0 0 2rem 0;
+    flex-grow: 1;
   }
 
   .plan-features li {
@@ -246,10 +246,39 @@ import Layout from '../layouts/Layout.astro'
     font-size: 1rem;
     color: #374151;
     border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .plan-features li:last-child {
     border-bottom: none;
+  }
+
+  .check-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), var(--tobiracast-light-blue));
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .basic-plan .check-icon {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+  }
+
+  .standard-plan .check-icon {
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), var(--tobiracast-light-blue));
+  }
+
+  .premium-plan .check-icon {
+    background: linear-gradient(135deg, var(--tobiracast-primary-orange), var(--tobiracast-light-orange));
   }
 
   .plan-button {
@@ -261,6 +290,7 @@ import Layout from '../layouts/Layout.astro'
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    margin-top: auto;
   }
 
   .basic-button {
