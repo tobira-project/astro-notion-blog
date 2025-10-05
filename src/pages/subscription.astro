@@ -4,14 +4,63 @@ import Layout from '../layouts/Layout.astro'
 
 <Layout title="プラン加入" path="/subscription">
   <div slot="main" class="subscription-page">
-    <div class="coming-soon-container">
-      <div class="coming-soon-card">
-        <div class="coming-soon-icon">🚀</div>
-        <h2 class="coming-soon-title">有料プラン準備中</h2>
-        <p class="coming-soon-description">
-          現在、より充実したコンテンツをお届けするため<br>
-          有料プランの準備を進めております。
+    <div class="subscription-container">
+      <header class="page-header">
+        <h1 class="page-title">プラン加入</h1>
+        <p class="page-description">
+          Tobiratoryの限定コンテンツにアクセスできるプランをご用意しています
         </p>
+      </header>
+
+      <!-- 認証エラー/通知表示 -->
+      <div id="subscription-message" class="message" style="display: none;"></div>
+
+      <!-- プラン選択 -->
+      <div class="plans-container">
+        <!-- 無料プラン -->
+        <div class="plan-card free-plan">
+          <div class="plan-header">
+            <h2 class="plan-name">無料プラン</h2>
+            <div class="plan-price">
+              <span class="price-amount">¥0</span>
+              <span class="price-period">/月</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>✓ 一般記事の閲覧</li>
+            <li>✓ 基本コンテンツへのアクセス</li>
+            <li>✗ 限定記事へのアクセス</li>
+            <li>✗ 限定動画コンテンツ</li>
+          </ul>
+          <button class="plan-button free-button" disabled>現在のプラン</button>
+        </div>
+
+        <!-- プレミアムプラン -->
+        <div class="plan-card premium-plan">
+          <div class="plan-badge">おすすめ</div>
+          <div class="plan-header">
+            <h2 class="plan-name">プレミアムプラン</h2>
+            <div class="plan-price">
+              <span class="price-amount">¥980</span>
+              <span class="price-period">/月</span>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>✓ 一般記事の閲覧</li>
+            <li>✓ 基本コンテンツへのアクセス</li>
+            <li>✓ 限定記事へのアクセス</li>
+            <li>✓ 限定動画コンテンツ</li>
+            <li>✓ 新機能への早期アクセス</li>
+          </ul>
+          <button id="subscribe-button" class="plan-button premium-button">
+            このプランに加入する
+          </button>
+        </div>
+      </div>
+
+      <!-- ログインしていない場合のメッセージ -->
+      <div id="login-prompt" class="login-prompt" style="display: none;">
+        <p>プランに加入するには<a href="/login">ログイン</a>してください</p>
       </div>
     </div>
   </div>
@@ -21,53 +70,206 @@ import Layout from '../layouts/Layout.astro'
   .subscription-page {
     width: 100%;
     margin: 0;
-    padding: 0;
+    padding: 2rem 1rem;
   }
 
-  .coming-soon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 60vh;
-    animation: fadeInUp 0.8s ease-out;
-    width: 100%;
+  .subscription-container {
+    max-width: 1000px;
+    margin: 0 auto;
   }
 
-  .coming-soon-card {
-    background: linear-gradient(135deg, var(--tobiracast-primary-blue) 0%, var(--tobiracast-light-blue) 100%);
-    color: white;
-    padding: 4rem 2rem;
+  .page-header {
     text-align: center;
-    box-shadow: var(--tobiracast-card-shadow);
-    width: 100%;
-    margin: 0 -2rem;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
   }
 
-  .coming-soon-icon {
-    font-size: 5rem;
-    margin-bottom: 1.5rem;
-    animation: bounce 2s infinite;
-  }
-
-  .coming-soon-title {
+  .page-title {
     font-size: 2.5rem;
+    color: var(--tobiracast-primary-blue);
+    margin-bottom: 1rem;
+  }
+
+  .page-description {
+    font-size: 1.1rem;
+    color: #6b7280;
+  }
+
+  .message {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+  }
+
+  .message.error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+  }
+
+  .message.success {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+  }
+
+  .message.info {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+  }
+
+  .plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .plan-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .plan-card:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+
+  .plan-card:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .premium-plan {
+    border: 2px solid var(--tobiracast-primary-orange);
+  }
+
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--tobiracast-primary-orange), var(--tobiracast-light-orange));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(233, 104, 0, 0.3);
+  }
+
+  .plan-header {
     margin-bottom: 1.5rem;
-    text-shadow: var(--tobiracast-text-shadow-medium);
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
   }
 
-  .coming-soon-description {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    opacity: 0.9;
+  .plan-name {
+    font-size: 1.75rem;
+    color: #111827;
+    margin-bottom: 1rem;
   }
 
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .price-amount {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--tobiracast-primary-blue);
+  }
+
+  .price-period {
+    font-size: 1.25rem;
+    color: #6b7280;
+  }
+
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+  }
+
+  .plan-features li {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .plan-features li:last-child {
+    border-bottom: none;
+  }
+
+  .plan-button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .free-button {
+    background: #e5e7eb;
+    color: #6b7280;
+    cursor: not-allowed;
+  }
+
+  .premium-button {
+    background: linear-gradient(135deg, var(--tobiracast-primary-orange), var(--tobiracast-light-orange));
+    color: white;
+    box-shadow: 0 4px 12px rgba(233, 104, 0, 0.3);
+  }
+
+  .premium-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 104, 0, 0.4);
+  }
+
+  .premium-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .login-prompt {
+    text-align: center;
+    padding: 2rem;
+    background: #eff6ff;
+    border-radius: 12px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .login-prompt p {
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  .login-prompt a {
+    color: var(--tobiracast-primary-blue);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .login-prompt a:hover {
+    text-decoration: underline;
   }
 
   @keyframes fadeInUp {
@@ -83,36 +285,130 @@ import Layout from '../layouts/Layout.astro'
 
   /* Responsive Design */
   @media (max-width: 768px) {
-    .coming-soon-card {
-      padding: 3rem 1.5rem;
-      margin: 0 -1rem;
-    }
-
-    .coming-soon-icon {
-      font-size: 4rem;
-    }
-
-    .coming-soon-title {
+    .page-title {
       font-size: 2rem;
     }
 
-    .coming-soon-description {
-      font-size: 1.1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .coming-soon-card {
-      padding: 2.5rem 1rem;
-      margin: 0 -1rem;
+    .plans-container {
+      grid-template-columns: 1fr;
     }
 
-    .coming-soon-title {
-      font-size: 1.75rem;
+    .plan-card {
+      padding: 1.5rem;
     }
 
-    .coming-soon-description {
-      font-size: 1rem;
+    .price-amount {
+      font-size: 2.5rem;
     }
   }
 </style>
+
+<script>
+  import { initializeApp } from 'firebase/app'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
+  import { loadStripe } from '@stripe/stripe-js'
+
+  // Firebase設定
+  const firebaseConfig = {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID
+  }
+
+  const app = initializeApp(firebaseConfig)
+  const auth = getAuth(app)
+
+  // Stripe設定
+  const stripePromise = loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
+
+  // DOM要素
+  const subscribeButton = document.getElementById('subscribe-button')
+  const loginPrompt = document.getElementById('login-prompt')
+  const subscriptionMessage = document.getElementById('subscription-message')
+
+  // メッセージ表示
+  function showMessage(message: string, type: 'error' | 'success' | 'info') {
+    subscriptionMessage.textContent = message
+    subscriptionMessage.className = `message ${type}`
+    subscriptionMessage.style.display = 'block'
+  }
+
+  // Stripe Checkoutセッション作成
+  async function createCheckoutSession(idToken: string) {
+    const response = await fetch(`${API_URL}/create-checkout-session`, {
+      method: 'POST',
+      headers: {
+        'Authorization': idToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        priceId: import.meta.env.PUBLIC_STRIPE_PRICE_ID,
+        successUrl: window.location.origin + '/subscription?success=true',
+        cancelUrl: window.location.origin + '/subscription?canceled=true'
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('Checkoutセッションの作成に失敗しました')
+    }
+
+    const { sessionId } = await response.json()
+    return sessionId
+  }
+
+  // Stripe Checkoutへリダイレクト
+  async function handleSubscribe() {
+    try {
+      subscribeButton.disabled = true
+      subscribeButton.textContent = '処理中...'
+
+      const user = auth.currentUser
+      if (!user) {
+        showMessage('ログインしてください', 'error')
+        return
+      }
+
+      const idToken = await user.getIdToken()
+      const sessionId = await createCheckoutSession(idToken)
+
+      const stripe = await stripePromise
+      const { error } = await stripe.redirectToCheckout({ sessionId })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    } catch (error) {
+      console.error('Subscription error:', error)
+      showMessage(error.message || 'エラーが発生しました', 'error')
+      subscribeButton.disabled = false
+      subscribeButton.textContent = 'このプランに加入する'
+    }
+  }
+
+  // URLパラメータをチェック
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.get('success') === 'true') {
+    showMessage('プランへの加入が完了しました！', 'success')
+  } else if (urlParams.get('canceled') === 'true') {
+    showMessage('プランへの加入がキャンセルされました', 'info')
+  }
+
+  // 認証状態の監視
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginPrompt.style.display = 'none'
+      subscribeButton.disabled = false
+    } else {
+      loginPrompt.style.display = 'block'
+      subscribeButton.disabled = true
+    }
+  })
+
+  // サブスクライブボタンクリック
+  subscribeButton?.addEventListener('click', handleSubscribe)
+</script>
