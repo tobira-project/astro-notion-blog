@@ -643,16 +643,16 @@ if (database.Icon && database.Icon.Type === 'file') {
       left: 50%;
       transform: translate(-50%, -50%);
       background: #ffffff;
-      border: 3px solid var(--tobiracast-primary-blue);
+      border: 2px solid var(--tobiracast-primary-blue);
       backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 1rem;
+      border-radius: 12px;
+      padding: 0.75rem;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
       align-items: stretch;
-      width: 280px;
-      max-width: 90vw;
+      width: 220px;
+      max-width: 85vw;
       max-height: 70vh;
       overflow-y: auto;
       opacity: 0;
@@ -675,18 +675,19 @@ if (database.Icon && database.Icon.Type === 'file') {
     }
 
     .nav-menu a {
-      padding: 10px 20px;
+      padding: 8px 16px;
       width: 100%;
       text-align: center;
       min-height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--tobiracast-primary-blue);
       background: transparent;
       border: 2px solid transparent;
       box-shadow: none;
+      border-radius: 8px;
     }
 
     .nav-menu a:hover {
@@ -697,14 +698,14 @@ if (database.Icon && database.Icon.Type === 'file') {
     }
 
     .nav-menu a.login-btn {
-      background: var(--tobiracast-primary-blue);
-      color: white;
-      border-color: var(--tobiracast-primary-blue);
+      background: transparent;
+      color: var(--tobiracast-primary-blue);
+      border-color: transparent;
     }
 
     .nav-menu a.login-btn:hover {
-      background: var(--tobiracast-dark-blue);
-      border-color: var(--tobiracast-dark-blue);
+      background: rgba(59, 130, 246, 0.1);
+      border-color: var(--tobiracast-primary-blue);
     }
 
     div.content {
