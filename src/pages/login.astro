@@ -462,20 +462,20 @@ import Layout from '../layouts/Layout.astro'
     // 409 Conflict = すでにFlowアカウントが存在する場合はポーリングを実行
     if (flowResponse.status === 409) {
       console.log('Flowアカウントは既に存在するか作成中です')
-      await pollForCompletion(idToken)
+      await pollForCompletion()
       return
     }
-    
+
     if (!flowResponse.ok) {
       throw new Error(`Flowアカウント作成リクエストに失敗しました (${flowResponse.status})`)
     }
-    
+
     // 作成完了まで待機
-    await pollForCompletion(idToken)
+    await pollForCompletion()
   }
 
   // ポーリングによる完了待機
-  async function pollForCompletion(idToken: string) {
+  async function pollForCompletion() {
     // テスト用に調整可能な設定
     const maxRetry = import.meta.env.DEV ? 6 : 100  // 開発環境では6回（1分）
     const sleepTime = import.meta.env.DEV ? 10000 : 10000  // 10秒
@@ -563,7 +563,7 @@ import Layout from '../layouts/Layout.astro'
           case 'flow-account-retrying':
             // 作成中/再試行中 - 完了を待つ
             showLoading('Flowアカウント作成中（処理継続中）...')
-            await pollForCompletion(idToken)
+            await pollForCompletion()
             return
             
           case 'flow-account-create-error':
@@ -723,7 +723,7 @@ import Layout from '../layouts/Layout.astro'
           await signInWithEmailLink(auth, email, window.location.href)
           window.localStorage.removeItem('emailForSignIn')
           // onAuthStateChangedが自動的にhandleTobiratoryAccountSetupを呼ぶ
-        } catch (error) {
+        } catch {
           showForm()
           showError('メールリンクでのログインに失敗しました')
         }
