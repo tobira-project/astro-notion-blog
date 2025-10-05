@@ -658,11 +658,14 @@ import Layout from '../layouts/Layout.astro'
   emailForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
     hideError()
-    
+
     const email = (document.getElementById('email-input') as HTMLInputElement).value
-    
+    console.log('メール送信開始:', email)
+    console.log('actionCodeSettings:', actionCodeSettings)
+
     try {
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      console.log('メール送信成功')
       // メールアドレスを保存
       window.localStorage.setItem('emailForSignIn', email)
       showError('ログインリンクを送信しました。メールをご確認ください。')
@@ -671,12 +674,13 @@ import Layout from '../layouts/Layout.astro'
       authError.style.borderColor = '#bbf7d0'
       authError.style.color = '#16a34a'
     } catch (error) {
+      console.error('メール送信エラー:', error)
       if (error.code === 'auth/invalid-email') {
         showError('メールアドレスの形式が正しくありません')
       } else if (error.code === 'auth/missing-email') {
         showError('メールアドレスを入力してください')
       } else {
-        showError('メール送信に失敗しました。もう一度お試しください。')
+        showError(`メール送信に失敗しました: ${error.message}`)
       }
     }
   })
