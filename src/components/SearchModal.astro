@@ -33,7 +33,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--tobiracast-modal-backdrop);
   }
 
   div.search-modal {
@@ -82,7 +82,7 @@
     border-radius: var(--radius);
   }
   div.search-result ul > :global(li.selected > a) {
-    background-color: rgba(241, 241, 239, 1);
+    background-color: var(--tobiracast-search-selected-bg);
   }
 
   div.search-result :global(div.search-result-title) {
@@ -139,7 +139,9 @@
 
     function select() {
       const a = document.querySelector('.search-result ul > li.selected a')
-      a.click()
+      if (a) {
+        a.click()
+      }
     }
 
     function selectFirst() {
