@@ -624,11 +624,11 @@ if (database.Icon && database.Icon.Type === 'file') {
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
-      z-index: 999;
+      z-index: 9998;
     }
 
     .menu-overlay.active {
@@ -641,15 +641,16 @@ if (database.Icon && database.Icon.Type === 'file') {
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.98);
+      background: #ffffff;
+      border: 3px solid var(--tobiracast-primary-blue);
       backdrop-filter: blur(20px);
       border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       flex-direction: column;
-      gap: 0.75rem;
-      align-items: center;
-      min-width: 280px;
+      gap: 0.5rem;
+      align-items: stretch;
+      min-width: 260px;
       max-width: 90vw;
       max-height: calc(100vh - 40px);
       overflow-y: auto;
@@ -657,7 +658,7 @@ if (database.Icon && database.Icon.Type === 'file') {
       visibility: hidden;
       transform: translateX(-50%) translateY(-20px) scale(0.95);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 1001;
+      z-index: 99999 !important;
     }
 
     .menu-header {
@@ -674,14 +675,14 @@ if (database.Icon && database.Icon.Type === 'file') {
     }
 
     .nav-menu a {
-      padding: 12px 24px;
+      padding: 10px 20px;
       width: 100%;
       text-align: center;
       min-height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--tobiracast-primary-blue);
       background: transparent;
       border: 2px solid transparent;
