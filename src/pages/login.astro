@@ -68,7 +68,7 @@ import Layout from '../layouts/Layout.astro'
                 class="form-input"
               />
             </div>
-            <button type="submit" class="btn-primary">メールでログイン / 新規登録</button>
+            <button type="submit" id="email-submit-btn" class="btn-primary">メールでログイン / 新規登録</button>
             <p class="magic-link-note">
               入力したメールアドレスにログインリンクを送信します<br>
               新規の方は自動的にアカウントが作成されます
@@ -655,26 +655,49 @@ import Layout from '../layouts/Layout.astro'
   })
 
   // Magic Linkメール認証（tobiratory-webと同じ）
+  const emailSubmitBtn = document.getElementById('email-submit-btn')
+
   emailForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
     hideError()
 
     const email = (document.getElementById('email-input') as HTMLInputElement).value
+    const originalBtnText = emailSubmitBtn.textContent
+
     console.log('メール送信開始:', email)
     console.log('actionCodeSettings:', actionCodeSettings)
 
     try {
+      // ボタンを無効化して送信中表示
+      emailSubmitBtn.disabled = true
+      emailSubmitBtn.textContent = '送信中...'
+
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
       console.log('メール送信成功')
+
       // メールアドレスを保存
       window.localStorage.setItem('emailForSignIn', email)
-      showError('ログインリンクを送信しました。メールをご確認ください。')
-      // この場合はエラーではなく成功メッセージとして表示
+
+      // 成功メッセージを表示
+      showError('✓ ログインリンクを送信しました！メールをご確認ください。')
       authError.style.backgroundColor = '#f0fdf4'
       authError.style.borderColor = '#bbf7d0'
       authError.style.color = '#16a34a'
+
+      // ボタンを「送信済み」に変更
+      emailSubmitBtn.textContent = '送信済み'
+      emailSubmitBtn.style.backgroundColor = '#10b981'
+
+      // 入力欄をクリア
+      document.getElementById('email-input').value = ''
+
     } catch (error) {
       console.error('メール送信エラー:', error)
+
+      // ボタンを元に戻す
+      emailSubmitBtn.disabled = false
+      emailSubmitBtn.textContent = originalBtnText
+
       if (error.code === 'auth/invalid-email') {
         showError('メールアドレスの形式が正しくありません')
       } else if (error.code === 'auth/missing-email') {
