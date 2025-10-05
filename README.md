@@ -32,15 +32,15 @@ TOBIRACASTは、[Tobiratory](https://tobiratory.com)の公式ポータルサイ�
 
 ## 🛠 技術スタック
 
-| カテゴリ | 技術 |
-|---------|------|
-| **フレームワーク** | Astro 5.x |
-| **CMS** | Notion API (`@notionhq/client`) |
-| **認証** | Firebase Auth（実装予定） |
-| **決済** | Stripe（実装予定） |
-| **スタイリング** | CSS Variables + Astro Scoped Styles |
-| **デプロイ** | Cloudflare Pages / Vercel |
-| **画像処理** | Sharp.js |
+| カテゴリ           | 技術                                |
+| ------------------ | ----------------------------------- |
+| **フレームワーク** | Astro 5.x                           |
+| **CMS**            | Notion API (`@notionhq/client`)     |
+| **認証**           | Firebase Auth（実装予定）           |
+| **決済**           | Stripe（実装予定）                  |
+| **スタイリング**   | CSS Variables + Astro Scoped Styles |
+| **デプロイ**       | Cloudflare Pages / Vercel           |
+| **画像処理**       | Sharp.js                            |
 
 ---
 
@@ -131,10 +131,10 @@ astro-notion-blog/
 TOBIRACASTは独自のカラーシステムを使用しています（`src/styles/tobiracast.css`）:
 
 ```css
---tobiracast-primary-blue: #1779de;    /* メインブルー */
---tobiracast-primary-orange: #e96800;  /* メインオレンジ */
---tobiracast-light-blue: #4d94ff;      /* ライトブルー */
---tobiracast-light-orange: #ff9a4d;    /* ライトオレンジ */
+--tobiracast-primary-blue: #1779de; /* メインブルー */
+--tobiracast-primary-orange: #e96800; /* メインオレンジ */
+--tobiracast-light-blue: #4d94ff; /* ライトブルー */
+--tobiracast-light-orange: #ff9a4d; /* ライトオレンジ */
 ```
 
 ### カスタマイズ対象外ファイル
@@ -182,16 +182,16 @@ git commit -m "feat: Notion APIの改善を取り込む"
 
 ## 📝 開発コマンド
 
-| コマンド | 説明 |
-|---------|------|
-| `npm run dev` | 開発サーバー起動（http://localhost:4321） |
-| `npm run build` | 本番ビルド |
-| `npm run build:cached` | キャッシュ利用ビルド（Notion再取得） |
-| `npm run preview` | ビルド結果をプレビュー |
-| `npm run lint` | コード品質チェック |
-| `npm run format` | コードフォーマット |
-| `npm run cache:fetch` | Notionコンテンツをキャッシュ |
-| `npm run cache:purge` | キャッシュクリア |
+| コマンド               | 説明                                      |
+| ---------------------- | ----------------------------------------- |
+| `npm run dev`          | 開発サーバー起動（http://localhost:4321） |
+| `npm run build`        | 本番ビルド                                |
+| `npm run build:cached` | キャッシュ利用ビルド（Notion再取得）      |
+| `npm run preview`      | ビルド結果をプレビュー                    |
+| `npm run lint`         | コード品質チェック                        |
+| `npm run format`       | コードフォーマット                        |
+| `npm run cache:fetch`  | Notionコンテンツをキャッシュ              |
+| `npm run cache:purge`  | キャッシュクリア                          |
 
 ---
 
