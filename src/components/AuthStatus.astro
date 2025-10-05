@@ -2,76 +2,66 @@
 // このコンポーネントはクライアントサイドでログイン状態を管理します
 ---
 
-<div id="auth-status-container">
-  <!-- ログイン前の表示 -->
-  <div id="logged-out-nav" class="auth-nav">
-    <a href="/login" class="login-btn">ログイン</a>
-  </div>
-  
-  <!-- ログイン後の表示 -->
-  <div id="logged-in-nav" class="auth-nav" style="display: none;">
-    <a href="/profile" class="login-btn">マイページ</a>
-  </div>
-</div>
+<!-- ログイン前の表示 -->
+<a href="/login" id="logged-out-nav" class="auth-link">ログイン</a>
+
+<!-- ログイン後の表示 -->
+<a href="/profile" id="logged-in-nav" class="auth-link" style="display: none;">マイページ</a>
 
 <style>
-  #auth-status-container {
-    position: relative;
-    z-index: 99999;
-  }
-
-  .auth-nav {
-    display: flex;
-    align-items: center;
-  }
-
-  /* 他のナビゲーションボタンと全く同じスタイル */
-  .login-btn {
+  .auth-link {
     display: block;
     padding: 16px 32px;
-    color: white;
+    color: var(--tobiracast-primary-orange);
     text-decoration: none;
     border-radius: 16px;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-weight: 700;
     font-size: 1.1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: var(--tobiracast-nav-button-border);
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: var(--tobiracast-nav-button-bg);
+    box-shadow: var(--tobiracast-nav-button-shadow);
     text-shadow: none;
     min-width: 140px;
     text-align: center;
   }
 
-  .login-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    color: white;
+  .auth-link:hover {
+    background: var(--tobiracast-nav-button-bg-hover);
+    border: var(--tobiracast-nav-button-border-hover);
+    color: var(--tobiracast-primary-orange);
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--tobiracast-nav-button-shadow-hover);
+  }
+
+  .auth-link:focus {
+    outline: 2px solid var(--tobiracast-primary-orange);
+    outline-offset: 2px;
   }
 
   @media (max-width: 768px) {
-    .login-btn {
-      background: transparent;
-      color: var(--tobiracast-primary-blue);
-      border: 2px solid transparent;
+    .auth-link {
       padding: 8px 16px;
+      width: 100%;
+      text-align: center;
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 0.85rem;
-      min-width: auto;
+      color: var(--tobiracast-primary-orange);
+      background: transparent;
+      border: 2px solid transparent;
+      box-shadow: none;
       border-radius: 8px;
     }
 
-    .login-btn:hover {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: var(--tobiracast-primary-blue);
+    .auth-link:hover {
+      background: rgba(255, 111, 0, 0.1);
+      border-color: var(--tobiracast-primary-orange);
       transform: none;
-    }
-
-    .auth-nav {
-      margin: 0;
-      width: 100%;
+      box-shadow: none;
     }
   }
 </style>
@@ -103,10 +93,10 @@
     if (user) {
       // ログイン済み
       loggedOutNav.style.display = 'none'
-      loggedInNav.style.display = 'flex'
+      loggedInNav.style.display = 'block'
     } else {
       // 未ログイン
-      loggedOutNav.style.display = 'flex'
+      loggedOutNav.style.display = 'block'
       loggedInNav.style.display = 'none'
     }
   })
