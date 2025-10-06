@@ -129,6 +129,7 @@ stripe listen \
 ```
 
 監視するイベント:
+
 - `checkout.session.completed` - 決済完了
 - `customer.subscription.updated` - サブスクリプション更新
 - `customer.subscription.deleted` - サブスクリプション解約
@@ -186,11 +187,13 @@ stripe events retrieve evt_xxxxxxxxxxxxx
 ### 推奨される開発フロー
 
 1. **ターミナル1: 開発サーバー**
+
    ```bash
    npm run dev
    ```
 
 2. **ターミナル2: Stripe Webhook リスニング**
+
    ```bash
    stripe listen --forward-to localhost:4321/api/stripe-webhook
    ```
@@ -236,12 +239,14 @@ stripe events retrieve evt_xxxxxxxxxxxxx
 ### 環境変数の設定
 
 **開発環境 (.env.local)**
+
 ```bash
 STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxx  # stripe listen で取得
 ```
 
 **本番環境 (.env.production または Cloudflare Pages設定)**
+
 ```bash
 STRIPE_SECRET_KEY=sk_live_xxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxx  # ダッシュボードで取得
@@ -252,6 +257,7 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxx  # ダッシュボードで取得
 ### 問題: stripe コマンドが見つからない
 
 **解決策:**
+
 ```bash
 # PATHを確認
 echo $PATH
@@ -267,6 +273,7 @@ source ~/.zshrc
 ### 問題: ログインできない
 
 **解決策:**
+
 1. ブラウザのキャッシュをクリア
 2. 別のブラウザで試す
 3. Stripeダッシュボードに直接アクセスして認証状態を確認
@@ -274,6 +281,7 @@ source ~/.zshrc
 ### 問題: Webhookイベントが重複する
 
 **解決策:**
+
 - `stripe listen` が複数実行されていないか確認
 - 既存のプロセスを終了: `Ctrl + C`
 - 再度 `stripe listen` を実行
@@ -281,6 +289,7 @@ source ~/.zshrc
 ### 問題: ポート4321が使用中
 
 **解決策:**
+
 ```bash
 # 使用中のプロセスを確認
 lsof -i :4321
@@ -346,13 +355,14 @@ stripe resources delete sub_xxxxxxxxxxxxx
 ## 10. セキュリティのベストプラクティス
 
 1. **Webhook署名の検証を必ず実装する**
+
    ```typescript
-   const signature = request.headers.get('stripe-signature')
+   const signature = request.headers.get('stripe-signature');
    const event = stripe.webhooks.constructEvent(
      body,
      signature,
      process.env.STRIPE_WEBHOOK_SECRET
-   )
+   );
    ```
 
 2. **本番環境とテスト環境のKeyを混同しない**
