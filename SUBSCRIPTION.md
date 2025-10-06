@@ -241,7 +241,8 @@ model accounts {
 
 ```json
 {
-  "sessionId": "cs_test_xxx"
+  "sessionId": "cs_test_xxx",
+  "url": "https://checkout.stripe.com/c/pay/cs_test_xxx#..."
 }
 ```
 
@@ -301,9 +302,9 @@ stripe-signature: t=xxx,v1=xxx
   - POSTリクエスト受付
   - priceId, userEmail, firebaseUidをバリデーション
   - Stripe Checkout Session作成
-  - sessionIdをレスポンス
+  - sessionIdとsession.urlをレスポンス
 - **設定**: `export const prerender = false` で動的レンダリング有効化
-- **注意**: デバッグログ含む（本番前に削除必要）
+- **備考**: Stripe.js v2025-09対応（redirectToCheckout廃止のため、urlを返却）
 
 #### 3. フロントエンド実装
 
@@ -312,10 +313,10 @@ stripe-signature: t=xxx,v1=xxx
   - 3つのプランカード表示
   - Firebase認証チェック
   - ログイン促進UI
-  - Stripe.js統合
   - `/api/create-checkout-session`呼び出し
-  - Checkoutページリダイレクト
+  - `window.location.href`で直接Checkoutページリダイレクト
   - エラーハンドリング
+- **備考**: Stripe.js v2025-09対応（`stripe.redirectToCheckout()`廃止により、標準リダイレクトに変更）
 
 #### 4. 成功/キャンセルページ
 
@@ -350,6 +351,26 @@ stripe-signature: t=xxx,v1=xxx
   - 未ログイン/無料ユーザー向けペイウォール表示
   - 有料会員向けコンテンツ表示制御（DB実装後に有効化）
 - **コミット**: `eb8eae1`
+
+#### 8. Stripe.js v2025-09対応
+
+- **対応日**: 2025-10-06
+- **理由**: Stripe.js v2025-09-30で`stripe.redirectToCheckout()`メソッドが廃止
+- **変更内容**:
+  - `src/pages/api/create-checkout-session.ts`: レスポンスに`session.url`を追加
+  - `src/pages/subscription.astro`: `@stripe/stripe-js`のインポートを削除
+  - `src/pages/subscription.astro`: `window.location.href = checkoutUrl`で直接リダイレクト
+- **参考**: [Stripe Changelog](https://docs.stripe.com/changelog/clover/2025-09-30/remove-redirect-to-checkout)
+
+#### 9. テスト環境キー設定
+
+- **対応日**: 2025-10-06
+- **理由**: サンドボックスキーとテスト環境キーが混在していたため統一
+- **変更内容**:
+  - `.env`: テスト環境のStripe APIキーに更新
+  - `.env.example`: Webhook URLコメントを更新
+- **使用環境**: テスト環境（本番モードではない）
+- **価格ID**: テスト環境で作成された価格IDを使用
 
 ### ⏸️ 未実装
 
@@ -485,98 +506,48 @@ stripe-signature: t=xxx,v1=xxx
 
 ## 現在の問題点
 
-### 🔴 Critical: Stripe価格IDが存在しない（上司確認中）
+### ✅ 解決済み: Stripe価格ID問題（2025-10-06解決）
 
 **問題**:
 
 ```
 Error: No such price: 'price_1SF3c2AoGft584VGs2iFQNwA'
-Error: No such price: 'price_1SF3bVAoGft584VGOby8ojwg'
-Error: No such price: 'price_1SF3cwAoGft584VGuBgXS7I7'
 ```
 
 **原因**:
 
-- Keybaseで共有された価格ID（`stripe_blog_test_keys.txt`）がStripeアカウントに存在しない
-- 可能性：
-  1. Stripeダッシュボードがテストモードではなく本番モードになっている
-  2. テストモードで商品が未作成
-  3. 商品が削除済み
-  4. 別のStripeアカウントの価格IDが共有された
-
-**現在の設定**（Keybaseより）:
-
-```
-BASIC: price_1SF3bVAoGft584VGOby8ojwg (¥980/月)
-STANDARD: price_1SF3c2AoGft584VGs2iFQNwA (¥1,980/月)
-PREMIUM: price_1SF3cwAoGft584VGuBgXS7I7 (¥9,800/月)
-```
-
-**影響**:
-
-- プラン選択ボタンをクリックしても500エラーが発生
-- Stripe Checkoutページへ遷移できない
-- **決済フロー全体が動作しない**
-- **フロントエンド・有料記事システムは実装完了しているが、決済ができないため統合テスト不可**
-
-**上司への確認内容** (2025-10-06送信):
-
-```
-問題の原因:
-提供された価格ID（price_1SF3c2AoGft584VGs2iFQNwAなど）が、
-このStripeアカウントに存在していません。
-
-以下を確認してください:
-1. Stripeダッシュボードにログイン:
-   https://dashboard.stripe.com/test/products
-2. テストモードになっているか確認:
-   右上のトグルが「テストモード」になっているか
-3. 商品一覧を確認:
-   - ¥980, ¥1,980, ¥9,800の商品が実際に存在するか
-   - 各商品の「価格ID」をクリックしてコピーし、
-     keybaseで送ってくれたものと正しいか確認
-
-次のステップ:
-実際の価格IDを教えてください。
-または、Stripeダッシュボードの商品一覧画面の
-スクリーンショットを送ってください。
-```
+- サンドボックス環境とテスト環境のキーが混在していた
+- `.env`にサンドボックスキーが設定されていたため、テスト環境の価格IDが見つからなかった
 
 **解決方法**:
 
-1. Stripeダッシュボードにアクセス: https://dashboard.stripe.com/test/products
-2. 右上が「テストモード」になっているか確認
-3. 3つの商品を作成（または既存商品の価格IDを確認）
-4. **実際の価格ID**をKeybaseまたはSlackで共有
-5. rayが`.env`ファイルを更新
-6. サーバー再起動・動作確認
+1. テスト環境のStripe APIキーに統一（2025-10-06）
+2. `.env`を更新してテスト環境キーを使用
+3. 動作確認完了（決済フロー正常動作）
 
-**担当**: jonosuke or Inuta（Stripe管理者のみアクセス可能）
-**ステータス**: 確認待ち
+**結果**: ✅ Phase 1（Checkout Session作成）完了
 
-### 🟡 Warning: デバッグログが残っている
+### ✅ 解決済み: デバッグログ削除（2025-10-06解決）
 
 **問題**:
 
-```typescript
-console.log('Received request:', { priceId, userEmail, firebaseUid });
-console.log(
-  'Stripe Secret Key:',
-  import.meta.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...'
-);
-```
-
-**影響**:
-
-- 本番環境でユーザー情報がログに出力される
-- セキュリティリスク
+セキュリティリスクのあるデバッグログが残っていた
 
 **解決方法**:
-本番デプロイ前に以下を削除:
 
-```bash
-# src/pages/api/create-checkout-session.ts の14-15行目
-```
+`src/pages/api/create-checkout-session.ts`からデバッグログを削除済み
+
+### ✅ 解決済み: Stripe.js v2025-09対応（2025-10-06解決）
+
+**問題**:
+
+Stripe.js v2025-09-30で`stripe.redirectToCheckout()`が廃止された
+
+**解決方法**:
+
+1. バックエンドから`session.url`を返却
+2. フロントエンドで`window.location.href = checkoutUrl`で直接リダイレクト
+3. `@stripe/stripe-js`の依存関係を削除
 
 ### 🟡 Warning: Astro Adapter未インストール
 

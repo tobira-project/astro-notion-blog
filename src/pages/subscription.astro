@@ -364,7 +364,6 @@ import Layout from '../layouts/Layout.astro'
 <script>
   import { initializeApp } from 'firebase/app'
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
-  import { loadStripe } from '@stripe/stripe-js'
 
   // Firebase設定
   const firebaseConfig = {
@@ -379,9 +378,6 @@ import Layout from '../layouts/Layout.astro'
 
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
-
-  // Stripe設定
-  const stripePromise = loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
   // DOM要素
   const subscribeButtons = document.querySelectorAll('[data-price-id]')
@@ -425,8 +421,8 @@ import Layout from '../layouts/Layout.astro'
       throw new Error('Checkoutセッションの作成に失敗しました')
     }
 
-    const { sessionId } = await response.json()
-    return sessionId
+    const { url } = await response.json()
+    return url
   }
 
   // Stripe Checkoutへリダイレクト
@@ -444,14 +440,10 @@ import Layout from '../layouts/Layout.astro'
         return
       }
 
-      const sessionId = await createCheckoutSession(user, planType)
+      const checkoutUrl = await createCheckoutSession(user, planType)
 
-      const stripe = await stripePromise
-      const { error } = await stripe.redirectToCheckout({ sessionId })
-
-      if (error) {
-        throw new Error(`決済ページへの移動に失敗しました: ${error.message}`)
-      }
+      // Stripe Checkoutページにリダイレクト
+      window.location.href = checkoutUrl
     } catch (error) {
       showMessage(error.message || 'エラーが発生しました', 'error')
       button.disabled = false

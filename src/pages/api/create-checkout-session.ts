@@ -27,6 +27,7 @@ interface CheckoutSessionRequest {
  */
 interface CheckoutSessionResponse {
   sessionId: string
+  url: string
 }
 
 interface ErrorResponse {
@@ -76,6 +77,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const successResponse: CheckoutSessionResponse = {
       sessionId: session.id,
+      url: session.url || '',
     }
     return new Response(JSON.stringify(successResponse), {
       status: 200,
