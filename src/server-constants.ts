@@ -3,14 +3,16 @@ export const NOTION_API_SECRET =
 export const DATABASE_ID =
   import.meta.env.DATABASE_ID || process.env.DATABASE_ID || ''
 
-// 環境変数バリデーション
-if (!NOTION_API_SECRET) {
-  throw new Error(
-    'NOTION_API_SECRET is required. Please set it in your .env file.'
-  )
-}
-if (!DATABASE_ID) {
-  throw new Error('DATABASE_ID is required. Please set it in your .env file.')
+// 環境変数バリデーション（ビルド時のみ）
+if (import.meta.env.PROD || process.env.NODE_ENV === 'production') {
+  if (!NOTION_API_SECRET) {
+    throw new Error(
+      'NOTION_API_SECRET is required. Please set it in your .env file.'
+    )
+  }
+  if (!DATABASE_ID) {
+    throw new Error('DATABASE_ID is required. Please set it in your .env file.')
+  }
 }
 
 export const CUSTOM_DOMAIN =
