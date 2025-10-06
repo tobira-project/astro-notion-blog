@@ -16,11 +16,13 @@ import {
   filePath,
   extractTargetBlocks,
 } from '../../lib/blog-helpers.ts'
+import { splitContentByDivider } from '../../lib/premium-content.ts'
 import Layout from '../../layouts/Layout.astro'
 import PostDate from '../../components/PostDate.astro'
 import PostTags from '../../components/PostTags.astro'
 import PostTitle from '../../components/PostTitle.astro'
 import PostBody from '../../components/PostBody.astro'
+import PremiumContentGate from '../../components/PremiumContentGate.astro'
 import PostRelativeLink from '../../components/PostRelativeLink.astro'
 import BlogPostsLink from '../../components/BlogPostsLink.astro'
 import BlogTagsLink from '../../components/BlogTagsLink.astro'
@@ -86,6 +88,9 @@ const currentPostIndex = allPosts.findIndex((post) => post.Slug === slug)
 const prevPost = allPosts[currentPostIndex + 1]
 const nextPost = allPosts[currentPostIndex - 1]
 
+// 有料コンテンツの分割
+const { freeBlocks, premiumBlocks, hasPremiumContent } = splitContentByDivider(blocks)
+
 let ogImage = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
   ogImage = new URL(filePath(new URL(post.FeaturedImage.Url)), Astro.site)
@@ -103,7 +108,17 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
       <PostDate post={post} />
       <PostTags post={post} />
       <PostTitle post={post} enableLink={false} />
-      <PostBody blocks={blocks} />
+
+      {hasPremiumContent ? (
+        <PremiumContentGate
+          freeBlocks={freeBlocks}
+          premiumBlocks={premiumBlocks}
+          hasPremiumContent={hasPremiumContent}
+        />
+      ) : (
+        <PostBody blocks={blocks} />
+      )}
+
       <PostTags post={post} />
 
       <footer>

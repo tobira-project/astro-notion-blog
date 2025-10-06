@@ -1,0 +1,230 @@
+---
+import { Block } from '../lib/interfaces.ts'
+import NotionBlocks from './NotionBlocks.astro'
+
+export interface Props {
+  freeBlocks: Block[]
+  premiumBlocks: Block[]
+  hasPremiumContent: boolean
+}
+
+const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
+---
+
+<div class="premium-content-gate">
+  <!-- 無料部分は常に表示 -->
+  <div class="free-content">
+    <NotionBlocks blocks={freeBlocks} isRoot={true} />
+  </div>
+
+  {hasPremiumContent && (
+    <div class="premium-section">
+      <!-- 有料コンテンツ（初期状態では非表示） -->
+      <div id="premium-content" class="premium-content" style="display: none;">
+        <NotionBlocks blocks={premiumBlocks} isRoot={false} />
+      </div>
+
+      <!-- 非会員向けメッセージ（初期状態で表示） -->
+      <div id="premium-paywall" class="premium-paywall">
+        <div class="paywall-content">
+          <div class="paywall-icon">🔒</div>
+          <h3 class="paywall-title">この先は有料会員限定コンテンツです</h3>
+          <p class="paywall-description">
+            続きを読むには、有料プランへの加入が必要です
+          </p>
+          <div class="paywall-buttons">
+            <a href="/subscription" class="btn-subscribe">プランを見る</a>
+            <a href="/login" class="btn-login">ログイン</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .premium-content-gate {
+    width: 100%;
+  }
+
+  .free-content {
+    margin-bottom: 2rem;
+  }
+
+  .premium-section {
+    position: relative;
+  }
+
+  .premium-paywall {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.95) 20%,
+      rgba(255, 255, 255, 1) 40%
+    );
+    padding: 4rem 2rem 2rem;
+    margin-top: -3rem;
+    border-radius: 12px;
+  }
+
+  .paywall-content {
+    background: white;
+    border: 2px solid var(--tobiracast-primary-blue);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(23, 121, 222, 0.1);
+  }
+
+  .paywall-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .paywall-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+
+  .paywall-description {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .paywall-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-subscribe {
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), var(--tobiracast-light-blue));
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(23, 121, 222, 0.3);
+  }
+
+  .btn-subscribe:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(23, 121, 222, 0.4);
+  }
+
+  .btn-login {
+    padding: 0.875rem 2rem;
+    background: white;
+    color: var(--tobiracast-primary-blue);
+    border: 2px solid var(--tobiracast-primary-blue);
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-login:hover {
+    background: #f0f9ff;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 640px) {
+    .paywall-content {
+      padding: 2rem 1.5rem;
+    }
+
+    .paywall-title {
+      font-size: 1.25rem;
+    }
+
+    .paywall-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn-subscribe,
+    .btn-login {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  import { initializeApp } from 'firebase/app'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
+  // Firebase設定
+  const firebaseConfig = {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID
+  }
+
+  const app = initializeApp(firebaseConfig)
+  const auth = getAuth(app)
+
+  const premiumContent = document.getElementById('premium-content')
+  const premiumPaywall = document.getElementById('premium-paywall')
+
+  // TODO: DB実装後に有効化
+  // async function checkSubscriptionStatus(uid: string): Promise<boolean> {
+  //   try {
+  //     const idToken = await auth.currentUser?.getIdToken()
+  //     const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
+  //
+  //     const response = await fetch(`${API_URL}/blog/subscription-status`, {
+  //       headers: {
+  //         'Authorization': idToken
+  //       }
+  //     })
+  //
+  //     if (!response.ok) {
+  //       return false
+  //     }
+  //
+  //     const data = await response.json()
+  //     return data.subscription_status === 'active'
+  //   } catch (error) {
+  //     console.error('Failed to check subscription status:', error)
+  //     return false
+  //   }
+  // }
+
+  // 認証状態の監視
+  onAuthStateChanged(auth, async (user) => {
+    if (!premiumContent || !premiumPaywall) return
+
+    if (user) {
+      // TODO: DB実装後に有効化
+      // const hasSubscription = await checkSubscriptionStatus(user.uid)
+
+      // DB実装前の一時的な処理：常にfalse（無料ユーザー扱い）
+      const hasSubscription = false
+
+      if (hasSubscription) {
+        // 有料会員の場合：プレミアムコンテンツを表示
+        premiumContent.style.display = 'block'
+        premiumPaywall.style.display = 'none'
+      } else {
+        // 無料会員の場合：ペイウォールを表示
+        premiumContent.style.display = 'none'
+        premiumPaywall.style.display = 'block'
+      }
+    } else {
+      // 未ログインの場合：ペイウォールを表示
+      premiumContent.style.display = 'none'
+      premiumPaywall.style.display = 'block'
+    }
+  })
+</script>
