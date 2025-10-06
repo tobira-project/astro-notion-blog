@@ -17,9 +17,9 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY, {
  * リクエストボディの型定義
  */
 interface CheckoutSessionRequest {
-  priceId: string        // Stripeの価格ID (例: price_xxx)
-  userEmail: string      // ユーザーのメールアドレス
-  firebaseUid: string    // Firebase UID (Webhook処理で使用)
+  priceId: string // Stripeの価格ID (例: price_xxx)
+  userEmail: string // ユーザーのメールアドレス
+  firebaseUid: string // Firebase UID (Webhook処理で使用)
 }
 
 /**
@@ -35,13 +35,14 @@ interface ErrorResponse {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const body = await request.json() as CheckoutSessionRequest
+    const body = (await request.json()) as CheckoutSessionRequest
     const { priceId, userEmail, firebaseUid } = body
 
     // リクエストパラメータのバリデーション
     if (!priceId || !userEmail || !firebaseUid) {
       const errorResponse: ErrorResponse = {
-        error: '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。'
+        error:
+          '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。',
       }
       return new Response(JSON.stringify(errorResponse), { status: 400 })
     }
@@ -74,21 +75,24 @@ export const POST: APIRoute = async ({ request }) => {
     })
 
     const successResponse: CheckoutSessionResponse = {
-      sessionId: session.id
+      sessionId: session.id,
     }
     return new Response(JSON.stringify(successResponse), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     })
   } catch (error) {
     console.error('Stripe Checkout Session作成エラー:', error)
 
     const errorResponse: ErrorResponse = {
-      error: error instanceof Error ? error.message : '予期しないエラーが発生しました'
+      error:
+        error instanceof Error
+          ? error.message
+          : '予期しないエラーが発生しました',
     }
     return new Response(JSON.stringify(errorResponse), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     })
   }
 }
