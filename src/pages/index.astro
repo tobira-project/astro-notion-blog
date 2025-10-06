@@ -17,7 +17,7 @@ const [posts] = await Promise.all([
 <Layout>
   <div slot="main" class={styles.main}>
     <section class="articles-section">
-      <div class="section-header">
+      <div class="section-header fade-in">
         <h2 class="section-title">最新記事</h2>
         <p class="section-subtitle">Tobiratoryから最新のインサイトをお届けします</p>
       </div>
@@ -27,9 +27,9 @@ const [posts] = await Promise.all([
         ) : (
           <>
             <div class="latest-articles">
-              {posts.map((post, index) => (
+              {posts.map((post) => (
                 <a href={getNavLink(`/posts/${post.Slug}`)} class="article-card-link">
-                  <article class="article-card" key={post.Slug} style={`animation-delay: ${index * 0.1}s`}>
+                  <article class="article-card fade-in" key={post.Slug}>
                     <div class="article-card-image">
                       <PostFeaturedImage post={post} />
                       <div class="article-card-overlay">
@@ -68,7 +68,6 @@ const [posts] = await Promise.all([
 .section-header {
   text-align: center;
   margin-bottom: 3rem;
-  animation: fadeIn 0.4s ease-out;
 }
 
 .section-title {
@@ -113,7 +112,6 @@ const [posts] = await Promise.all([
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: var(--tobiracast-card-shadow);
   position: relative;
-  animation: fadeIn 0.4s ease-out;
 }
 
 .article-card:hover {

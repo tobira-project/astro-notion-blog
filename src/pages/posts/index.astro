@@ -23,7 +23,7 @@ const [posts, numberOfPages] = await Promise.all([
 <Layout title="記事一覧" path="/posts">
   <div slot="main" class={styles.main}>
     <header>
-      <h1 class="page-title">記事一覧</h1>
+      <h1 class="page-title fade-in">記事一覧</h1>
     </header>
 
     {
@@ -31,8 +31,8 @@ const [posts, numberOfPages] = await Promise.all([
         <NoContents contents={posts} />
       ) : (
         <div class="posts-list">
-          {posts.map((post, index) => (
-            <article class="post-card" key={post.Slug} style={`animation-delay: ${index * 0.1}s`}>
+          {posts.map((post) => (
+            <article class="post-card fade-in" key={post.Slug}>
               <div class="post-card-image">
                 <PostFeaturedImage post={post} />
               </div>
@@ -69,7 +69,6 @@ const [posts, numberOfPages] = await Promise.all([
     position: relative;
     display: inline-block;
     width: 100%;
-    animation: fadeIn 0.4s ease-out;
   }
 
   .page-title::after {
@@ -98,7 +97,6 @@ const [posts, numberOfPages] = await Promise.all([
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     border-bottom: 1px solid var(--tobiracast-border);
-    animation: fadeIn 0.4s ease-out;
   }
 
   .post-card:hover {

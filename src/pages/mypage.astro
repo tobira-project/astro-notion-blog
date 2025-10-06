@@ -9,7 +9,7 @@ import '../styles/tobiracast.css'
       <p>読み込み中...</p>
     </div>
 
-    <div id="not-logged-in" class="not-logged-in" style="display: none;">
+    <div id="not-logged-in" class="not-logged-in fade-in" style="display: none;">
       <div class="message-card">
         <svg class="lock-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -22,12 +22,12 @@ import '../styles/tobiracast.css'
     </div>
 
     <div id="profile-content" class="profile-content" style="display: none;">
-      <div class="profile-header">
+      <div class="profile-header fade-in">
         <h1>マイページ</h1>
         <p class="profile-subtitle">アカウント情報</p>
       </div>
 
-      <div class="profile-card">
+      <div class="profile-card fade-in">
         <div class="info-section">
           <label>メールアドレス</label>
           <p id="user-email" class="user-email">---</p>
@@ -70,7 +70,6 @@ import '../styles/tobiracast.css'
   .not-logged-in {
     text-align: center;
     padding: 2rem;
-    animation: fadeIn 0.4s ease-out;
   }
 
   .message-card {
@@ -124,7 +123,6 @@ import '../styles/tobiracast.css'
     text-align: center;
     margin-bottom: 3rem;
     margin-top: 2rem;
-    animation: fadeIn 0.4s ease-out;
   }
 
   .profile-header h1 {
@@ -147,7 +145,6 @@ import '../styles/tobiracast.css'
     margin: 0 auto 2rem;
     max-width: 800px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.4s ease-out;
   }
 
   .info-section {

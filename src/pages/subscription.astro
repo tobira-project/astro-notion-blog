@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro'
 <Layout title="プラン加入" path="/subscription">
   <div slot="main" class="subscription-page">
     <div class="subscription-container">
-      <header class="page-header">
+      <header class="page-header fade-in">
         <h1 class="page-title">プラン加入</h1>
         <p class="page-description">
           Tobiratoryの限定コンテンツにアクセスできるプランをご用意しています
@@ -18,7 +18,7 @@ import Layout from '../layouts/Layout.astro'
       <!-- プラン選択 -->
       <div class="plans-container">
         <!-- ベーシックプラン (¥980) -->
-        <div class="plan-card basic-plan">
+        <div class="plan-card basic-plan fade-in">
           <div class="plan-header">
             <h2 class="plan-name">ベーシック</h2>
             <div class="plan-price">
@@ -37,7 +37,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
 
         <!-- スタンダードプラン (¥1,980) -->
-        <div class="plan-card standard-plan">
+        <div class="plan-card standard-plan fade-in">
           <div class="plan-badge">おすすめ</div>
           <div class="plan-header">
             <h2 class="plan-name">スタンダード</h2>
@@ -58,7 +58,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
 
         <!-- プレミアムプラン (¥9,800) -->
-        <div class="plan-card premium-plan">
+        <div class="plan-card premium-plan fade-in">
           <div class="plan-header">
             <h2 class="plan-name">プレミアム</h2>
             <div class="plan-price">
@@ -103,7 +103,6 @@ import Layout from '../layouts/Layout.astro'
   .page-header {
     text-align: center;
     margin-bottom: 3rem;
-    animation: fadeIn 0.4s ease-out;
   }
 
   .page-title {
@@ -159,7 +158,6 @@ import Layout from '../layouts/Layout.astro'
     position: relative;
     display: flex;
     flex-direction: column;
-    animation: fadeIn 0.4s ease-out;
   }
 
   .plan-card:hover {

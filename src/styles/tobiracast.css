@@ -138,6 +138,10 @@
 
 /* === 共通アニメーション === */
 /* シンプルで控えめなfadeIn - 全ページで統一 */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
