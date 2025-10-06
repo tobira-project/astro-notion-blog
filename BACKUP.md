@@ -8,12 +8,14 @@
 ### 保存場所
 
 #### 1. Gitタグ
+
 ```
 タグ名: pre-tailwind-migration
 コミット: a64d28a (docs: PUBLIC_API_URLに説明コメントを追加)
 ```
 
 #### 2. Gitブランチ
+
 ```
 ブランチ名: backup-before-tailwind
 リモート: origin/backup-before-tailwind
@@ -22,16 +24,19 @@
 ### バックアップに戻す方法
 
 #### タグから復元
+
 ```bash
 git checkout pre-tailwind-migration
 ```
 
 #### ブランチから復元
+
 ```bash
 git checkout backup-before-tailwind
 ```
 
 #### mainブランチに戻す（Tailwind導入後の状態）
+
 ```bash
 git checkout main
 ```
@@ -44,6 +49,7 @@ git checkout main
 ### 現在の状態
 
 **Tailwind導入前:**
+
 - Layout.astro: 945行（カスタムCSS）
 - CSS変数: tobiracast.css（120行以上）
 - ページ: index, login, subscription, mypage

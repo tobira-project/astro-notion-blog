@@ -5,7 +5,9 @@ export const DATABASE_ID =
 
 // 環境変数バリデーション
 if (!NOTION_API_SECRET) {
-  throw new Error('NOTION_API_SECRET is required. Please set it in your .env file.')
+  throw new Error(
+    'NOTION_API_SECRET is required. Please set it in your .env file.'
+  )
 }
 if (!DATABASE_ID) {
   throw new Error('DATABASE_ID is required. Please set it in your .env file.')
