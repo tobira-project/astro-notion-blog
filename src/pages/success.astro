@@ -1,0 +1,125 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="加入完了" path="/success">
+  <div slot="main" class="success-page">
+    <div class="success-container">
+      <div class="success-icon">✓</div>
+      <h1 class="success-title">プランへの加入が完了しました！</h1>
+      <p class="success-message">
+        ご登録ありがとうございます。<br />
+        限定コンテンツへのアクセスが可能になりました。
+      </p>
+      <div class="action-buttons">
+        <a href="/mypage" class="button primary-button">マイページへ</a>
+        <a href="/" class="button secondary-button">トップページへ</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .success-page {
+    width: 100%;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .success-container {
+    max-width: 600px;
+    text-align: center;
+    background: white;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .success-title {
+    font-size: 2rem;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+
+  .success-message {
+    font-size: 1.1rem;
+    color: #6b7280;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+
+  .primary-button {
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), var(--tobiracast-light-blue));
+    color: white;
+    box-shadow: 0 4px 12px rgba(23, 121, 222, 0.3);
+  }
+
+  .primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(23, 121, 222, 0.4);
+  }
+
+  .secondary-button {
+    background: white;
+    color: var(--tobiracast-primary-blue);
+    border: 2px solid var(--tobiracast-primary-blue);
+  }
+
+  .secondary-button:hover {
+    background: var(--tobiracast-primary-blue);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .success-container {
+      padding: 2rem 1.5rem;
+    }
+
+    .success-title {
+      font-size: 1.5rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+    }
+  }
+</style>
