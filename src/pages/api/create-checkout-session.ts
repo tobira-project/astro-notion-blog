@@ -1,25 +1,28 @@
-import type { APIRoute } from 'astro';
-import Stripe from 'stripe';
+import type { APIRoute } from 'astro'
+import Stripe from 'stripe'
 
-export const prerender = false;
+export const prerender = false
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-12-18.acacia',
-});
+})
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { priceId, userEmail, firebaseUid } = await request.json();
+    const { priceId, userEmail, firebaseUid } = await request.json()
 
-    console.log('Received request:', { priceId, userEmail, firebaseUid });
-    console.log('Stripe Secret Key:', import.meta.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...');
+    console.log('Received request:', { priceId, userEmail, firebaseUid })
+    console.log(
+      'Stripe Secret Key:',
+      import.meta.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...'
+    )
 
     // バリデーション
     if (!priceId || !userEmail || !firebaseUid) {
       return new Response(
         JSON.stringify({ error: 'Missing required parameters' }),
         { status: 400 }
-      );
+      )
     }
 
     // Checkout Session作成
@@ -43,17 +46,15 @@ export const POST: APIRoute = async ({ request }) => {
           firebaseUid: firebaseUid,
         },
       },
-    });
+    })
 
-    return new Response(
-      JSON.stringify({ sessionId: session.id }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({ sessionId: session.id }), {
+      status: 200,
+    })
   } catch (error) {
-    console.error('Error creating checkout session:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500 }
-    );
+    console.error('Error creating checkout session:', error)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    })
   }
-};
+}
