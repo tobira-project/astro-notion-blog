@@ -292,7 +292,6 @@ if (database.Icon && database.Icon.Type === 'file') {
     font-weight: 700;
     margin-bottom: 1rem;
     text-shadow: var(--tobiracast-text-shadow-strong);
-    animation: fadeInUp 0.8s ease-out;
   }
 
   .hero-title a {
@@ -337,12 +336,10 @@ if (database.Icon && database.Icon.Type === 'file') {
     margin-left: auto;
     margin-right: auto;
     text-shadow: var(--tobiracast-text-shadow-light);
-    animation: fadeInUp 0.8s ease-out 0.1s both;
   }
 
   .main-nav {
     margin-top: 1.5rem;
-    animation: fadeInUp 0.8s ease-out 0.2s both;
     position: relative;
   }
 
@@ -574,17 +571,6 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   .footer-bottom a:hover {
     color: var(--tobiracast-light-orange);
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   @media (max-width: 768px) {
