@@ -218,6 +218,7 @@ model accounts {
 ```
 
 **重要**:
+
 - tobiratory-webプロジェクトのschema.prismaと整合性を保つ必要がある
 - account_uuidはnullable（accountsテーブルのレコード削除時も対応）
 - マイグレーション実行はjonosuke/Inutaが担当
@@ -337,6 +338,7 @@ stripe-signature: t=xxx,v1=xxx
 - **コマンド**: `npm install stripe`
 
 #### 7. 有料記事システム実装
+
 - **ファイル**:
   - `src/lib/premium-content.ts` - 区切り線判定ロジック
   - `src/components/PremiumContentGate.astro` - ペイウォールUI
@@ -371,6 +373,7 @@ stripe-signature: t=xxx,v1=xxx
 **重要**: フロントエンド（astro-notion-blog）ではなく、バックエンド（tobiratory-web）にAPIを実装します。
 
 ##### a. Stripe Checkout Session作成API
+
 - **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/create-checkout-session.ts`
 - **エンドポイント**: `POST /blog/create-checkout-session`
 - **機能**:
@@ -381,6 +384,7 @@ stripe-signature: t=xxx,v1=xxx
 - **依存**: なし（すぐ実装可能）
 
 ##### b. Stripe Webhook処理
+
 - **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/stripe-webhook.ts`
 - **エンドポイント**: `POST /blog/stripe-webhook`
 - **必要機能**:
@@ -439,6 +443,7 @@ stripe-signature: t=xxx,v1=xxx
   - tobiratory-webとのDB共有有無
 
 #### 4. サブスクリプション状態確認API（tobiratory-webリポジトリ）
+
 - **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/subscription-status.ts` (未作成)
 - **エンドポイント**: `GET /blog/subscription-status`
 - **必要機能**:
@@ -491,6 +496,7 @@ Error: No such price: 'price_1SF3cwAoGft584VGuBgXS7I7'
 ```
 
 **原因**:
+
 - Keybaseで共有された価格ID（`stripe_blog_test_keys.txt`）がStripeアカウントに存在しない
 - 可能性：
   1. Stripeダッシュボードがテストモードではなく本番モードになっている
@@ -499,6 +505,7 @@ Error: No such price: 'price_1SF3cwAoGft584VGuBgXS7I7'
   4. 別のStripeアカウントの価格IDが共有された
 
 **現在の設定**（Keybaseより）:
+
 ```
 BASIC: price_1SF3bVAoGft584VGOby8ojwg (¥980/月)
 STANDARD: price_1SF3c2AoGft584VGs2iFQNwA (¥1,980/月)
@@ -513,6 +520,7 @@ PREMIUM: price_1SF3cwAoGft584VGuBgXS7I7 (¥9,800/月)
 - **フロントエンド・有料記事システムは実装完了しているが、決済ができないため統合テスト不可**
 
 **上司への確認内容** (2025-10-06送信):
+
 ```
 問題の原因:
 提供された価格ID（price_1SF3c2AoGft584VGs2iFQNwAなど）が、
@@ -605,6 +613,7 @@ export default defineConfig({
 ## 上司の確認なしで実装可能なタスク
 
 ### ✅ すでに完了
+
 1. ✅ 有料記事システム（Notion区切り線判定 + ペイウォールUI）
 2. ✅ Stripe決済UI（subscription.astro）
 3. ✅ API Endpoint（create-checkout-session.ts）
@@ -613,24 +622,28 @@ export default defineConfig({
 ### 🔄 現在実装可能（上司確認不要）
 
 #### 1. フロントエンドの改善
+
 - マイページ（mypage.astro）のUI実装（API接続は後回し）
 - ログイン後のユーザーメニュー改善
 - エラーメッセージの日本語化
 - レスポンシブデザインの調整
 
 #### 2. ドキュメント整備
+
 - ✅ SUBSCRIPTION.md作成（完了）
 - ✅ DB_DESIGN_PROPOSAL.md作成（完了）
 - API仕様書の詳細化
 - テストケース一覧作成
 
 #### 3. コード品質改善
+
 - デバッグログの削除（create-checkout-session.ts:14-15）
 - TypeScript型定義の追加
 - エラーハンドリングの強化
 - コメント追加
 
 #### 4. テスト準備
+
 - Stripe CLI のセットアップ手順書作成
 - テストシナリオ作成
 - テストデータ準備
@@ -638,16 +651,19 @@ export default defineConfig({
 ### ⏸️ 上司の確認が必要
 
 #### 1. Stripe価格ID確認（🔴 Critical）
+
 - **ブロッカー**: 価格IDが存在しないため決済フロー全体が動作しない
 - **必要な人**: jonosuke or Inuta
 - **作業時間**: 10分程度
 
 #### 2. DB設計承認（🔴 Critical）
+
 - **ドキュメント**: DB_DESIGN_PROPOSAL.md
 - **必要な人**: jonosuke
 - **作業時間**: レビュー20分 + マイグレーション10分
 
 #### 3. tobiratory-webへのAPI実装指示
+
 - **内容**: どのリポジトリにバックエンドAPIを実装するか最終確認
 - **必要な人**: jonosuke or Inuta
 
@@ -737,6 +753,7 @@ export default defineConfig({
 4. [ ] 動作確認（DB実装後）
 
 **完了事項**:
+
 - ✅ `src/lib/premium-content.ts` - 区切り線判定ロジック
 - ✅ `src/components/PremiumContentGate.astro` - ペイウォールUI
 - ✅ `src/pages/posts/[slug].astro` - 記事ページ統合
@@ -744,6 +761,7 @@ export default defineConfig({
 - ✅ 無料ユーザー向けペイウォール表示
 
 **残タスク**:
+
 - ⏸️ tobiratory-webに`/blog/subscription-status` API実装（DB実装後）
 - ⏸️ PremiumContentGate.astroでAPI呼び出し有効化（コメントアウト済み）
 
