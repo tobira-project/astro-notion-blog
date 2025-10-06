@@ -450,7 +450,7 @@ import Layout from '../layouts/Layout.astro'
       const { error } = await stripe.redirectToCheckout({ sessionId })
 
       if (error) {
-        throw new Error(error.message)
+        throw new Error(`決済ページへの移動に失敗しました: ${error.message}`)
       }
     } catch (error) {
       showMessage(error.message || 'エラーが発生しました', 'error')
