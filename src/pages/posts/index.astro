@@ -69,7 +69,6 @@ const [posts, numberOfPages] = await Promise.all([
     position: relative;
     display: inline-block;
     width: 100%;
-    animation: fadeInDown 0.8s ease-out;
   }
 
   .page-title::after {
@@ -98,9 +97,6 @@ const [posts, numberOfPages] = await Promise.all([
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     border-bottom: 1px solid var(--tobiracast-border);
-    animation: fadeInUp 0.8s ease-out both;
-    opacity: 0;
-    transform: translateY(20px);
   }
 
   .post-card:hover {
@@ -216,28 +212,6 @@ const [posts, numberOfPages] = await Promise.all([
   .post-card-content :global(.read-more-link a) {
     padding: 0.5rem 1.25rem;
     font-size: 0.85rem;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   /* Responsive Design */

@@ -68,7 +68,6 @@ const [posts] = await Promise.all([
 .section-header {
   text-align: center;
   margin-bottom: 3rem;
-  animation: fadeInUp 0.8s ease-out;
 }
 
 .section-title {
@@ -113,9 +112,6 @@ const [posts] = await Promise.all([
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: var(--tobiracast-card-shadow);
   position: relative;
-  animation: fadeInUp 0.8s ease-out both;
-  opacity: 0;
-  transform: translateY(20px);
 }
 
 .article-card:hover {
@@ -244,17 +240,6 @@ const [posts] = await Promise.all([
 .article-card-content :global(.post-date)::before {
   content: '📅';
   font-size: 0.8rem;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Responsive Design */
