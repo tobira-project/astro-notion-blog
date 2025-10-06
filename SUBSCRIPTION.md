@@ -372,11 +372,38 @@ stripe-signature: t=xxx,v1=xxx
 - **使用環境**: テスト環境（本番モードではない）
 - **価格ID**: テスト環境で作成された価格IDを使用
 
+#### 10. Webhook実装（Phase 2完了）
+
+- **対応日**: 2025-10-06
+- **ファイル**: `src/pages/api/stripe-webhook.ts`
+- **機能**:
+  - Webhook署名検証（セキュリティ対策）
+  - イベントタイプ別ハンドラー実装
+    - `checkout.session.completed` - 決済完了時
+    - `customer.subscription.updated` - サブスクリプション更新時
+    - `customer.subscription.deleted` - サブスクリプション削除時
+  - エラーハンドリング（署名検証失敗時は400返却）
+  - DB連携コード準備済み（コメントアウト、DB実装後に有効化）
+- **テスト**:
+  - Stripe CLIでローカルテスト完了
+  - イベント受信・処理・200レスポンス返却を確認
+  - Webhook署名検証が正常動作
+- **コミット**: `8ef462f`
+- **備考**:
+  - raw bodyの適切な取得（arrayBuffer → Buffer変換）
+  - Prisma upsert/updateロジックを実装済み（コメントアウト）
+  - 開発環境用のWebhook Secretは`.env`に設定（本番用と分離）
+
 ### ⏸️ 未実装
 
-#### 1. Stripe商品・価格作成（上司確認待ち）
+#### 1. Webhook実装（Phase 2）- ✅ 完了済み（2025-10-06）
 
-- **作業者**: jonosuke or Inuta
+**ステータス**: 完了
+**次のステップ**: DB実装後にコメントアウト部分を有効化
+
+#### 2. データベース実装（Phase 3）
+
+- **作業者**: jonosuke（DB設計承認待ち）
 - **必要作業**:
   1. Stripeダッシュボードにログイン
   2. テストモードに切り替え
@@ -642,71 +669,80 @@ export default defineConfig({
 
 ### ⏸️ 上司の確認が必要
 
-#### 1. Stripe価格ID確認（🔴 Critical）
+#### 1. ✅ Stripe価格ID確認（完了）
 
-- **ブロッカー**: 価格IDが存在しないため決済フロー全体が動作しない
-- **必要な人**: jonosuke or Inuta
-- **作業時間**: 10分程度
+- **ステータス**: ✅ 完了（2025-10-06）
+- **テスト環境の価格IDで動作確認済み**
 
-#### 2. DB設計承認（🔴 Critical）
+#### 2. DB設計承認（🔴 Critical - 現在待機中）
 
 - **ドキュメント**: DB_DESIGN_PROPOSAL.md
 - **必要な人**: jonosuke
 - **作業時間**: レビュー20分 + マイグレーション10分
+- **ステータス**: 設計承認済み、マイグレーション実行待ち
+- **次のステップ**: tobiratory-webでマイグレーション実行後、Webhook内のDB連携コードを有効化
 
 #### 3. tobiratory-webへのAPI実装指示
 
 - **内容**: どのリポジトリにバックエンドAPIを実装するか最終確認
 - **必要な人**: jonosuke or Inuta
+- **ステータス**: DB実装後に進める
 
 ---
 
 ## 次のステップ
 
-### フェーズ1: Stripe設定完了（上司作業）
+### ✅ フェーズ1: Stripe Checkout Session作成（完了）
 
 **優先度**: 🔴 Critical
-**担当**: jonosuke or Inuta
+**担当**: ray
 **期限**: ASAP
+**ステータス**: ✅ **完了（2025-10-06）**
 
 #### タスク:
 
-1. [ ] Stripeダッシュボードでテストモード商品作成
-   - ベーシック: ¥980/月
-   - スタンダード: ¥1,980/月
-   - プレミアム: ¥9,800/月
-2. [ ] 各価格IDをrayに共有
-3. [ ] `.env`ファイル更新（ray作業）
-4. [ ] 動作確認（ray作業）
+1. [x] API endpoint作成: `/api/create-checkout-session.ts`
+2. [x] フロントエンド実装: `subscription.astro`にStripe.js統合
+3. [x] 成功/キャンセルページ作成: `success.astro`, `cancel.astro`
+4. [x] Stripe.js v2025-09対応（`redirectToCheckout`廃止対応）
+5. [x] テスト環境キー設定（テスト環境に統一）
+6. [x] 動作確認（Stripe Checkoutページへのリダイレクト成功）
 
-**成果物**: 決済フローが正常動作
+**成果物**: ✅ 決済フローが正常動作
+
+**コミット**: `3891a20`
 
 ---
 
-### フェーズ2: Webhook実装（ray作業）
+### ✅ フェーズ2: Webhook実装（完了）
 
 **優先度**: 🔴 Critical
 **担当**: ray
 **期限**: フェーズ1完了後すぐ
+**ステータス**: ✅ **完了（2025-10-06）**
 
 #### タスク:
 
-1. [ ] `src/pages/api/stripe-webhook.ts` 作成
-2. [ ] Webhook署名検証実装
-3. [ ] `checkout.session.completed` イベント処理
-4. [ ] ローカルでWebhook動作確認（Stripe CLI使用）
-5. [ ] エラーハンドリング実装
+1. [x] `src/pages/api/stripe-webhook.ts` 作成
+2. [x] Webhook署名検証実装
+3. [x] `checkout.session.completed` イベント処理実装
+4. [x] `customer.subscription.updated` イベント処理実装
+5. [x] `customer.subscription.deleted` イベント処理実装
+6. [x] ローカルでWebhook動作確認（Stripe CLI使用）
+7. [x] エラーハンドリング実装
 
-**参考資料**:
+**テスト結果**:
+- ✅ Webhook署名検証が正常動作
+- ✅ イベント受信・処理・200レスポンス返却を確認
+- ✅ raw bodyの適切な取得（arrayBuffer → Buffer変換）
 
-- https://stripe.com/docs/webhooks
-- https://stripe.com/docs/stripe-cli
+**成果物**: ✅ Webhookイベント受信・処理が正常動作
 
-**成果物**: Webhookイベント受信・処理が正常動作
+**コミット**: `8ef462f`
 
 ---
 
-### フェーズ3: データベース設計（チーム作業）
+### ⏸️ フェーズ3: データベース設計（チーム作業）
 
 **優先度**: 🔴 Critical
 **担当**: jonosuke, Inuta, ray
