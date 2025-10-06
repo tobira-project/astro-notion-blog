@@ -732,6 +732,7 @@ export default defineConfig({
 7. [x] エラーハンドリング実装
 
 **テスト結果**:
+
 - ✅ Webhook署名検証が正常動作
 - ✅ イベント受信・処理・200レスポンス返却を確認
 - ✅ raw bodyの適切な取得（arrayBuffer → Buffer変換）
