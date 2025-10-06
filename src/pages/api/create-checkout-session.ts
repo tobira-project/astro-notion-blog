@@ -11,12 +11,6 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const { priceId, userEmail, firebaseUid } = await request.json()
 
-    console.log('Received request:', { priceId, userEmail, firebaseUid })
-    console.log(
-      'Stripe Secret Key:',
-      import.meta.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...'
-    )
-
     // バリデーション
     if (!priceId || !userEmail || !firebaseUid) {
       return new Response(
