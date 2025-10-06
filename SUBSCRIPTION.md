@@ -38,9 +38,10 @@ Tobiratoryブログに月額サブスクリプション機能を実装し、限�
 ### スコープ
 - ✅ Stripe決済フロー実装（Checkout Session）
 - ✅ 成功/キャンセルページ
-- ⏸️ Webhook処理（支払い完了通知受信）
-- ⏸️ データベース設計・実装
-- ⏸️ 限定コンテンツ表示制御
+- ✅ 限定コンテンツ表示制御（Notion区切り線判定）
+- ⏸️ Webhook処理（支払い完了通知受信）- DB設計承認待ち
+- ⏸️ データベース設計・実装 - DB_DESIGN_PROPOSAL.md提出済み、承認待ち
+- ⏸️ バックエンドAPI実装（tobiratory-webリポジトリ）
 - ⏸️ マイページでのサブスクリプション状態表示
 
 ---
@@ -169,43 +170,43 @@ Webhook ID: we_1S851TALsNLSU9r2O7qTBijR
 
 ### データベーススキーマ (提案)
 
+**詳細**: `DB_DESIGN_PROPOSAL.md` 参照
+
 ```prisma
-// schema.prisma (未実装)
+// tobiratory-web/apps/firebase/functions/prisma/schema.prisma に追加
 
-model Account {
-  id              String        @id @default(cuid())
-  firebaseUid     String        @unique
-  email           String        @unique
-  displayName     String?
-  photoURL        String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  blogAccount     BlogAccount?
-}
-
-model BlogAccount {
-  id                    String    @id @default(cuid())
-  accountId             String    @unique
-  account               Account   @relation(fields: [accountId], references: [id])
+model blog_accounts {
+  id                    Int       @id @default(autoincrement())
+  account_uuid          String?   @db.VarChar(100)
+  account               accounts? @relation(fields: [account_uuid], references: [uuid])
 
   // Stripe情報
-  stripeCustomerId      String?   @unique
-  stripeSubscriptionId  String?   @unique
+  stripe_customer_id    String?   @unique @db.VarChar(255)
+  stripe_subscription_id String?  @unique @db.VarChar(255)
 
   // サブスクリプション状態
-  subscriptionStatus    String?   // active, canceled, past_due, etc.
-  planType              String?   // basic, standard, premium
-  currentPeriodStart    DateTime?
-  currentPeriodEnd      DateTime?
+  subscription_status   String?   @db.VarChar(50)  // active, canceled, past_due, etc.
+  subscription_tier     String?   @db.VarChar(50)  // basic, standard, premium
+  current_period_start  DateTime? @db.Timestamp(6)
+  current_period_end    DateTime? @db.Timestamp(6)
+  cancel_at_period_end  Boolean   @default(false)
 
-  // メタデータ
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  // 日時
+  updated_date_time     DateTime  @default(now()) @db.Timestamp(6)
+  created_date_time     DateTime  @default(now()) @db.Timestamp(6)
+}
 
-  @@index([stripeCustomerId])
-  @@index([subscriptionStatus])
+// accounts テーブルに以下を追加
+model accounts {
+  // ... 既存のフィールド ...
+  blog_account          blog_accounts?
 }
 ```
+
+**重要**:
+- tobiratory-webプロジェクトのschema.prismaと整合性を保つ必要がある
+- account_uuidはnullable（accountsテーブルのレコード削除時も対応）
+- マイグレーション実行はjonosuke/Inutaが担当
 
 ### API仕様
 
@@ -310,6 +311,19 @@ stripe-signature: t=xxx,v1=xxx
 - **パッケージ**: `stripe@^19.1.0`
 - **コマンド**: `npm install stripe`
 
+#### 7. 有料記事システム実装
+- **ファイル**:
+  - `src/lib/premium-content.ts` - 区切り線判定ロジック
+  - `src/components/PremiumContentGate.astro` - ペイウォールUI
+  - `src/pages/posts/[slug].astro` - 記事ページ統合
+- **機能**:
+  - Notion Dividerブロック検出
+  - 無料部分と有料部分の自動分割
+  - Firebase認証状態確認
+  - 未ログイン/無料ユーザー向けペイウォール表示
+  - 有料会員向けコンテンツ表示制御（DB実装後に有効化）
+- **コミット**: `eb8eae1`
+
 ### ⏸️ 未実装
 
 #### 1. Stripe商品・価格作成（上司確認待ち）
@@ -326,13 +340,31 @@ stripe-signature: t=xxx,v1=xxx
   6. `.env`ファイルを更新
 - **URL**: https://dashboard.stripe.com/test/products
 
-#### 2. Webhook Endpoint実装
-- **ファイル**: `src/pages/api/stripe-webhook.ts` (未作成)
+#### 2. バックエンドAPI実装（tobiratory-webリポジトリ）
+
+以下のAPIエンドポイントをtobiratory-webリポジトリに実装する必要があります：
+
+##### a. Stripe Checkout Session作成API
+- **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/create-checkout-session.ts`
+- **エンドポイント**: `POST /blog/create-checkout-session`
+- **機能**:
+  - Firebase ID Token認証
+  - Stripe Checkout Session作成
+  - Firebase UIDをmetadataに含める
+  - sessionIdを返却
+- **依存**: なし（すぐ実装可能）
+
+##### b. Stripe Webhook処理
+- **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/stripe-webhook.ts`
+- **エンドポイント**: `POST /blog/stripe-webhook`
 - **必要機能**:
   - Webhook署名検証
   - `checkout.session.completed`イベント処理
-  - データベース更新
+  - `customer.subscription.updated`イベント処理
+  - `customer.subscription.deleted`イベント処理
+  - blog_accountsテーブル更新
   - エラーログ記録
+- **依存**: DB実装完了後
 - **参考コード**:
   ```typescript
   import type { APIRoute } from 'astro';
@@ -376,13 +408,15 @@ stripe-signature: t=xxx,v1=xxx
   - PostgreSQLデータベース接続情報
   - tobiratory-webとのDB共有有無
 
-#### 4. 限定コンテンツ表示制御
-- **ファイル**: `src/pages/posts/[slug].astro`
+#### 4. サブスクリプション状態確認API（tobiratory-webリポジトリ）
+- **ファイル**: `tobiratory-web/apps/firebase/functions/src/blog/subscription-status.ts` (未作成)
 - **必要機能**:
-  - Dividerブロック検出
-  - サブスクリプション状態チェック
-  - 非サブスクライバー向けペイウォール表示
-  - サブスクライバー向け全文表示
+  - Firebase ID Tokenによる認証
+  - blog_accountsテーブルからサブスクリプション状態取得
+  - subscription_status === 'active' の判定
+  - レスポンス返却
+- **エンドポイント**: `GET /blog/subscription-status`
+- **依存**: DB実装完了後
 
 #### 5. マイページ統合
 - **ファイル**: `src/pages/mypage.astro`
@@ -412,30 +446,68 @@ stripe-signature: t=xxx,v1=xxx
 
 ## 現在の問題点
 
-### 🔴 Critical: Stripe価格IDが存在しない
+### 🔴 Critical: Stripe価格IDが存在しない（上司確認中）
 
 **問題**:
 ```
 Error: No such price: 'price_1SF3c2AoGft584VGs2iFQNwA'
+Error: No such price: 'price_1SF3bVAoGft584VGOby8ojwg'
+Error: No such price: 'price_1SF3cwAoGft584VGuBgXS7I7'
 ```
 
 **原因**:
-- `.env`に設定された価格IDがStripeアカウントに存在しない
-- StripeダッシュボードでSTANDARDプラン（¥1,980/月）の商品が未作成、または削除済み
+- Keybaseで共有された価格ID（`stripe_blog_test_keys.txt`）がStripeアカウントに存在しない
+- 可能性：
+  1. Stripeダッシュボードがテストモードではなく本番モードになっている
+  2. テストモードで商品が未作成
+  3. 商品が削除済み
+  4. 別のStripeアカウントの価格IDが共有された
+
+**現在の設定**（Keybaseより）:
+```
+BASIC: price_1SF3bVAoGft584VGOby8ojwg (¥980/月)
+STANDARD: price_1SF3c2AoGft584VGs2iFQNwA (¥1,980/月)
+PREMIUM: price_1SF3cwAoGft584VGuBgXS7I7 (¥9,800/月)
+```
 
 **影響**:
 - プラン選択ボタンをクリックしても500エラーが発生
 - Stripe Checkoutページへ遷移できない
 - **決済フロー全体が動作しない**
+- **フロントエンド・有料記事システムは実装完了しているが、決済ができないため統合テスト不可**
+
+**上司への確認内容** (2025-10-06送信):
+```
+問題の原因:
+提供された価格ID（price_1SF3c2AoGft584VGs2iFQNwAなど）が、
+このStripeアカウントに存在していません。
+
+以下を確認してください:
+1. Stripeダッシュボードにログイン:
+   https://dashboard.stripe.com/test/products
+2. テストモードになっているか確認:
+   右上のトグルが「テストモード」になっているか
+3. 商品一覧を確認:
+   - ¥980, ¥1,980, ¥9,800の商品が実際に存在するか
+   - 各商品の「価格ID」をクリックしてコピーし、
+     keybaseで送ってくれたものと正しいか確認
+
+次のステップ:
+実際の価格IDを教えてください。
+または、Stripeダッシュボードの商品一覧画面の
+スクリーンショットを送ってください。
+```
 
 **解決方法**:
 1. Stripeダッシュボードにアクセス: https://dashboard.stripe.com/test/products
-2. テストモードであることを確認
+2. 右上が「テストモード」になっているか確認
 3. 3つの商品を作成（または既存商品の価格IDを確認）
-4. 実際の価格IDで`.env`を更新
-5. サーバー再起動
+4. **実際の価格ID**をKeybaseまたはSlackで共有
+5. rayが`.env`ファイルを更新
+6. サーバー再起動・動作確認
 
 **担当**: jonosuke or Inuta（Stripe管理者のみアクセス可能）
+**ステータス**: 確認待ち
 
 ### 🟡 Warning: デバッグログが残っている
 
