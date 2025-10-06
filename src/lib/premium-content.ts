@@ -11,14 +11,14 @@ export function splitContentByDivider(blocks: Block[]): {
   premiumBlocks: Block[]
   hasPremiumContent: boolean
 } {
-  const dividerIndex = blocks.findIndex(block => block.Type === 'divider')
+  const dividerIndex = blocks.findIndex((block) => block.Type === 'divider')
 
   // dividerが見つからない場合は全て無料コンテンツ
   if (dividerIndex === -1) {
     return {
       freeBlocks: blocks,
       premiumBlocks: [],
-      hasPremiumContent: false
+      hasPremiumContent: false,
     }
   }
 
@@ -26,7 +26,7 @@ export function splitContentByDivider(blocks: Block[]): {
   return {
     freeBlocks: blocks.slice(0, dividerIndex),
     premiumBlocks: blocks.slice(dividerIndex + 1),
-    hasPremiumContent: true
+    hasPremiumContent: true,
   }
 }
 
@@ -36,7 +36,9 @@ export function splitContentByDivider(blocks: Block[]): {
  * @param firebaseUid - Firebase UID
  * @returns Promise<boolean> - 有料プランに加入しているかどうか
  */
-export async function checkSubscriptionStatus(firebaseUid: string): Promise<boolean> {
+export async function checkSubscriptionStatus(
+  firebaseUid: string
+): Promise<boolean> {
   // TODO: DB実装後に有効化
   // const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
 
