@@ -29,7 +29,8 @@
   --tobiracast-button-shadow-orange: 0 2px 8px rgba(233, 104, 0, 0.2);
   --tobiracast-button-shadow-orange-hover: 0 4px 12px rgba(233, 104, 0, 0.3);
   --tobiracast-button-shadow-orange-strong: 0 4px 15px rgba(233, 104, 0, 0.3);
-  --tobiracast-button-shadow-orange-strong-hover: 0 8px 25px rgba(233, 104, 0, 0.4);
+  --tobiracast-button-shadow-orange-strong-hover: 0 8px 25px
+    rgba(233, 104, 0, 0.4);
 
   /* コンテンツエリア用 */
   --tobiracast-content-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
@@ -39,12 +40,24 @@
   --tobiracast-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
 
   /* === ナビゲーションボタン === */
-  --tobiracast-nav-button-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
-  --tobiracast-nav-button-bg-hover: linear-gradient(145deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.95));
+  --tobiracast-nav-button-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.85)
+  );
+  --tobiracast-nav-button-bg-hover: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.95)
+  );
   --tobiracast-nav-button-border: 1.5px solid rgba(255, 255, 255, 0.3);
   --tobiracast-nav-button-border-hover: 1.5px solid rgba(255, 255, 255, 0.5);
-  --tobiracast-nav-button-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --tobiracast-nav-button-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --tobiracast-nav-button-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --tobiracast-nav-button-shadow-hover:
+    0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --tobiracast-nav-button-text: #1a1a1a;
 
   /* === テキストシャドウ === */
@@ -53,7 +66,11 @@
   --tobiracast-text-shadow-strong: 0 2px 8px rgba(0, 0, 0, 0.5);
 
   /* === オーバーレイ === */
-  --tobiracast-overlay-gradient: linear-gradient(135deg, rgba(23, 121, 222, 0.8), rgba(233, 104, 0, 0.8));
+  --tobiracast-overlay-gradient: linear-gradient(
+    135deg,
+    rgba(23, 121, 222, 0.8),
+    rgba(233, 104, 0, 0.8)
+  );
   --tobiracast-white-overlay-15: rgba(255, 255, 255, 0.15);
   --tobiracast-white-overlay-12: rgba(255, 255, 255, 0.12);
   --tobiracast-white-overlay-10: rgba(255, 255, 255, 0.1);
