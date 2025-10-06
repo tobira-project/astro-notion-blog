@@ -124,7 +124,6 @@ import '../styles/tobiracast.css'
     text-align: center;
     margin-bottom: 3rem;
     margin-top: 2rem;
-    animation: fadeInUp 0.8s ease-out;
   }
 
   .profile-header h1 {
@@ -147,7 +146,6 @@ import '../styles/tobiracast.css'
     margin: 0 auto 2rem;
     max-width: 800px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    animation: fadeInUp 0.8s ease-out 0.1s backwards;
   }
 
   .info-section {
@@ -180,7 +178,6 @@ import '../styles/tobiracast.css'
   .action-buttons {
     display: flex;
     justify-content: center;
-    animation: fadeInUp 0.8s ease-out 0.2s backwards;
   }
 
   .logout-btn {
@@ -214,17 +211,6 @@ import '../styles/tobiracast.css'
   .logout-btn svg {
     width: 18px;
     height: 18px;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   @media (max-width: 768px) {
@@ -316,7 +302,6 @@ import '../styles/tobiracast.css'
       await signOut(auth)
       window.location.href = '/'
     } catch (error) {
-      console.error('ログアウトエラー:', error)
       alert('ログアウトに失敗しました')
     }
   })

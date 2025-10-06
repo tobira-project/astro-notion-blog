@@ -358,14 +358,6 @@ import Layout from '../layouts/Layout.astro'
     handleCodeInApp: true,
   }
 
-  // デバッグ: 設定を確認
-  console.log('Firebase Config:', {
-    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY ? '設定済み' : '未設定',
-    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
-  })
-  console.log('Action Code Settings:', actionCodeSettings)
-
   // DOM要素
   const authError = document.getElementById('auth-error')
   const accountCreating = document.getElementById('account-creating')
@@ -417,7 +409,6 @@ import Layout from '../layouts/Layout.astro'
     
     // 409 Conflict = すでにアカウントが存在する場合はOKとして扱う
     if (signupResponse.status === 409) {
-      console.log('Tobiratoryアカウントは既に存在します')
       return
     }
     
@@ -439,7 +430,6 @@ import Layout from '../layouts/Layout.astro'
     
     // 409 Conflict = すでにFlowアカウントが存在する場合はポーリングを実行
     if (flowResponse.status === 409) {
-      console.log('Flowアカウントは既に存在するか作成中です')
       await pollForCompletion()
       return
     }
@@ -457,9 +447,7 @@ import Layout from '../layouts/Layout.astro'
     // テスト用に調整可能な設定
     const maxRetry = import.meta.env.DEV ? 6 : 100  // 開発環境では6回（1分）
     const sleepTime = import.meta.env.DEV ? 10000 : 10000  // 10秒
-    
-    console.log(`ポーリング開始: maxRetry=${maxRetry}, sleepTime=${sleepTime}ms`)
-    
+
     for (let i = 0; i < maxRetry; i++) {
       await new Promise(resolve => setTimeout(resolve, sleepTime))
       
@@ -473,8 +461,7 @@ import Layout from '../layouts/Layout.astro'
       })
       
       const checkProfile = await checkResponse.json()
-      console.log(`ポーリング ${i+1}/${maxRetry}:`, checkProfile)
-      
+
       // 上司の指示通りのレスポンス形式に対応
       if (checkProfile.status === 'success') {
         showLoading('アカウント作成完了')
@@ -551,10 +538,8 @@ import Layout from '../layouts/Layout.astro'
             return
         }
       }
-      
+
     } catch (error) {
-      console.error('Account setup error:', error)
-      
       // エラー時はリトライボタンを表示
       accountCreating.style.display = 'block'
       loginForm.style.display = 'none'
@@ -616,8 +601,6 @@ import Layout from '../layouts/Layout.astro'
 
   // リトライボタン
   retryButton.addEventListener('click', async () => {
-    console.log('リトライボタンがクリックされました')
-    
     // UIリセット
     retryButton.style.display = 'none'
     const spinner = accountCreating.querySelector('.spinner')
@@ -642,16 +625,12 @@ import Layout from '../layouts/Layout.astro'
     const email = (document.getElementById('email-input') as HTMLInputElement).value
     const originalBtnText = emailSubmitBtn.textContent
 
-    console.log('メール送信開始:', email)
-    console.log('actionCodeSettings:', actionCodeSettings)
-
     try {
       // ボタンを無効化して送信中表示
       emailSubmitBtn.disabled = true
       emailSubmitBtn.textContent = '送信中...'
 
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      console.log('メール送信成功')
 
       // メールアドレスを保存
       window.localStorage.setItem('emailForSignIn', email)
@@ -670,8 +649,6 @@ import Layout from '../layouts/Layout.astro'
       document.getElementById('email-input').value = ''
 
     } catch (error) {
-      console.error('メール送信エラー:', error)
-
       // ボタンを元に戻す
       emailSubmitBtn.disabled = false
       emailSubmitBtn.textContent = originalBtnText

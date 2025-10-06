@@ -387,12 +387,10 @@ export async function downloadFile(url: URL) {
       responseType: 'stream',
     })
   } catch (err) {
-    console.log(err)
     return Promise.resolve()
   }
 
   if (!res || res.status != 200) {
-    console.log(res)
     return Promise.resolve()
   }
 
@@ -415,7 +413,6 @@ export async function downloadFile(url: URL) {
   try {
     return pipeline(stream, new ExifTransformer(), writeStream)
   } catch (err) {
-    console.log(err)
     writeStream.end()
     return Promise.resolve()
   }
@@ -906,7 +903,6 @@ async function _getSyncedBlockChildren(block: Block): Promise<Block[]> {
     try {
       originalBlock = await getBlock(block.SyncedBlock.SyncedFrom.BlockId)
     } catch (err) {
-      console.log(`Could not retrieve the original synced_block. error: ${err}`)
       return []
     }
   }

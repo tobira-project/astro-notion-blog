@@ -100,7 +100,6 @@ export const buildURLToHTMLMap = async (
           return res.text()
         })
         .catch(() => {
-          console.log('Request was aborted')
           return ''
         })
         .finally(() => {

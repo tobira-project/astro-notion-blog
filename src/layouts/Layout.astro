@@ -35,7 +35,7 @@ if (database.Cover) {
     try {
       coverImageURL = filePath(new URL(database.Cover.Url))
     } catch {
-      console.log('Invalid DB cover image URL: ', database.Cover?.Url)
+      // Invalid cover image URL
     }
   }
 }
@@ -45,7 +45,7 @@ if (database.Icon && database.Icon.Type === 'file') {
   try {
     customIconURL = filePath(new URL(database.Icon.Url))
   } catch {
-    console.log('Invalid DB custom icon URL: ', database.Icon?.Url)
+    // Invalid custom icon URL
   }
 }
 ---

@@ -250,7 +250,6 @@
         `${url.protocol}//${url.hostname}${port}/feed`
       )
       if (res.status !== 200) {
-        console.log(res.status)
         throw new Error('Failed to fetch RSS feed')
       }
 
