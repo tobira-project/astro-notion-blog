@@ -386,7 +386,7 @@ export async function downloadFile(url: URL) {
       timeout: REQUEST_TIMEOUT_MS,
       responseType: 'stream',
     })
-  } catch (err) {
+  } catch {
     return Promise.resolve()
   }
 
@@ -412,7 +412,7 @@ export async function downloadFile(url: URL) {
   }
   try {
     return pipeline(stream, new ExifTransformer(), writeStream)
-  } catch (err) {
+  } catch {
     writeStream.end()
     return Promise.resolve()
   }
@@ -902,7 +902,7 @@ async function _getSyncedBlockChildren(block: Block): Promise<Block[]> {
   ) {
     try {
       originalBlock = await getBlock(block.SyncedBlock.SyncedFrom.BlockId)
-    } catch (err) {
+    } catch {
       return []
     }
   }

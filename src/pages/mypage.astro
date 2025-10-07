@@ -300,7 +300,7 @@ import '../styles/tobiracast.css'
     try {
       await signOut(auth)
       window.location.href = '/'
-    } catch (error) {
+    } catch {
       alert('ログアウトに失敗しました')
     }
   })

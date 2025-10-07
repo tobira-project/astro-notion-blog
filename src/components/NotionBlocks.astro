@@ -105,7 +105,7 @@ const bookmarkURLs = blocks
     let url: URL
     try {
       url = new URL(urlString)
-    } catch (err) {
+    } catch {
       // Invalid URL
     }
     return url

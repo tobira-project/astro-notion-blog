@@ -12,7 +12,7 @@ const { block } = Astro.props
 let url: URL
 try {
   url = new URL(block.Video.External?.Url)
-} catch (err) {
+} catch {
   // Invalid video URL
 }
 ---

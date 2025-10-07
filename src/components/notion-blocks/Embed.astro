@@ -24,7 +24,7 @@ const { block, urlMap } = Astro.props
 let url: URL
 try {
   url = new URL(block.Embed.Url)
-} catch (err) {
+} catch {
   // Invalid embed URL
 }
 ---
