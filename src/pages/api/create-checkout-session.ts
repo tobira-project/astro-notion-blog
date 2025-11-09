@@ -41,10 +41,11 @@ export const POST: APIRoute = async ({ request }) => {
     const { priceId, userEmail, firebaseUid } = body //TODO: userEmail,firebaseUidは渡されないので消す
 
     // リクエストパラメータのバリデーション
-    if (!priceId || !userEmail || !firebaseUid) {//TODO: userEmail,firebaseUidは渡されないので消す
+    if (!priceId || !userEmail || !firebaseUid) {
+      //TODO: userEmail,firebaseUidは渡されないので消す
       const errorResponse: ErrorResponse = {
         error:
-          '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。',//TODO: userEmail,firebaseUidは渡されないので消す
+          '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。', //TODO: userEmail,firebaseUidは渡されないので消す
       }
       return new Response(JSON.stringify(errorResponse), { status: 400 })
     }
