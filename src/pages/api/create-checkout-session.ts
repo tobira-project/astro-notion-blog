@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro'
 import Stripe from 'stripe'
+//TODO: import admin from 'firebase-admin'
 
 /**
  * APIルート: Stripe Checkout Sessionを作成
@@ -37,16 +38,32 @@ interface ErrorResponse {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = (await request.json()) as CheckoutSessionRequest
-    const { priceId, userEmail, firebaseUid } = body
+    const { priceId, userEmail, firebaseUid } = body //TODO: userEmail,firebaseUidは渡されないので消す
 
     // リクエストパラメータのバリデーション
-    if (!priceId || !userEmail || !firebaseUid) {
+    if (!priceId || !userEmail || !firebaseUid) {//TODO: userEmail,firebaseUidは渡されないので消す
       const errorResponse: ErrorResponse = {
         error:
-          '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。',
+          '必須パラメータが不足しています。priceId, userEmail, firebaseUidが必要です。',//TODO: userEmail,firebaseUidは渡されないので消す
       }
       return new Response(JSON.stringify(errorResponse), { status: 400 })
     }
+
+    //TODO: const authHeader = request.headers.get('Authorization')
+    /*TODO: 適当に変える
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: '認証が必要です' }), {
+        status: 401
+      })
+    }
+     */
+
+    //TODO: const idToken = authHeader.split('Bearer ')[1]
+    /* TODO: verifyIdTokenが失敗する場合があるので、try-catchで囲む
+    const decodedToken = await admin.auth().verifyIdToken(idToken)
+    const firebaseUid = decodedToken.uid
+    const userEmail = decodedToken.email
+     */
 
     // Stripe Checkout Session作成
     const session = await stripe.checkout.sessions.create({
