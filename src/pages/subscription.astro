@@ -392,8 +392,7 @@ import Layout from '../layouts/Layout.astro'
   }
 
   // Stripe Checkoutセッション作成
-  //TODO: auth.currentUser.getIdToken()を実行できる形でuserを受け取る
-  async function createCheckoutSession(user: { email: string | null; uid: string }, planType: string) {
+  async function createCheckoutSession(user: any, planType: string) {
     // 環境変数から適切なPRICE_IDを取得
     const priceIdMap = {
       'basic': import.meta.env.PUBLIC_STRIPE_PRICE_ID_BASIC,
@@ -406,18 +405,16 @@ import Layout from '../layouts/Layout.astro'
       throw new Error('無効なプランが選択されました')
     }
 
-    //TODO: const idToken = await user.getIdToken()
+    const idToken = await user.getIdToken()
 
-    const response = await fetch('/api/create-checkout-session', {
+    const response = await fetch(import.meta.env.PUBLIC_FIREBASE_FUNCTIONS_URL + '/blog-createCheckoutSession', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-        //TODO: 'Authorization': `Bearer ${idToken}`
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`
       },
       body: JSON.stringify({
-        priceId: priceId,
-        userEmail: user.email, //TODO: idTokenから取得できるので必要なし
-        firebaseUid: user.uid //TODO: idTokenから取得できるので必要なし
+        priceId: priceId
       })
     })
 
