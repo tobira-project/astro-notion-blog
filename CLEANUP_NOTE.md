@@ -35,6 +35,7 @@ npm install --ignore-scripts
 ```
 
 **結果:** 成功！✅
+
 - node_modulesが正常にインストールされた
 - 開発可能な状態に復旧
 - `re2`のネイティブビルドをスキップ
