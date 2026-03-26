@@ -357,6 +357,28 @@ import Layout from '../layouts/Layout.astro'
   const retryButton = document.getElementById('retry-button')
   let authSetupInFlight = false
 
+  function describeProfileState(state: string, attempt?: number, maxRetry?: number) {
+    const progress = attempt && maxRetry ? ` (${attempt}/${maxRetry})` : ''
+
+    switch (state) {
+      case 'account-not-exists':
+      case 'account-not-found':
+        return `Tobiratoryアカウントが未作成です${progress}`
+      case 'flow-account-not-exists':
+        return `Flowアカウントが未作成です${progress}`
+      case 'flow-address-creating':
+        return `Flowアカウント作成中です${progress}`
+      case 'flow-account-retrying':
+        return `Flowアカウント作成を再試行中です${progress}`
+      case 'flow-account-create-error':
+        return `Flowアカウント作成エラーです${progress}`
+      case 'success':
+        return 'ログイン完了'
+      default:
+        return `状態確認中: ${state}${progress}`
+    }
+  }
+
   // エラー表示
   function showError(message: string) {
     authError.textContent = message
@@ -407,6 +429,10 @@ import Layout from '../layouts/Layout.astro'
     })
 
     const profile = await profileResponse.json()
+    console.log('[login] my/profile response', {
+      statusCode: profileResponse.status,
+      body: profile,
+    })
 
     if (!profileResponse.ok) {
       const errorMessage =
@@ -485,9 +511,12 @@ import Layout from '../layouts/Layout.astro'
         await createFlowAccount(currentIdToken, user)
         return
       }
-      
-      // 進捗表示の更新
-      showLoading(`アカウント作成中... (${i+1}/${maxRetry})`)
+
+      if (checkProfile.status === 'error') {
+        showLoading(describeProfileState(checkProfile.data, i + 1, maxRetry))
+      } else {
+        showLoading(`アカウント作成中... (${i+1}/${maxRetry})`)
+      }
     }
     
     throw new Error('アカウント作成がタイムアウトしました')
@@ -509,7 +538,7 @@ import Layout from '../layouts/Layout.astro'
 
       // 上司の指示通りのレスポンス形式に対応
       if (profile.status === 'success') {
-        showLoading('ログイン完了')
+        showLoading(describeProfileState('success'))
         setTimeout(() => window.location.href = '/', 1000)
         return
       }
@@ -520,7 +549,7 @@ import Layout from '../layouts/Layout.astro'
           case 'account-not-exists':
           case 'account-not-found':
             // Tobiratory AccountとFlowアカウントを作る
-            showLoading('Tobiratoryアカウントを作成中...')
+            showLoading(describeProfileState(profile.data))
             await createTobiratoryAccount(idToken)
             showLoading('Flowアカウントを作成中...')
             await createFlowAccount(idToken, user)
@@ -528,20 +557,20 @@ import Layout from '../layouts/Layout.astro'
             
           case 'flow-account-not-exists':
             // Flowアカウントを作る
-            showLoading('Flowアカウントを作成中...')
+            showLoading(describeProfileState(profile.data))
             await createFlowAccount(idToken, user)
             return
             
           case 'flow-address-creating':
           case 'flow-account-retrying':
             // 作成中/再試行中 - 完了を待つ
-            showLoading('Flowアカウント作成中（処理継続中）...')
+            showLoading(describeProfileState(profile.data))
             await pollForCompletion(user)
             return
             
           case 'flow-account-create-error':
             // エラー発生 - Flowアカウントを作り直し
-            showLoading('エラー発生 - Flowアカウント再作成中...')
+            showLoading(describeProfileState(profile.data))
             await createFlowAccount(idToken, user)
             return
         }
