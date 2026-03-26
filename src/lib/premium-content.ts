@@ -63,7 +63,9 @@ export function splitContentByDivider(blocks: Block[]): {
  *   // プレミアムコンテンツを表示
  * }
  */
-export async function checkSubscriptionStatus(idToken: string): Promise<boolean> {
+export async function checkSubscriptionStatus(
+  idToken: string
+): Promise<boolean> {
   // 入力バリデーション
   if (typeof idToken !== 'string' || idToken.trim() === '') {
     throw new TypeError('idToken must be a non-empty string')
