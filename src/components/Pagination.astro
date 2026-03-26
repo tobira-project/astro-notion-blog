@@ -66,4 +66,17 @@ for (let i = startPage; i <= endPage; i++) {
     color: #999;
     text-decoration: none;
   }
+  @media (max-width: 480px) {
+    .pagination {
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+    .pagination a {
+      width: 2rem;
+      height: 2.4rem;
+      line-height: 2.4rem;
+      margin: 0;
+      font-size: 0.8rem;
+    }
+  }
 </style>

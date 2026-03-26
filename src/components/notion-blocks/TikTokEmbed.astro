@@ -12,7 +12,7 @@ const videoId = url.pathname.split('/')[3]
     class="tiktok-embed"
     cite={url.toString()}
     data-video-id={videoId}
-    style="min-width: 325px;"
+    style="min-width: 0; width: 100%;"
   >
     <section>
       <a
@@ -28,13 +28,16 @@ const videoId = url.pathname.split('/')[3]
 
 <style>
   .tiktok-wrapper {
-    max-width: 325px;
-    overflow-x: auto;
+    width: min(100%, 325px);
+    max-width: 100%;
+    overflow-x: hidden;
     margin-block-start: 1.5rem;
     margin-inline: auto;
     border-radius: 8px;
   }
   blockquote.tiktok-embed {
     margin: 0;
+    min-width: 0 !important;
+    width: 100% !important;
   }
 </style>

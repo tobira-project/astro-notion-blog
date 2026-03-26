@@ -6,13 +6,14 @@ const { url } = Astro.props
 const id = url.pathname.split('/')[2]
 ---
 
-<blockquote
-  class="instagram-media"
-  data-instgrm-captioned
-  data-instgrm-permalink={`https://www.instagram.com/reel/${id}/?utm_source=ig_embed&utm_campaign=loading`}
-  data-instgrm-version="14"
-  style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
->
+<div class="instagram-wrapper">
+  <blockquote
+    class="instagram-media"
+    data-instgrm-captioned
+    data-instgrm-permalink={`https://www.instagram.com/reel/${id}/?utm_source=ig_embed&utm_campaign=loading`}
+    data-instgrm-version="14"
+    style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:0; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+  >
   <div style="padding:16px;">
     <a
       href={`https://www.instagram.com/reel/${id}/?utm_source=ig_embed&utm_campaign=loading`}
@@ -124,6 +125,22 @@ const id = url.pathname.split('/')[2]
       >
     </p>
   </div>
-</blockquote>
+  </blockquote>
+</div>
 
 <script async src="//www.instagram.com/embed.js"></script>
+
+<style>
+  .instagram-wrapper {
+    width: min(100%, 540px);
+    max-width: 100%;
+    margin-inline: auto;
+    overflow-x: hidden;
+  }
+
+  .instagram-wrapper :global(.instagram-media) {
+    min-width: 0 !important;
+    width: calc(100% - 2px) !important;
+    max-width: 100% !important;
+  }
+</style>

@@ -7,10 +7,10 @@
 </div>
 
 <!-- ログイン前の表示 -->
-<a href="/login" id="logged-out-nav" class="auth-link" style="display: none;">ログイン</a>
+<a href="/login" id="logged-out-nav" class="auth-link" hidden>ログイン</a>
 
 <!-- ログイン後の表示 -->
-<a href="/mypage" id="logged-in-nav" class="auth-link" style="display: none;">マイページ</a>
+<a href="/mypage" id="logged-in-nav" class="auth-link" hidden>マイページ</a>
 
 <style>
   .auth-link {
@@ -116,15 +116,15 @@
   const authStatusLoading = document.getElementById('auth-status-loading')
 
   function showLoggedIn() {
-    authStatusLoading.style.display = 'none'
-    loggedOutNav.style.display = 'none'
-    loggedInNav.style.display = 'block'
+    authStatusLoading.hidden = true
+    loggedOutNav.hidden = true
+    loggedInNav.hidden = false
   }
 
   function showLoggedOut() {
-    authStatusLoading.style.display = 'none'
-    loggedOutNav.style.display = 'block'
-    loggedInNav.style.display = 'none'
+    authStatusLoading.hidden = true
+    loggedOutNav.hidden = false
+    loggedInNav.hidden = true
   }
 
   // 認証状態の監視
