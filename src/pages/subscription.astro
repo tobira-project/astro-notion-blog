@@ -362,22 +362,11 @@ import Layout from '../layouts/Layout.astro'
 </style>
 
 <script>
-  import { initializeApp } from 'firebase/app'
-  import { getAuth, onAuthStateChanged } from 'firebase/auth'
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { getFirebaseAuth } from '../lib/firebase-client'
+  import { getBlogFunctionUrl } from '../lib/functions-url'
 
-  // Firebase設定
-  const firebaseConfig = {
-    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
-    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
-    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID
-  }
-
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
+  const auth = getFirebaseAuth()
 
   // DOM要素
   const subscribeButtons = document.querySelectorAll('[data-price-id]')
@@ -407,7 +396,7 @@ import Layout from '../layouts/Layout.astro'
 
     const idToken = await user.getIdToken()
 
-    const response = await fetch(import.meta.env.PUBLIC_FIREBASE_FUNCTIONS_URL + '/blog-createCheckoutSession', {
+    const response = await fetch(getBlogFunctionUrl(import.meta.env.PUBLIC_FIREBASE_FUNCTIONS_URL, 'blog-createCheckoutSession'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

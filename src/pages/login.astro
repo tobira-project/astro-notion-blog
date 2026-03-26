@@ -325,32 +325,20 @@ import Layout from '../layouts/Layout.astro'
 </style>
 
 <script>
-  import { initializeApp } from 'firebase/app'
   import { 
-    getAuth,
     GoogleAuthProvider,
     OAuthProvider,
     signInWithPopup,
     sendSignInLinkToEmail,
     isSignInWithEmailLink,
     signInWithEmailLink,
-    onAuthStateChanged
+    onAuthStateChanged,
+    type User
   } from 'firebase/auth'
-
-  // Firebase設定
-  const firebaseConfig = {
-    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
-    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
-    measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID
-  }
-
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
+  import { getFirebaseAuth } from '../lib/firebase-client'
+  import { getNativeApiBaseUrl } from '../lib/functions-url'
+  const auth = getFirebaseAuth()
+  const API_URL = getNativeApiBaseUrl(import.meta.env.PUBLIC_API_URL)
 
   // Magic Link設定（tobiratory-webと同じ）
   const actionCodeSettings = {
@@ -367,6 +355,7 @@ import Layout from '../layouts/Layout.astro'
   const appleLoginBtn = document.getElementById('apple-login')
   const emailForm = document.getElementById('email-login-form')
   const retryButton = document.getElementById('retry-button')
+  let authSetupInFlight = false
 
   // エラー表示
   function showError(message: string) {
@@ -391,15 +380,46 @@ import Layout from '../layouts/Layout.astro'
   function showForm() {
     accountCreating.style.display = 'none'
     loginForm.style.display = 'block'
+    retryButton.style.display = 'none'
     googleLoginBtn.disabled = false
     appleLoginBtn.disabled = false
     googleLoginBtn.querySelector('span').textContent = 'Googleでログイン'
     appleLoginBtn.querySelector('span').textContent = 'Appleでログイン'
   }
 
+  async function getIdTokenOrThrow(user: User) {
+    const idToken = await user.getIdToken()
+
+    if (!idToken) {
+      throw new Error('認証トークンを取得できませんでした')
+    }
+
+    return idToken
+  }
+
+  async function fetchProfile(idToken: string) {
+    const profileResponse = await fetch(`${API_URL}/my/profile`, {
+      method: 'GET',
+      headers: {
+        'Authorization': idToken,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const profile = await profileResponse.json()
+
+    if (!profileResponse.ok) {
+      const errorMessage =
+        profile?.data || profile?.error || `プロフィール取得に失敗しました (${profileResponse.status})`
+      throw new Error(errorMessage)
+    }
+
+    return profile
+  }
+
   // Tobiratoryアカウント作成
   async function createTobiratoryAccount(idToken: string) {
-    const signupResponse = await fetch(`${API_URL}/native/signup`, {
+    const signupResponse = await fetch(`${API_URL}/signup`, {
       method: 'POST',
       headers: {
         'Authorization': idToken,
@@ -418,8 +438,8 @@ import Layout from '../layouts/Layout.astro'
   }
 
   // Flowアカウント作成
-  async function createFlowAccount(idToken: string) {
-    const flowResponse = await fetch(`${API_URL}/native/create-flow`, {
+  async function createFlowAccount(idToken: string, user: User) {
+    const flowResponse = await fetch(`${API_URL}/create-flow`, {
       method: 'POST',
       headers: {
         'Authorization': idToken,
@@ -430,7 +450,7 @@ import Layout from '../layouts/Layout.astro'
     
     // 409 Conflict = すでにFlowアカウントが存在する場合はポーリングを実行
     if (flowResponse.status === 409) {
-      await pollForCompletion()
+      await pollForCompletion(user)
       return
     }
 
@@ -439,11 +459,11 @@ import Layout from '../layouts/Layout.astro'
     }
 
     // 作成完了まで待機
-    await pollForCompletion()
+    await pollForCompletion(user)
   }
 
   // ポーリングによる完了待機
-  async function pollForCompletion() {
+  async function pollForCompletion(user: User) {
     // テスト用に調整可能な設定
     const maxRetry = import.meta.env.DEV ? 6 : 100  // 開発環境では6回（1分）
     const sleepTime = import.meta.env.DEV ? 10000 : 10000  // 10秒
@@ -451,16 +471,8 @@ import Layout from '../layouts/Layout.astro'
     for (let i = 0; i < maxRetry; i++) {
       await new Promise(resolve => setTimeout(resolve, sleepTime))
       
-      const currentIdToken = await auth.currentUser?.getIdToken()
-      const checkResponse = await fetch(`${API_URL}/native/my/profile`, {
-        method: 'GET',
-        headers: {
-          'Authorization': currentIdToken,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      const checkProfile = await checkResponse.json()
+      const currentIdToken = await getIdTokenOrThrow(user)
+      const checkProfile = await fetchProfile(currentIdToken)
 
       // 上司の指示通りのレスポンス形式に対応
       if (checkProfile.status === 'success') {
@@ -470,7 +482,7 @@ import Layout from '../layouts/Layout.astro'
       } else if (checkProfile.status === 'error' && checkProfile.data === 'flow-account-create-error') {
         // エラー時は再試行
         showLoading('エラー発生 - Flowアカウント再作成中...')
-        await createFlowAccount(currentIdToken)
+        await createFlowAccount(currentIdToken, user)
         return
       }
       
@@ -482,23 +494,18 @@ import Layout from '../layouts/Layout.astro'
   }
 
   // tobiratory-webと同じ認証フロー
-  async function handleTobiratoryAccountSetup() {
+  async function handleTobiratoryAccountSetup(user: User) {
+    if (authSetupInFlight) {
+      return
+    }
+
+    authSetupInFlight = true
+
     try {
       showLoading('プロフィール確認中...')
-      
-      const idToken = await auth.currentUser?.getIdToken()
-      if (!idToken) throw new Error('認証されていません')
-      
-      // プロフィール取得
-      const profileResponse = await fetch(`${API_URL}/native/my/profile`, {
-        method: 'GET',
-        headers: {
-          'Authorization': idToken,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      const profile = await profileResponse.json()
+
+      const idToken = await getIdTokenOrThrow(user)
+      const profile = await fetchProfile(idToken)
 
       // 上司の指示通りのレスポンス形式に対応
       if (profile.status === 'success') {
@@ -516,29 +523,31 @@ import Layout from '../layouts/Layout.astro'
             showLoading('Tobiratoryアカウントを作成中...')
             await createTobiratoryAccount(idToken)
             showLoading('Flowアカウントを作成中...')
-            await createFlowAccount(idToken)
+            await createFlowAccount(idToken, user)
             return
             
           case 'flow-account-not-exists':
             // Flowアカウントを作る
             showLoading('Flowアカウントを作成中...')
-            await createFlowAccount(idToken)
+            await createFlowAccount(idToken, user)
             return
             
           case 'flow-address-creating':
           case 'flow-account-retrying':
             // 作成中/再試行中 - 完了を待つ
             showLoading('Flowアカウント作成中（処理継続中）...')
-            await pollForCompletion()
+            await pollForCompletion(user)
             return
             
           case 'flow-account-create-error':
             // エラー発生 - Flowアカウントを作り直し
             showLoading('エラー発生 - Flowアカウント再作成中...')
-            await createFlowAccount(idToken)
+            await createFlowAccount(idToken, user)
             return
         }
       }
+
+      throw new Error('プロフィール確認のレスポンスが想定外でした')
 
     } catch (error) {
       // エラー時はリトライボタンを表示
@@ -550,13 +559,15 @@ import Layout from '../layouts/Layout.astro'
       // スピナーを隠す
       const spinner = accountCreating.querySelector('.spinner')
       if (spinner) spinner.style.display = 'none'
+    } finally {
+      authSetupInFlight = false
     }
   }
 
   // Firebase認証状態監視
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      await handleTobiratoryAccountSetup()
+      await handleTobiratoryAccountSetup(user)
     } else {
       showForm()
     }
@@ -609,7 +620,7 @@ import Layout from '../layouts/Layout.astro'
     
     // 再度認証フローを実行
     if (auth.currentUser) {
-      await handleTobiratoryAccountSetup()
+      await handleTobiratoryAccountSetup(auth.currentUser)
     } else {
       showForm()
       showError('ログインしてください')
