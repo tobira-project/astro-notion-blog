@@ -69,19 +69,42 @@
 <script>
   import { onAuthStateChanged } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
+  import { getNativeApiBaseUrl } from '../lib/functions-url'
 
   const auth = getFirebaseAuth()
+  const API_URL = getNativeApiBaseUrl(import.meta.env.PUBLIC_API_URL)
 
   // DOM要素
   const loggedOutNav = document.getElementById('logged-out-nav')
   const loggedInNav = document.getElementById('logged-in-nav')
 
   // 認証状態の監視
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // ログイン済み
-      loggedOutNav.style.display = 'none'
-      loggedInNav.style.display = 'block'
+      // アカウントが完成しているか確認
+      try {
+        const idToken = await user.getIdToken()
+        const response = await fetch(`${API_URL}/my/profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': idToken,
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await response.json()
+
+        if (data.status === 'success') {
+          loggedOutNav.style.display = 'none'
+          loggedInNav.style.display = 'block'
+          return
+        }
+      } catch {
+        // API呼び出し失敗時はログインリンク表示
+      }
+
+      // アカウント未完成 → ログイン表示のまま
+      loggedOutNav.style.display = 'block'
+      loggedInNav.style.display = 'none'
     } else {
       // 未ログイン
       loggedOutNav.style.display = 'block'

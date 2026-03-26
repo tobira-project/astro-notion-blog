@@ -249,8 +249,10 @@ import '../styles/tobiracast.css'
 <script>
   import { onAuthStateChanged, signOut } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
+  import { getNativeApiBaseUrl } from '../lib/functions-url'
 
   const auth = getFirebaseAuth()
+  const API_URL = getNativeApiBaseUrl(import.meta.env.PUBLIC_API_URL)
 
   const loadingState = document.getElementById('loading-state')
   const notLoggedIn = document.getElementById('not-logged-in')
@@ -259,8 +261,35 @@ import '../styles/tobiracast.css'
   const userCreatedEl = document.getElementById('user-created')
   const logoutBtn = document.getElementById('logout-btn')
 
-  onAuthStateChanged(auth, (user) => {
+  // Tobiratoryアカウントが完成しているか確認
+  async function checkAccountReady(idToken: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_URL}/my/profile`, {
+        method: 'GET',
+        headers: {
+          'Authorization': idToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json()
+      return data.status === 'success'
+    } catch {
+      return false
+    }
+  }
+
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
+      // アカウントが完成しているか確認
+      const idToken = await user.getIdToken()
+      const isReady = await checkAccountReady(idToken)
+
+      if (!isReady) {
+        // アカウント未完成 → ログインページでセットアップを完了させる
+        window.location.href = '/login'
+        return
+      }
+
       // ユーザー情報を表示
       if (userEmailEl) userEmailEl.textContent = user.email || '未設定'
       if (userCreatedEl && user.metadata.creationTime) {
