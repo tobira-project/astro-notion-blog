@@ -2,8 +2,12 @@
 // このコンポーネントはクライアントサイドでログイン状態を管理します
 ---
 
+<div id="auth-status-loading" class="auth-link auth-link-loading" aria-hidden="true">
+  読み込み中
+</div>
+
 <!-- ログイン前の表示 -->
-<a href="/login" id="logged-out-nav" class="auth-link">ログイン</a>
+<a href="/login" id="logged-out-nav" class="auth-link" style="display: none;">ログイン</a>
 
 <!-- ログイン後の表示 -->
 <a href="/mypage" id="logged-in-nav" class="auth-link" style="display: none;">マイページ</a>
@@ -38,6 +42,38 @@
   .auth-link:focus {
     outline: 2px solid var(--tobiracast-primary-orange);
     outline-offset: 2px;
+  }
+
+  .auth-link-loading {
+    color: transparent;
+    pointer-events: none;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .auth-link-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      var(--tobiracast-nav-button-bg);
+    animation: auth-link-shimmer 1.2s ease-in-out infinite;
+  }
+
+  @keyframes auth-link-shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
   }
 
   @media (max-width: 768px) {
@@ -77,6 +113,19 @@
   // DOM要素
   const loggedOutNav = document.getElementById('logged-out-nav')
   const loggedInNav = document.getElementById('logged-in-nav')
+  const authStatusLoading = document.getElementById('auth-status-loading')
+
+  function showLoggedIn() {
+    authStatusLoading.style.display = 'none'
+    loggedOutNav.style.display = 'none'
+    loggedInNav.style.display = 'block'
+  }
+
+  function showLoggedOut() {
+    authStatusLoading.style.display = 'none'
+    loggedOutNav.style.display = 'block'
+    loggedInNav.style.display = 'none'
+  }
 
   // 認証状態の監視
   onAuthStateChanged(auth, async (user) => {
@@ -94,8 +143,7 @@
         const data = await response.json()
 
         if (data.status === 'success') {
-          loggedOutNav.style.display = 'none'
-          loggedInNav.style.display = 'block'
+          showLoggedIn()
           return
         }
       } catch {
@@ -103,12 +151,10 @@
       }
 
       // アカウント未完成 → ログイン表示のまま
-      loggedOutNav.style.display = 'block'
-      loggedInNav.style.display = 'none'
+      showLoggedOut()
     } else {
       // 未ログイン
-      loggedOutNav.style.display = 'block'
-      loggedInNav.style.display = 'none'
+      showLoggedOut()
     }
   })
 </script>
