@@ -39,6 +39,23 @@ import '../styles/tobiracast.css'
         </div>
       </div>
 
+      <div class="profile-card fade-in">
+        <div class="info-section">
+          <label>現在のプラン</label>
+          <p id="subscription-tier">---</p>
+        </div>
+
+        <div class="info-section">
+          <label>サブスクリプション状態</label>
+          <p id="subscription-status">---</p>
+        </div>
+
+        <div class="info-section">
+          <label>次回更新日</label>
+          <p id="subscription-period-end">---</p>
+        </div>
+      </div>
+
       <div class="action-buttons">
         <button id="logout-btn" class="logout-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -250,6 +267,11 @@ import '../styles/tobiracast.css'
   import { onAuthStateChanged, signOut } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
   import { getNativeApiBaseUrl } from '../lib/functions-url'
+  import {
+    fetchSubscriptionStatus,
+    formatSubscriptionStatus,
+    formatSubscriptionTier,
+  } from '../lib/subscription-client'
 
   const auth = getFirebaseAuth()
   const API_URL = getNativeApiBaseUrl(import.meta.env.PUBLIC_API_URL)
@@ -259,6 +281,9 @@ import '../styles/tobiracast.css'
   const profileContent = document.getElementById('profile-content')
   const userEmailEl = document.getElementById('user-email')
   const userCreatedEl = document.getElementById('user-created')
+  const subscriptionTierEl = document.getElementById('subscription-tier')
+  const subscriptionStatusEl = document.getElementById('subscription-status')
+  const subscriptionPeriodEndEl = document.getElementById('subscription-period-end')
   const logoutBtn = document.getElementById('logout-btn')
 
   // Tobiratoryアカウントが完成しているか確認
@@ -301,6 +326,37 @@ import '../styles/tobiracast.css'
           hour: '2-digit',
           minute: '2-digit'
         })
+      }
+
+      try {
+        const subscription = await fetchSubscriptionStatus(idToken)
+
+        if (subscriptionTierEl) {
+          subscriptionTierEl.textContent = formatSubscriptionTier(
+            subscription.subscription_tier
+          )
+        }
+
+        if (subscriptionStatusEl) {
+          subscriptionStatusEl.textContent = formatSubscriptionStatus(
+            subscription.subscription_status
+          )
+        }
+
+        if (subscriptionPeriodEndEl) {
+          subscriptionPeriodEndEl.textContent = subscription.current_period_end
+            ? new Date(subscription.current_period_end).toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : '---'
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription status:', error)
+        if (subscriptionTierEl) subscriptionTierEl.textContent = '取得失敗'
+        if (subscriptionStatusEl) subscriptionStatusEl.textContent = '取得失敗'
+        if (subscriptionPeriodEndEl) subscriptionPeriodEndEl.textContent = '取得失敗'
       }
 
       // コンテンツを表示

@@ -1,4 +1,5 @@
 import { Block } from './interfaces'
+import { fetchSubscriptionStatus } from './subscription-client'
 
 /**
  * ブロック配列からdividerの位置を検出し、無料部分と有料部分に分割する
@@ -62,35 +63,17 @@ export function splitContentByDivider(blocks: Block[]): {
  *   // プレミアムコンテンツを表示
  * }
  */
-export async function checkSubscriptionStatus(
-  firebaseUid: string
-): Promise<boolean> {
+export async function checkSubscriptionStatus(idToken: string): Promise<boolean> {
   // 入力バリデーション
-  if (typeof firebaseUid !== 'string' || firebaseUid.trim() === '') {
-    throw new TypeError('firebaseUid must be a non-empty string')
+  if (typeof idToken !== 'string' || idToken.trim() === '') {
+    throw new TypeError('idToken must be a non-empty string')
   }
 
-  // TODO: DB実装後に有効化
-  // const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
-
-  // try {
-  //   const response = await fetch(`${API_URL}/blog/subscription-status`, {
-  //     headers: {
-  //       'Authorization': firebaseUid
-  //     }
-  //   })
-  //
-  //   if (!response.ok) {
-  //     return false
-  //   }
-  //
-  //   const data = await response.json()
-  //   return data.status === 'active'
-  // } catch (error) {
-  //   console.error('Failed to check subscription status:', error)
-  //   return false
-  // }
-
-  // DB実装前の一時的な処理：常にfalse（無料ユーザー扱い）
-  return false
+  try {
+    const data = await fetchSubscriptionStatus(idToken)
+    return data.hasActiveSubscription
+  } catch (error) {
+    console.error('Failed to check subscription status:', error)
+    return false
+  }
 }

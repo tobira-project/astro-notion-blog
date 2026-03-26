@@ -365,6 +365,10 @@ import Layout from '../layouts/Layout.astro'
   import { onAuthStateChanged } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
   import { getBlogFunctionUrl } from '../lib/functions-url'
+  import {
+    fetchSubscriptionStatus,
+    formatSubscriptionTier,
+  } from '../lib/subscription-client'
 
   const auth = getFirebaseAuth()
 
@@ -372,12 +376,27 @@ import Layout from '../layouts/Layout.astro'
   const subscribeButtons = document.querySelectorAll('[data-price-id]')
   const loginPrompt = document.getElementById('login-prompt')
   const subscriptionMessage = document.getElementById('subscription-message')
+  const defaultButtonLabelMap = {
+    basic: 'このプランに加入する',
+    standard: 'このプランに加入する',
+    premium: 'このプランに加入する',
+  }
 
   // メッセージ表示
   function showMessage(message: string, type: 'error' | 'success' | 'info') {
     subscriptionMessage.textContent = message
     subscriptionMessage.className = `message ${type}`
     subscriptionMessage.style.display = 'block'
+  }
+
+  function setButtonsDisabledState(disabled: boolean, label?: string) {
+    subscribeButtons.forEach((button) => {
+      button.disabled = disabled
+
+      const planType = button.getAttribute('data-price-id')
+      const defaultLabel = defaultButtonLabelMap[planType] || 'このプランに加入する'
+      button.textContent = label || defaultLabel
+    })
   }
 
   // Stripe Checkoutセッション作成
@@ -456,13 +475,30 @@ import Layout from '../layouts/Layout.astro'
   }
 
   // 認証状態の監視
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       loginPrompt.style.display = 'none'
-      subscribeButtons.forEach(btn => btn.disabled = false)
+
+      try {
+        const idToken = await user.getIdToken()
+        const subscription = await fetchSubscriptionStatus(idToken)
+
+        if (subscription.hasActiveSubscription) {
+          setButtonsDisabledState(true, '加入済み')
+          showMessage(
+            `${formatSubscriptionTier(subscription.subscription_tier)}プランに加入中です`,
+            'success'
+          )
+          return
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription status:', error)
+      }
+
+      setButtonsDisabledState(false)
     } else {
       loginPrompt.style.display = 'block'
-      subscribeButtons.forEach(btn => btn.disabled = true)
+      setButtonsDisabledState(true)
     }
   })
 

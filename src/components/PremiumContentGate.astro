@@ -159,46 +159,20 @@ const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
 <script>
   import { onAuthStateChanged } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
+  import { checkSubscriptionStatus } from '../lib/premium-content'
 
   const auth = getFirebaseAuth()
 
   const premiumContent = document.getElementById('premium-content')
   const premiumPaywall = document.getElementById('premium-paywall')
 
-  // TODO: DB実装後に有効化
-  // async function checkSubscriptionStatus(uid: string): Promise<boolean> {
-  //   try {
-  //     const idToken = await auth.currentUser?.getIdToken()
-  //     const API_URL = import.meta.env.PUBLIC_API_URL || 'https://asia-northeast1-tobiratory-f6ae1.cloudfunctions.net'
-  //
-  //     const response = await fetch(`${API_URL}/blog/subscription-status`, {
-  //       headers: {
-  //         'Authorization': idToken
-  //       }
-  //     })
-  //
-  //     if (!response.ok) {
-  //       return false
-  //     }
-  //
-  //     const data = await response.json()
-  //     return data.subscription_status === 'active'
-  //   } catch (error) {
-  //     console.error('Failed to check subscription status:', error)
-  //     return false
-  //   }
-  // }
-
   // 認証状態の監視
   onAuthStateChanged(auth, async (user) => {
     if (!premiumContent || !premiumPaywall) return
 
     if (user) {
-      // TODO: DB実装後に有効化
-      // const hasSubscription = await checkSubscriptionStatus(user.uid)
-
-      // DB実装前の一時的な処理：常にfalse（無料ユーザー扱い）
-      const hasSubscription = false
+      const idToken = await user.getIdToken()
+      const hasSubscription = await checkSubscriptionStatus(idToken)
 
       if (hasSubscription) {
         // 有料会員の場合：プレミアムコンテンツを表示
