@@ -499,18 +499,19 @@ import Layout from '../layouts/Layout.astro'
       })
       
       const profile = await profileResponse.json()
-      
+
       // 上司の指示通りのレスポンス形式に対応
       if (profile.status === 'success') {
         showLoading('ログイン完了')
         setTimeout(() => window.location.href = '/', 1000)
         return
       }
-      
+
       // エラーレスポンスの場合のデータ処理
       if (profile.status === 'error') {
         switch (profile.data) {
           case 'account-not-exists':
+          case 'account-not-found':
             // Tobiratory AccountとFlowアカウントを作る
             showLoading('Tobiratoryアカウントを作成中...')
             await createTobiratoryAccount(idToken)
