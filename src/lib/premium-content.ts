@@ -53,12 +53,12 @@ export function splitContentByDivider(blocks: Block[]): {
  * tobiratory-webのAPIエンドポイントに問い合わせて、
  * ユーザーが有効なサブスクリプションを持っているかを確認します。
  *
- * @param firebaseUid - Firebase UID
+ * @param idToken - Firebase ID token
  * @returns Promise<boolean> - 有料プランに加入している場合true、それ以外false
  * @throws {TypeError} firebaseUid が文字列でない、または空文字列の場合
  *
  * @example
- * const isSubscribed = await checkSubscriptionStatus(user.uid)
+ * const isSubscribed = await checkSubscriptionStatus(idToken)
  * if (isSubscribed) {
  *   // プレミアムコンテンツを表示
  * }
