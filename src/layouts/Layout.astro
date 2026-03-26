@@ -190,10 +190,16 @@ if (database.Icon && database.Icon.Type === 'file') {
         const navMenu = document.querySelector('.nav-menu');
         const menuCloseBtn = document.querySelector('.menu-close-btn');
         const menuOverlay = document.querySelector('.menu-overlay');
+        const siteHeader = document.querySelector('.site-header');
 
         function closeMenu() {
           mobileMenuToggle.classList.remove('active');
           navMenu.classList.remove('active');
+          mobileMenuToggle.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('mobile-menu-open');
+          if (siteHeader) {
+            siteHeader.classList.remove('menu-open');
+          }
           if (menuOverlay) {
             menuOverlay.classList.remove('active');
           }
@@ -202,10 +208,15 @@ if (database.Icon && database.Icon.Type === 'file') {
         if (mobileMenuToggle && navMenu) {
           // ハンバーガーボタンクリック
           mobileMenuToggle.addEventListener('click', function() {
-            mobileMenuToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
+            const isActive = mobileMenuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active', isActive);
+            mobileMenuToggle.setAttribute('aria-expanded', String(isActive));
+            document.body.classList.toggle('mobile-menu-open', isActive);
+            if (siteHeader) {
+              siteHeader.classList.toggle('menu-open', isActive);
+            }
             if (menuOverlay) {
-              menuOverlay.classList.toggle('active');
+              menuOverlay.classList.toggle('active', isActive);
             }
           });
 
@@ -255,6 +266,10 @@ if (database.Icon && database.Icon.Type === 'file') {
     overflow: visible;
     min-height: 400px;
     z-index: 1;
+  }
+
+  .site-header.menu-open {
+    z-index: 100000;
   }
 
   .site-header::before {
@@ -783,6 +798,10 @@ if (database.Icon && database.Icon.Type === 'file') {
 
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+  }
+
+  body.mobile-menu-open {
+    overflow: hidden;
   }
 
   /* 画像のシンプルなスタイリング */
