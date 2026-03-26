@@ -434,12 +434,6 @@ import Layout from '../layouts/Layout.astro'
       body: profile,
     })
 
-    if (!profileResponse.ok) {
-      const errorMessage =
-        profile?.data || profile?.error || `プロフィール取得に失敗しました (${profileResponse.status})`
-      throw new Error(errorMessage)
-    }
-
     return profile
   }
 
