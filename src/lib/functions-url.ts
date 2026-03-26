@@ -20,7 +20,10 @@ export function getNativeApiBaseUrl(baseUrl?: string) {
   return `${origin}/native`
 }
 
-export function getBlogFunctionUrl(baseUrl: string | undefined, functionName: string) {
+export function getBlogFunctionUrl(
+  baseUrl: string | undefined,
+  functionName: string
+) {
   const origin = getFunctionsOrigin(baseUrl)
 
   if (origin.endsWith(`/${functionName}`)) {
