@@ -389,9 +389,15 @@ import Layout from '../layouts/Layout.astro'
       'premium': import.meta.env.PUBLIC_STRIPE_PRICE_ID_PREMIUM
     }
 
+    const envNameMap = {
+      'basic': 'PUBLIC_STRIPE_PRICE_ID_BASIC',
+      'standard': 'PUBLIC_STRIPE_PRICE_ID_STANDARD',
+      'premium': 'PUBLIC_STRIPE_PRICE_ID_PREMIUM'
+    }
+
     const priceId = priceIdMap[planType]
     if (!priceId) {
-      throw new Error('無効なプランが選択されました')
+      throw new Error(`${envNameMap[planType] || 'PUBLIC_STRIPE_PRICE_ID'} が未設定です`)
     }
 
     const idToken = await user.getIdToken()
