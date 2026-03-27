@@ -1,4 +1,5 @@
 ---
+import { getNavLink } from '../lib/blog-helpers.ts'
 import Layout from '../layouts/Layout.astro'
 ---
 
@@ -12,8 +13,8 @@ import Layout from '../layouts/Layout.astro'
         プランに加入する場合は、再度お手続きをお願いします。
       </p>
       <div class="action-buttons">
-        <a href="/subscription" class="button primary-button">プラン選択に戻る</a>
-        <a href="/" class="button secondary-button">トップページへ</a>
+        <a href={getNavLink('/subscription')} class="button primary-button">プラン選択に戻る</a>
+        <a href={getNavLink('/')} class="button secondary-button">トップページへ</a>
       </div>
     </div>
   </div>

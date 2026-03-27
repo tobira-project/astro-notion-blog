@@ -5,9 +5,18 @@ export default (): AstroIntegration => ({
   name: 'featured-image-downloader',
   hooks: {
     'astro:build:start': async () => {
-      const posts = await getAllPosts()
+      let posts
+      try {
+        posts = await getAllPosts()
+      } catch (error) {
+        console.warn(
+          'Skipping Notion featured image downloads because posts could not be loaded.',
+          error
+        )
+        return
+      }
 
-      await Promise.all(
+      await Promise.allSettled(
         posts.map((post) => {
           if (!post.FeaturedImage || !post.FeaturedImage.Url) {
             return Promise.resolve()
@@ -16,7 +25,11 @@ export default (): AstroIntegration => ({
           let url!: URL
           try {
             url = new URL(post.FeaturedImage.Url)
-          } catch {
+          } catch (error) {
+            console.warn(
+              `Skipping featured image download for post "${post.Slug}" because URL was invalid.`,
+              error
+            )
             return Promise.resolve()
           }
 

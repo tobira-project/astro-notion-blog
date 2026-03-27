@@ -1,14 +1,14 @@
 ---
+import { getNavLink } from '../lib/blog-helpers.ts'
 import { Block } from '../lib/interfaces.ts'
 import NotionBlocks from './NotionBlocks.astro'
 
 export interface Props {
   freeBlocks: Block[]
-  premiumBlocks: Block[]
   hasPremiumContent: boolean
 }
 
-const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
+const { freeBlocks, hasPremiumContent } = Astro.props
 ---
 
 <div class="premium-content-gate">
@@ -19,22 +19,16 @@ const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
 
   {hasPremiumContent && (
     <div class="premium-section">
-      <!-- 有料コンテンツ（初期状態では非表示） -->
-      <div id="premium-content" class="premium-content" style="display: none;">
-        <NotionBlocks blocks={premiumBlocks} isRoot={false} />
-      </div>
-
-      <!-- 非会員向けメッセージ（初期状態で表示） -->
       <div id="premium-paywall" class="premium-paywall">
         <div class="paywall-content">
           <div class="paywall-icon">🔒</div>
           <h3 class="paywall-title">この先は有料会員限定コンテンツです</h3>
           <p class="paywall-description">
-            続きを読むには、有料プランへの加入が必要です
+            保護対象コンテンツのため、この続きは静的HTMLには含めていません。
           </p>
           <div class="paywall-buttons">
-            <a href="/subscription" class="btn-subscribe">プランを見る</a>
-            <a href="/login" class="btn-login">ログイン</a>
+            <a href={getNavLink('/subscription')} class="btn-subscribe">プランを見る</a>
+            <a href={getNavLink('/login')} class="btn-login">ログイン</a>
           </div>
         </div>
       </div>
@@ -155,38 +149,3 @@ const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
     }
   }
 </style>
-
-<script>
-  import { onAuthStateChanged } from 'firebase/auth'
-  import { getFirebaseAuth } from '../lib/firebase-client'
-  import { checkSubscriptionStatus } from '../lib/premium-content'
-
-  const auth = getFirebaseAuth()
-
-  const premiumContent = document.getElementById('premium-content')
-  const premiumPaywall = document.getElementById('premium-paywall')
-
-  // 認証状態の監視
-  onAuthStateChanged(auth, async (user) => {
-    if (!premiumContent || !premiumPaywall) return
-
-    if (user) {
-      const idToken = await user.getIdToken()
-      const hasSubscription = await checkSubscriptionStatus(idToken)
-
-      if (hasSubscription) {
-        // 有料会員の場合：プレミアムコンテンツを表示
-        premiumContent.style.display = 'block'
-        premiumPaywall.style.display = 'none'
-      } else {
-        // 無料会員の場合：ペイウォールを表示
-        premiumContent.style.display = 'none'
-        premiumPaywall.style.display = 'block'
-      }
-    } else {
-      // 未ログインの場合：ペイウォールを表示
-      premiumContent.style.display = 'none'
-      premiumPaywall.style.display = 'block'
-    }
-  })
-</script>

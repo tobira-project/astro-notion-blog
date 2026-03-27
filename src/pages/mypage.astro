@@ -1,4 +1,5 @@
 ---
+import { getNavLink } from '../lib/blog-helpers.ts'
 import Layout from '../layouts/Layout.astro'
 import '../styles/tobiracast.css'
 ---
@@ -17,7 +18,7 @@ import '../styles/tobiracast.css'
         </svg>
         <h2>ログインしてください</h2>
         <p>マイページを表示するには、ログインが必要です。</p>
-        <a href="/login" class="login-link">ログインページへ</a>
+        <a href={getNavLink('/login')} class="login-link">ログインページへ</a>
       </div>
     </div>
 
@@ -267,6 +268,7 @@ import '../styles/tobiracast.css'
   import { onAuthStateChanged, signOut } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
   import { getNativeApiBaseUrl } from '../lib/functions-url'
+  import { withBasePath } from '../lib/public-path'
   import {
     fetchSubscriptionStatus,
     formatSubscriptionStatus,
@@ -311,7 +313,7 @@ import '../styles/tobiracast.css'
 
       if (!isReady) {
         // アカウント未完成 → ログインページでセットアップを完了させる
-        window.location.href = '/login'
+        window.location.href = withBasePath('/login')
         return
       }
 
@@ -373,7 +375,7 @@ import '../styles/tobiracast.css'
   logoutBtn?.addEventListener('click', async () => {
     try {
       await signOut(auth)
-      window.location.href = '/'
+      window.location.href = withBasePath('/')
     } catch {
       alert('ログアウトに失敗しました')
     }

@@ -351,12 +351,13 @@ import Layout from '../layouts/Layout.astro'
   } from 'firebase/auth'
   import { getFirebaseAuth } from '../lib/firebase-client'
   import { getNativeApiBaseUrl } from '../lib/functions-url'
+  import { withBasePath } from '../lib/public-path'
   const auth = getFirebaseAuth()
   const API_URL = getNativeApiBaseUrl(import.meta.env.PUBLIC_API_URL)
 
   // Magic Link設定（tobiratory-webと同じ）
   const actionCodeSettings = {
-    url: window.location.origin + '/login',
+    url: new URL(withBasePath('/login'), window.location.origin).toString(),
     handleCodeInApp: true,
   }
 
@@ -511,7 +512,9 @@ import Layout from '../layouts/Layout.astro'
       // 上司の指示通りのレスポンス形式に対応
       if (checkProfile.status === 'success') {
         showLoading('アカウント作成完了')
-        setTimeout(() => window.location.href = '/', 1000)
+        setTimeout(() => {
+          window.location.href = withBasePath('/')
+        }, 1000)
         return
       } else if (checkProfile.status === 'error' && checkProfile.data === 'flow-account-create-error') {
         // エラー時は再試行
@@ -547,7 +550,9 @@ import Layout from '../layouts/Layout.astro'
       // 上司の指示通りのレスポンス形式に対応
       if (profile.status === 'success') {
         showLoading(describeProfileState('success'))
-        setTimeout(() => window.location.href = '/', 1000)
+        setTimeout(() => {
+          window.location.href = withBasePath('/')
+        }, 1000)
         return
       }
 

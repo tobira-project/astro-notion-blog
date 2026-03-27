@@ -52,5 +52,5 @@ export interface DateFilterCondition {
 
 export interface PropertyValueSortObject {
   property: string
-  direction: string
+  direction: 'ascending' | 'descending'
 }

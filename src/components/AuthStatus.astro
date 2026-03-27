@@ -1,4 +1,5 @@
 ---
+import { getNavLink } from '../lib/blog-helpers.ts'
 // このコンポーネントはクライアントサイドでログイン状態を管理します
 ---
 
@@ -7,10 +8,10 @@
 </div>
 
 <!-- ログイン前の表示 -->
-<a href="/login" id="logged-out-nav" class="auth-link" hidden>ログイン</a>
+<a href={getNavLink('/login')} id="logged-out-nav" class="auth-link" hidden>ログイン</a>
 
 <!-- ログイン後の表示 -->
-<a href="/mypage" id="logged-in-nav" class="auth-link" hidden>マイページ</a>
+<a href={getNavLink('/mypage')} id="logged-in-nav" class="auth-link" hidden>マイページ</a>
 
 <style>
   .auth-link {

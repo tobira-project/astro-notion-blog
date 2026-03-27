@@ -1,4 +1,4 @@
-import { Block } from './interfaces'
+import type { Block } from './interfaces'
 import { fetchSubscriptionStatus } from './subscription-client'
 
 /**

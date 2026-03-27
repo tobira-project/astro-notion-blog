@@ -110,6 +110,8 @@
 </style>
 
 <script>
+  import { withBasePath } from '../lib/public-path'
+
   document.addEventListener('DOMContentLoaded', async () => {
     let feedItems = []
     let fetched = false
@@ -252,12 +254,7 @@
     }
 
     async function fetchRSS() {
-      const url = new URL(location.href)
-      const port = url.port ? `:${url.port}` : ''
-
-      const res = await fetch(
-        `${url.protocol}//${url.hostname}${port}/feed`
-      )
+      const res = await fetch(withBasePath('/feed'))
       if (res.status !== 200) {
         throw new Error('Failed to fetch RSS feed')
       }

@@ -60,6 +60,12 @@ const client = new Client({
   auth: NOTION_API_SECRET,
 })
 
+// SDK メソッドの実パラメータ型を抽出（as any の代わりに使用）
+type QueryDatabaseParams = Parameters<typeof client.databases.query>[0]
+type RetrieveDatabaseParams = Parameters<typeof client.databases.retrieve>[0]
+type RetrieveBlockParams = Parameters<typeof client.blocks.retrieve>[0]
+type ListBlockChildrenParams = Parameters<typeof client.blocks.children.list>[0]
+
 let postsCache: Post[] | null = null
 let dbCache: Database | null = null
 
@@ -70,68 +76,74 @@ export async function getAllPosts(): Promise<Post[]> {
     return Promise.resolve(postsCache)
   }
 
-  const params: requestParams.QueryDatabase = {
-    database_id: DATABASE_ID,
-    filter: {
-      and: [
-        {
-          property: 'Published',
-          checkbox: {
-            equals: true,
+  try {
+    const params: requestParams.QueryDatabase = {
+      database_id: DATABASE_ID,
+      filter: {
+        and: [
+          {
+            property: 'Published',
+            checkbox: {
+              equals: true,
+            },
           },
-        },
+          {
+            property: 'Date',
+            date: {
+              on_or_before: new Date().toISOString(),
+            },
+          },
+        ],
+      },
+      sorts: [
         {
           property: 'Date',
-          date: {
-            on_or_before: new Date().toISOString(),
-          },
+          direction: 'descending',
         },
       ],
-    },
-    sorts: [
-      {
-        property: 'Date',
-        direction: 'descending',
-      },
-    ],
-    page_size: 100,
-  }
-
-  let results: responses.PageObject[] = []
-  while (true) {
-    const res = await retry(
-      async (bail) => {
-        try {
-          return (await client.databases.query(
-            params as any // eslint-disable-line @typescript-eslint/no-explicit-any
-          )) as responses.QueryDatabaseResponse
-        } catch (error: unknown) {
-          if (error instanceof APIResponseError) {
-            if (error.status && error.status >= 400 && error.status < 500) {
-              bail(error)
-            }
-          }
-          throw error
-        }
-      },
-      {
-        retries: numberOfRetry,
-      }
-    )
-
-    results = results.concat(res.results)
-
-    if (!res.has_more) {
-      break
+      page_size: 100,
     }
 
-    params['start_cursor'] = res.next_cursor as string
-  }
+    let results: responses.PageObject[] = []
+    while (true) {
+      const res = await retry(
+        async (bail) => {
+          try {
+            return (await client.databases.query(
+              params as QueryDatabaseParams
+            )) as responses.QueryDatabaseResponse
+          } catch (error: unknown) {
+            if (error instanceof APIResponseError) {
+              if (error.status && error.status >= 400 && error.status < 500) {
+                bail(error)
+              }
+            }
+            throw error
+          }
+        },
+        {
+          retries: numberOfRetry,
+        }
+      )
 
-  postsCache = results
-    .filter((pageObject) => _validPageObject(pageObject))
-    .map((pageObject) => _buildPost(pageObject))
-  return postsCache
+      results = results.concat(res.results)
+
+      if (!res.has_more) {
+        break
+      }
+
+      params['start_cursor'] = res.next_cursor as string
+    }
+
+    postsCache = results
+      .filter((pageObject) => _validPageObject(pageObject))
+      .map((pageObject) => _buildPost(pageObject))
+    return postsCache
+  } catch (error) {
+    console.warn('Failed to load posts from Notion. Falling back to empty posts.', error)
+    postsCache = []
+    return postsCache
+  }
 }
 
 export async function getPosts(pageSize = 10): Promise<Post[]> {
@@ -244,7 +256,7 @@ export async function getAllBlocksByBlockId(blockId: string): Promise<Block[]> {
         async (bail) => {
           try {
             return (await client.blocks.children.list(
-              params as any // eslint-disable-line @typescript-eslint/no-explicit-any
+              params as ListBlockChildrenParams
             )) as responses.RetrieveBlockChildrenResponse
           } catch (error: unknown) {
             if (error instanceof APIResponseError) {
@@ -340,7 +352,7 @@ export async function getBlock(blockId: string): Promise<Block> {
     async (bail) => {
       try {
         return (await client.blocks.retrieve(
-          params as any // eslint-disable-line @typescript-eslint/no-explicit-any
+          params as RetrieveBlockParams
         )) as responses.RetrieveBlockResponse
       } catch (error: unknown) {
         if (error instanceof APIResponseError) {
@@ -423,69 +435,83 @@ export async function getDatabase(): Promise<Database> {
     return Promise.resolve(dbCache)
   }
 
-  const params: requestParams.RetrieveDatabase = {
-    database_id: DATABASE_ID,
-  }
+  try {
+    const params: requestParams.RetrieveDatabase = {
+      database_id: DATABASE_ID,
+    }
 
-  const res = await retry(
-    async (bail) => {
-      try {
-        return (await client.databases.retrieve(
-          params as any // eslint-disable-line @typescript-eslint/no-explicit-any
-        )) as responses.RetrieveDatabaseResponse
-      } catch (error: unknown) {
-        if (error instanceof APIResponseError) {
-          if (error.status && error.status >= 400 && error.status < 500) {
-            bail(error)
+    const res = await retry(
+      async (bail) => {
+        try {
+          return (await client.databases.retrieve(
+            params as RetrieveDatabaseParams
+          )) as responses.RetrieveDatabaseResponse
+        } catch (error: unknown) {
+          if (error instanceof APIResponseError) {
+            if (error.status && error.status >= 400 && error.status < 500) {
+              bail(error)
+            }
           }
+          throw error
         }
-        throw error
+      },
+      {
+        retries: numberOfRetry,
       }
-    },
-    {
-      retries: numberOfRetry,
+    )
+
+    let icon: FileObject | Emoji | null = null
+    if (res.icon) {
+      if (res.icon.type === 'emoji' && 'emoji' in res.icon) {
+        icon = {
+          Type: res.icon.type,
+          Emoji: res.icon.emoji,
+        }
+      } else if (res.icon.type === 'external' && 'external' in res.icon) {
+        icon = {
+          Type: res.icon.type,
+          Url: res.icon.external?.url || '',
+        }
+      } else if (res.icon.type === 'file' && 'file' in res.icon) {
+        icon = {
+          Type: res.icon.type,
+          Url: res.icon.file?.url || '',
+        }
+      }
     }
-  )
 
-  let icon: FileObject | Emoji | null = null
-  if (res.icon) {
-    if (res.icon.type === 'emoji' && 'emoji' in res.icon) {
-      icon = {
-        Type: res.icon.type,
-        Emoji: res.icon.emoji,
-      }
-    } else if (res.icon.type === 'external' && 'external' in res.icon) {
-      icon = {
-        Type: res.icon.type,
-        Url: res.icon.external?.url || '',
-      }
-    } else if (res.icon.type === 'file' && 'file' in res.icon) {
-      icon = {
-        Type: res.icon.type,
-        Url: res.icon.file?.url || '',
+    let cover: FileObject | null = null
+    if (res.cover) {
+      cover = {
+        Type: res.cover.type,
+        Url: res.cover.external?.url || res.cover?.file?.url || '',
       }
     }
-  }
 
-  let cover: FileObject | null = null
-  if (res.cover) {
-    cover = {
-      Type: res.cover.type,
-      Url: res.cover.external?.url || res.cover?.file?.url || '',
+    const database: Database = {
+      Title: res.title.map((richText) => richText.plain_text).join(''),
+      Description: res.description
+        .map((richText) => richText.plain_text)
+        .join(''),
+      Icon: icon,
+      Cover: cover,
     }
-  }
 
-  const database: Database = {
-    Title: res.title.map((richText) => richText.plain_text).join(''),
-    Description: res.description
-      .map((richText) => richText.plain_text)
-      .join(''),
-    Icon: icon,
-    Cover: cover,
+    dbCache = database
+    return database
+  } catch (error) {
+    console.warn(
+      'Failed to load database metadata from Notion. Falling back to empty metadata.',
+      error
+    )
+    dbCache = {
+      Title: '',
+      Description: '',
+      Icon: null,
+      Cover: null,
+    }
+    return dbCache
   }
-
-  dbCache = database
-  return database
 }
 
 function _buildBlock(blockObject: responses.BlockObject): Block {
@@ -786,7 +812,7 @@ async function _getTableRows(blockId: string): Promise<TableRow[]> {
         async (bail) => {
           try {
             return (await client.blocks.children.list(
-              params as any // eslint-disable-line @typescript-eslint/no-explicit-any
+              params as ListBlockChildrenParams
             )) as responses.RetrieveBlockChildrenResponse
           } catch (error: unknown) {
             if (error instanceof APIResponseError) {
@@ -851,7 +877,7 @@ async function _getColumns(blockId: string): Promise<Column[]> {
         async (bail) => {
           try {
             return (await client.blocks.children.list(
-              params as any // eslint-disable-line @typescript-eslint/no-explicit-any
+              params as ListBlockChildrenParams
             )) as responses.RetrieveBlockChildrenResponse
           } catch (error: unknown) {
             if (error instanceof APIResponseError) {

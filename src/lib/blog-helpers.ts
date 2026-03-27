@@ -18,71 +18,60 @@ export const extractTargetBlocks = (
   blockType: string,
   blocks: Block[]
 ): Block[] => {
-  return blocks
-    .reduce((acc: Block[], block) => {
-      if (block.Type === blockType) {
-        acc.push(block)
-      }
+  const result: Block[] = []
 
-      if (block.ColumnList && block.ColumnList.Columns) {
-        acc = acc.concat(
-          _extractTargetBlockFromColums(blockType, block.ColumnList.Columns)
-        )
-      } else if (block.BulletedListItem && block.BulletedListItem.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.BulletedListItem.Children)
-        )
-      } else if (block.NumberedListItem && block.NumberedListItem.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.NumberedListItem.Children)
-        )
-      } else if (block.ToDo && block.ToDo.Children) {
-        acc = acc.concat(extractTargetBlocks(blockType, block.ToDo.Children))
-      } else if (block.SyncedBlock && block.SyncedBlock.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.SyncedBlock.Children)
-        )
-      } else if (block.Toggle && block.Toggle.Children) {
-        acc = acc.concat(extractTargetBlocks(blockType, block.Toggle.Children))
-      } else if (block.Paragraph && block.Paragraph.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.Paragraph.Children)
-        )
-      } else if (block.Heading1 && block.Heading1.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.Heading1.Children)
-        )
-      } else if (block.Heading2 && block.Heading2.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.Heading2.Children)
-        )
-      } else if (block.Heading3 && block.Heading3.Children) {
-        acc = acc.concat(
-          extractTargetBlocks(blockType, block.Heading3.Children)
-        )
-      } else if (block.Quote && block.Quote.Children) {
-        acc = acc.concat(extractTargetBlocks(blockType, block.Quote.Children))
-      } else if (block.Callout && block.Callout.Children) {
-        acc = acc.concat(extractTargetBlocks(blockType, block.Callout.Children))
-      }
+  for (const block of blocks) {
+    if (block.Type === blockType) {
+      result.push(block)
+    }
 
-      return acc
-    }, [])
-    .flat()
+    // 子ブロックを持つコンテナから再帰的に抽出
+    const children =
+      block.ColumnList?.Columns
+        ? _extractTargetBlockFromColumns(blockType, block.ColumnList.Columns)
+        : block.BulletedListItem?.Children
+          ? extractTargetBlocks(blockType, block.BulletedListItem.Children)
+          : block.NumberedListItem?.Children
+            ? extractTargetBlocks(blockType, block.NumberedListItem.Children)
+            : block.ToDo?.Children
+              ? extractTargetBlocks(blockType, block.ToDo.Children)
+              : block.SyncedBlock?.Children
+                ? extractTargetBlocks(blockType, block.SyncedBlock.Children)
+                : block.Toggle?.Children
+                  ? extractTargetBlocks(blockType, block.Toggle.Children)
+                  : block.Paragraph?.Children
+                    ? extractTargetBlocks(blockType, block.Paragraph.Children)
+                    : block.Heading1?.Children
+                      ? extractTargetBlocks(blockType, block.Heading1.Children)
+                      : block.Heading2?.Children
+                        ? extractTargetBlocks(blockType, block.Heading2.Children)
+                        : block.Heading3?.Children
+                          ? extractTargetBlocks(blockType, block.Heading3.Children)
+                          : block.Quote?.Children
+                            ? extractTargetBlocks(blockType, block.Quote.Children)
+                            : block.Callout?.Children
+                              ? extractTargetBlocks(blockType, block.Callout.Children)
+                              : null
+
+    if (children) {
+      result.push(...children)
+    }
+  }
+
+  return result
 }
 
-const _extractTargetBlockFromColums = (
+const _extractTargetBlockFromColumns = (
   blockType: string,
   columns: Column[]
 ): Block[] => {
-  return columns
-    .reduce((acc: Block[], column) => {
-      if (column.Children) {
-        acc = acc.concat(extractTargetBlocks(blockType, column.Children))
-      }
-      return acc
-    }, [])
-    .flat()
+  const result: Block[] = []
+  for (const column of columns) {
+    if (column.Children) {
+      result.push(...extractTargetBlocks(blockType, column.Children))
+    }
+  }
+  return result
 }
 
 export const buildURLToHTMLMap = async (
@@ -149,17 +138,33 @@ export const getPageLink = (page: number, tag: string) => {
 }
 
 export const getDateStr = (date: string) => {
-  const dt = new Date(date)
-
-  if (date.indexOf('T') !== -1) {
-    // Consider timezone
-    const elements = date.split('T')[1].split(/([+-])/)
-    if (elements.length > 1) {
-      const diff = parseInt(`${elements[1]}${elements[2]}`, 10)
-      dt.setHours(dt.getHours() + diff)
-    }
+  // 日付のみ (e.g. "2026-03-27") の場合はそのまま返す
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return date
   }
 
+  // 日時+オフセット (e.g. "2026-03-27T00:30:00.000+09:00") の場合、
+  // オフセットが示す現地時刻の日付を返す。
+  // new Date() は UTC に変換してしまうため、UTC メソッドにオフセット分を加算して
+  // 元のタイムゾーンでの日付を復元する。
+  const dt = new Date(date)
+  const offsetMatch = date.match(/([+-])(\d{2}):(\d{2})$/)
+  const isUtcDateTime = /Z$/.test(date)
+
+  if (offsetMatch || isUtcDateTime) {
+    const offsetMinutes = offsetMatch
+      ? (offsetMatch[1] === '+' ? 1 : -1) *
+        (parseInt(offsetMatch[2], 10) * 60 + parseInt(offsetMatch[3], 10))
+      : 0
+    const localMs = dt.getTime() + offsetMinutes * 60 * 1000
+    const local = new Date(localMs)
+    const y = local.getUTCFullYear()
+    const m = ('00' + (local.getUTCMonth() + 1)).slice(-2)
+    const d = ('00' + local.getUTCDate()).slice(-2)
+    return y + '-' + m + '-' + d
+  }
+
+  // オフセットなし日時 (e.g. "2026-03-27T00:30:00") はローカルTZ解釈
   const y = dt.getFullYear()
   const m = ('00' + (dt.getMonth() + 1)).slice(-2)
   const d = ('00' + dt.getDate()).slice(-2)

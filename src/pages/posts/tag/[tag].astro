@@ -35,7 +35,10 @@ const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
   getNumberOfPagesByTag(tag),
 ])
 
-const currentTag = posts[0].Tags.find((t) => t.name === tag)
+const currentTag = tags.find((t) => t.name === tag) || {
+  name: tag,
+  color: 'light-gray',
+}
 ---
 
 <Layout title={`Posts in ${tag}`} path={`/posts/tag/${tag}`}>

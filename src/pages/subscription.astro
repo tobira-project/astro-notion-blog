@@ -1,4 +1,5 @@
 ---
+import { getNavLink } from '../lib/blog-helpers.ts'
 import Layout from '../layouts/Layout.astro'
 ---
 
@@ -82,7 +83,7 @@ import Layout from '../layouts/Layout.astro'
 
       <!-- ログインしていない場合のメッセージ -->
       <div id="login-prompt" class="login-prompt" style="display: none;">
-        <p>プランに加入するには<a href="/login">ログイン</a>してください</p>
+        <p>プランに加入するには<a href={getNavLink('/login')}>ログイン</a>してください</p>
       </div>
     </div>
   </div>

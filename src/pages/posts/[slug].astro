@@ -60,36 +60,46 @@ const fileAtacchedBlocks = extractTargetBlocks('image', blocks)
     return imageOrFile && imageOrFile.File && imageOrFile.File.Url
   })
 
-// Download files
-await Promise.all(
-  fileAtacchedBlocks
-    .map(async (block) => {
-      const expiryTime = (block.Image || block.File).File.ExpiryTime
-      if (Date.parse(expiryTime) > Date.now()) {
-        return Promise.resolve(block)
+const fileUrls = (
+  await Promise.all(
+    fileAtacchedBlocks.map(async (block) => {
+      const fileObject = (block.Image || block.File)?.File
+      const expiryTime = fileObject?.ExpiryTime
+      const expiryTimestamp = expiryTime ? Date.parse(expiryTime) : NaN
+      const shouldReuseBlock =
+        Number.isFinite(expiryTimestamp) && expiryTimestamp > Date.now()
+      const latestBlock = shouldReuseBlock ? block : await getBlock(block.Id)
+      const latestUrl = (latestBlock.Image || latestBlock.File)?.File?.Url
+
+      if (!latestUrl) {
+        console.warn(
+          `[posts/${slug}] skipped attachment download because URL was missing`,
+          latestBlock.Id
+        )
+        return null
       }
-      return getBlock(block.Id)
+
+      try {
+        return new URL(latestUrl)
+      } catch {
+        console.warn(
+          `[posts/${slug}] skipped attachment download because URL was invalid`,
+          latestBlock.Id
+        )
+        return null
+      }
     })
-    .map((promise) =>
-      promise.then((block) => {
-        let url!: URL
-        try {
-          url = new URL((block.Image || block.File).File.Url)
-        } catch {
-          return Promise.reject()
-        }
-        return Promise.resolve(url)
-      })
-    )
-    .map((promise) => promise.then(downloadFile))
-)
+  )
+).filter((url): url is URL => url !== null)
+
+await Promise.allSettled(fileUrls.map((url) => downloadFile(url)))
 
 const currentPostIndex = allPosts.findIndex((post) => post.Slug === slug)
 const prevPost = allPosts[currentPostIndex + 1]
 const nextPost = allPosts[currentPostIndex - 1]
 
 // 有料コンテンツの分割
-const { freeBlocks, premiumBlocks, hasPremiumContent } = splitContentByDivider(blocks)
+const { freeBlocks, hasPremiumContent } = splitContentByDivider(blocks)
 
 let ogImage = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
@@ -112,7 +122,6 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
       {hasPremiumContent ? (
         <PremiumContentGate
           freeBlocks={freeBlocks}
-          premiumBlocks={premiumBlocks}
           hasPremiumContent={hasPremiumContent}
         />
       ) : (
