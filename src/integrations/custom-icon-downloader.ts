@@ -27,7 +27,10 @@ export default (): AstroIntegration => ({
       try {
         url = new URL(icon.Url)
       } catch (error) {
-        console.warn('Skipping Notion custom icon download because URL was invalid.', error)
+        console.warn(
+          'Skipping Notion custom icon download because URL was invalid.',
+          error
+        )
         return Promise.resolve()
       }
 

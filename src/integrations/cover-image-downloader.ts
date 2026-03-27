@@ -24,7 +24,10 @@ export default (): AstroIntegration => ({
       try {
         url = new URL(database.Cover.Url)
       } catch (error) {
-        console.warn('Skipping Notion cover image download because URL was invalid.', error)
+        console.warn(
+          'Skipping Notion cover image download because URL was invalid.',
+          error
+        )
         return Promise.resolve()
       }
 

@@ -26,32 +26,37 @@ export const extractTargetBlocks = (
     }
 
     // 子ブロックを持つコンテナから再帰的に抽出
-    const children =
-      block.ColumnList?.Columns
-        ? _extractTargetBlockFromColumns(blockType, block.ColumnList.Columns)
-        : block.BulletedListItem?.Children
-          ? extractTargetBlocks(blockType, block.BulletedListItem.Children)
-          : block.NumberedListItem?.Children
-            ? extractTargetBlocks(blockType, block.NumberedListItem.Children)
-            : block.ToDo?.Children
-              ? extractTargetBlocks(blockType, block.ToDo.Children)
-              : block.SyncedBlock?.Children
-                ? extractTargetBlocks(blockType, block.SyncedBlock.Children)
-                : block.Toggle?.Children
-                  ? extractTargetBlocks(blockType, block.Toggle.Children)
-                  : block.Paragraph?.Children
-                    ? extractTargetBlocks(blockType, block.Paragraph.Children)
-                    : block.Heading1?.Children
-                      ? extractTargetBlocks(blockType, block.Heading1.Children)
-                      : block.Heading2?.Children
-                        ? extractTargetBlocks(blockType, block.Heading2.Children)
-                        : block.Heading3?.Children
-                          ? extractTargetBlocks(blockType, block.Heading3.Children)
-                          : block.Quote?.Children
-                            ? extractTargetBlocks(blockType, block.Quote.Children)
-                            : block.Callout?.Children
-                              ? extractTargetBlocks(blockType, block.Callout.Children)
-                              : null
+    const children = block.ColumnList?.Columns
+      ? _extractTargetBlockFromColumns(blockType, block.ColumnList.Columns)
+      : block.BulletedListItem?.Children
+        ? extractTargetBlocks(blockType, block.BulletedListItem.Children)
+        : block.NumberedListItem?.Children
+          ? extractTargetBlocks(blockType, block.NumberedListItem.Children)
+          : block.ToDo?.Children
+            ? extractTargetBlocks(blockType, block.ToDo.Children)
+            : block.SyncedBlock?.Children
+              ? extractTargetBlocks(blockType, block.SyncedBlock.Children)
+              : block.Toggle?.Children
+                ? extractTargetBlocks(blockType, block.Toggle.Children)
+                : block.Paragraph?.Children
+                  ? extractTargetBlocks(blockType, block.Paragraph.Children)
+                  : block.Heading1?.Children
+                    ? extractTargetBlocks(blockType, block.Heading1.Children)
+                    : block.Heading2?.Children
+                      ? extractTargetBlocks(blockType, block.Heading2.Children)
+                      : block.Heading3?.Children
+                        ? extractTargetBlocks(
+                            blockType,
+                            block.Heading3.Children
+                          )
+                        : block.Quote?.Children
+                          ? extractTargetBlocks(blockType, block.Quote.Children)
+                          : block.Callout?.Children
+                            ? extractTargetBlocks(
+                                blockType,
+                                block.Callout.Children
+                              )
+                            : null
 
     if (children) {
       result.push(...children)

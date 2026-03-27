@@ -140,7 +140,10 @@ export async function getAllPosts(): Promise<Post[]> {
       .map((pageObject) => _buildPost(pageObject))
     return postsCache
   } catch (error) {
-    console.warn('Failed to load posts from Notion. Falling back to empty posts.', error)
+    console.warn(
+      'Failed to load posts from Notion. Falling back to empty posts.',
+      error
+    )
     postsCache = []
     return postsCache
   }
