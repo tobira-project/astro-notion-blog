@@ -307,12 +307,18 @@ import '../styles/tobiracast.css'
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // アカウントが完成しているか確認
       const idToken = await user.getIdToken()
-      const isReady = await checkAccountReady(idToken)
+
+      // アカウント確認とサブスク取得を並列実行
+      const [isReady, subscription] = await Promise.all([
+        checkAccountReady(idToken),
+        fetchSubscriptionStatus(idToken).catch((error) => {
+          console.error('Failed to fetch subscription status:', error)
+          return null
+        }),
+      ])
 
       if (!isReady) {
-        // アカウント未完成 → ログインページでセットアップを完了させる
         window.location.href = withBasePath('/login')
         return
       }
@@ -330,21 +336,18 @@ import '../styles/tobiracast.css'
         })
       }
 
-      try {
-        const subscription = await fetchSubscriptionStatus(idToken)
-
+      // サブスクリプション情報を表示
+      if (subscription) {
         if (subscriptionTierEl) {
           subscriptionTierEl.textContent = formatSubscriptionTier(
             subscription.subscription_tier
           )
         }
-
         if (subscriptionStatusEl) {
           subscriptionStatusEl.textContent = formatSubscriptionStatus(
             subscription.subscription_status
           )
         }
-
         if (subscriptionPeriodEndEl) {
           subscriptionPeriodEndEl.textContent = subscription.current_period_end
             ? new Date(subscription.current_period_end).toLocaleDateString('ja-JP', {
@@ -354,8 +357,7 @@ import '../styles/tobiracast.css'
               })
             : '---'
         }
-      } catch (error) {
-        console.error('Failed to fetch subscription status:', error)
+      } else {
         if (subscriptionTierEl) subscriptionTierEl.textContent = '取得失敗'
         if (subscriptionStatusEl) subscriptionStatusEl.textContent = '取得失敗'
         if (subscriptionPeriodEndEl) subscriptionPeriodEndEl.textContent = '取得失敗'

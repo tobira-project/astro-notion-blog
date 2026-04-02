@@ -99,7 +99,7 @@ const prevPost = allPosts[currentPostIndex + 1]
 const nextPost = allPosts[currentPostIndex - 1]
 
 // 有料コンテンツの分割
-const { freeBlocks, hasPremiumContent } = splitContentByDivider(blocks)
+const { freeBlocks, premiumBlocks, hasPremiumContent } = splitContentByDivider(blocks)
 
 let ogImage = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
@@ -122,6 +122,7 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
       {hasPremiumContent ? (
         <PremiumContentGate
           freeBlocks={freeBlocks}
+          premiumBlocks={premiumBlocks}
           hasPremiumContent={hasPremiumContent}
         />
       ) : (

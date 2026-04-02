@@ -368,6 +368,7 @@ import Layout from '../layouts/Layout.astro'
   import { getBlogFunctionUrl } from '../lib/functions-url'
   import {
     fetchSubscriptionStatus,
+    hasPremiumAccess,
     formatSubscriptionTier,
   } from '../lib/subscription-client'
 
@@ -484,7 +485,7 @@ import Layout from '../layouts/Layout.astro'
         const idToken = await user.getIdToken()
         const subscription = await fetchSubscriptionStatus(idToken)
 
-        if (subscription.hasActiveSubscription) {
+        if (hasPremiumAccess(subscription)) {
           setButtonsDisabledState(true, '加入済み')
           showMessage(
             `${formatSubscriptionTier(subscription.subscription_tier)}プランに加入中です`,

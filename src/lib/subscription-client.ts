@@ -8,6 +8,8 @@ export interface SubscriptionStatusResponse {
   cancel_at_period_end: boolean
 }
 
+const ACCESSIBLE_SUBSCRIPTION_STATUSES = new Set(['ACTIVE', 'TRIALING'])
+
 export async function fetchSubscriptionStatus(
   idToken: string
 ): Promise<SubscriptionStatusResponse> {
@@ -29,6 +31,13 @@ export async function fetchSubscriptionStatus(
   }
 
   return response.json()
+}
+
+export function hasPremiumAccess(subscription: SubscriptionStatusResponse) {
+  return (
+    subscription.hasActiveSubscription ||
+    ACCESSIBLE_SUBSCRIPTION_STATUSES.has(subscription.subscription_status || '')
+  )
 }
 
 export function formatSubscriptionTier(tier: string | null) {

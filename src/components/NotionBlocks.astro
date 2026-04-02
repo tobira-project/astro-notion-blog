@@ -32,8 +32,8 @@ import LinkToPage from './notion-blocks/LinkToPage.astro'
 export interface Props {
   blocks: interfaces.Block[]
   isRoot: boolean
-  level: number
-  headings: interfaces.Block[]
+  level?: number
+  headings?: interfaces.Block[]
 }
 
 const {

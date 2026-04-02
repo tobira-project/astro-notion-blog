@@ -1,14 +1,15 @@
 ---
 import { getNavLink } from '../lib/blog-helpers.ts'
-import { Block } from '../lib/interfaces.ts'
+import type { Block } from '../lib/interfaces.ts'
 import NotionBlocks from './NotionBlocks.astro'
 
 export interface Props {
   freeBlocks: Block[]
+  premiumBlocks: Block[]
   hasPremiumContent: boolean
 }
 
-const { freeBlocks, hasPremiumContent } = Astro.props
+const { freeBlocks, premiumBlocks, hasPremiumContent } = Astro.props
 ---
 
 <div class="premium-content-gate">
@@ -19,12 +20,21 @@ const { freeBlocks, hasPremiumContent } = Astro.props
 
   {hasPremiumContent && (
     <div class="premium-section">
+      <!-- 有料コンテンツ: template 内はブラウザに描画されず、検索エンジンにもインデックスされない -->
+      <template id="premium-content-template">
+        <NotionBlocks blocks={premiumBlocks} isRoot={false} />
+      </template>
+
+      <!-- 認証後に有料コンテンツが挿入される -->
+      <div id="premium-content" class="premium-content" style="display: none;"></div>
+
+      <!-- 非会員向けペイウォール -->
       <div id="premium-paywall" class="premium-paywall">
         <div class="paywall-content">
           <div class="paywall-icon">🔒</div>
           <h3 class="paywall-title">この先は有料会員限定コンテンツです</h3>
           <p class="paywall-description">
-            保護対象コンテンツのため、この続きは静的HTMLには含めていません。
+            続きを読むには、有料プランへの加入が必要です
           </p>
           <div class="paywall-buttons">
             <a href={getNavLink('/subscription')} class="btn-subscribe">プランを見る</a>
@@ -149,3 +159,30 @@ const { freeBlocks, hasPremiumContent } = Astro.props
     }
   }
 </style>
+
+<script>
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { getFirebaseAuth } from '../lib/firebase-client'
+  import { checkSubscriptionStatus } from '../lib/premium-content'
+
+  const auth = getFirebaseAuth()
+
+  const template = document.getElementById('premium-content-template') as HTMLTemplateElement | null
+  const premiumContent = document.getElementById('premium-content')
+  const premiumPaywall = document.getElementById('premium-paywall')
+
+  if (template && premiumContent && premiumPaywall) {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const idToken = await user.getIdToken()
+        const hasSubscription = await checkSubscriptionStatus(idToken)
+
+        if (hasSubscription) {
+          premiumContent.appendChild(template.content.cloneNode(true))
+          premiumContent.style.display = 'block'
+          premiumPaywall.style.display = 'none'
+        }
+      }
+    })
+  }
+</script>

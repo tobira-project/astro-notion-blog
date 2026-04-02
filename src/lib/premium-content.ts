@@ -1,5 +1,8 @@
 import type { Block } from './interfaces'
-import { fetchSubscriptionStatus } from './subscription-client'
+import {
+  fetchSubscriptionStatus,
+  hasPremiumAccess,
+} from './subscription-client'
 
 /**
  * ブロック配列からdividerの位置を検出し、無料部分と有料部分に分割する
@@ -73,7 +76,7 @@ export async function checkSubscriptionStatus(
 
   try {
     const data = await fetchSubscriptionStatus(idToken)
-    return data.hasActiveSubscription
+    return hasPremiumAccess(data)
   } catch (error) {
     console.error('Failed to check subscription status:', error)
     return false
