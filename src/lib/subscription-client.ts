@@ -10,6 +10,29 @@ export interface SubscriptionStatusResponse {
 
 const ACCESSIBLE_SUBSCRIPTION_STATUSES = new Set(['ACTIVE', 'TRIALING'])
 
+export async function createPortalSession(idToken: string): Promise<string> {
+  const response = await fetch(
+    getBlogFunctionUrl(
+      import.meta.env.PUBLIC_FIREBASE_FUNCTIONS_URL,
+      'blog-createPortalSession'
+    ),
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  if (!response.ok) {
+    throw new Error('ポータルセッションの作成に失敗しました')
+  }
+
+  const data = await response.json()
+  return data.url
+}
+
 export async function fetchSubscriptionStatus(
   idToken: string
 ): Promise<SubscriptionStatusResponse> {

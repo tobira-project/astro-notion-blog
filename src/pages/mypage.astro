@@ -58,6 +58,12 @@ import '../styles/tobiracast.css'
       </div>
 
       <div class="action-buttons">
+        <button id="portal-btn" class="portal-btn" style="display: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          プラン・支払い管理
+        </button>
         <button id="logout-btn" class="logout-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -194,7 +200,38 @@ import '../styles/tobiracast.css'
 
   .action-buttons {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .portal-btn {
+    display: flex;
+    align-items: center;
     justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--tobiracast-primary-blue), #1558b0);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(23, 121, 222, 0.3);
+    min-width: 200px;
+  }
+
+  .portal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(23, 121, 222, 0.4);
+  }
+
+  .portal-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
   }
 
   .logout-btn {
@@ -270,9 +307,11 @@ import '../styles/tobiracast.css'
   import { getNativeApiBaseUrl } from '../lib/functions-url'
   import { withBasePath } from '../lib/public-path'
   import {
+    createPortalSession,
     fetchSubscriptionStatus,
     formatSubscriptionStatus,
     formatSubscriptionTier,
+    hasPremiumAccess,
   } from '../lib/subscription-client'
 
   const auth = getFirebaseAuth()
@@ -287,6 +326,7 @@ import '../styles/tobiracast.css'
   const subscriptionStatusEl = document.getElementById('subscription-status')
   const subscriptionPeriodEndEl = document.getElementById('subscription-period-end')
   const logoutBtn = document.getElementById('logout-btn')
+  const portalBtn = document.getElementById('portal-btn') as HTMLButtonElement | null
 
   // Tobiratoryアカウントが完成しているか確認
   async function checkAccountReady(idToken: string): Promise<boolean> {
@@ -357,6 +397,10 @@ import '../styles/tobiracast.css'
               })
             : '---'
         }
+        // サブスク加入中ならポータルボタンを表示
+        if (portalBtn && hasPremiumAccess(subscription)) {
+          portalBtn.style.display = 'flex'
+        }
       } else {
         if (subscriptionTierEl) subscriptionTierEl.textContent = '取得失敗'
         if (subscriptionStatusEl) subscriptionStatusEl.textContent = '取得失敗'
@@ -370,6 +414,23 @@ import '../styles/tobiracast.css'
       // 未ログインの場合はメッセージを表示
       if (loadingState) loadingState.style.display = 'none'
       if (notLoggedIn) notLoggedIn.style.display = 'block'
+    }
+  })
+
+  // Customer Portalへ遷移
+  portalBtn?.addEventListener('click', async () => {
+    portalBtn.disabled = true
+    portalBtn.textContent = '読み込み中...'
+    try {
+      const user = auth.currentUser
+      if (!user) return
+      const idToken = await user.getIdToken()
+      const url = await createPortalSession(idToken)
+      window.location.href = url
+    } catch {
+      alert('プラン管理ページへの移動に失敗しました')
+      portalBtn.disabled = false
+      portalBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>プラン・支払い管理`
     }
   })
 
