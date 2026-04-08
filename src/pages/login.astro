@@ -32,7 +32,7 @@ import Layout from '../layouts/Layout.astro'
         </div>
 
         <!-- ログインフォーム -->
-        <div id="login-form">
+        <div id="login-form" style="display: none;">
           <!-- Googleログインボタン -->
           <button id="google-login" class="social-btn google-btn">
             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -606,13 +606,20 @@ import Layout from '../layouts/Layout.astro'
     }
   }
 
+  // Magic Linkの場合は即座にローディング表示（フォームの一瞬表示を防ぐ）
+  const isMagicLink = isSignInWithEmailLink(auth, window.location.href)
+  if (isMagicLink) {
+    showLoading('メールリンクを確認中...')
+  }
+
   // Firebase認証状態監視
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       await handleTobiratoryAccountSetup(user)
-    } else {
+    } else if (!isMagicLink) {
       showForm()
     }
+    // Magic Link処理中の場合はローディングのまま待つ
   })
 
   // Googleログイン
@@ -717,15 +724,14 @@ import Layout from '../layouts/Layout.astro'
     }
   })
 
-  // ページ読み込み時にMagic Linkをチェック（tobiratory-webと同じ）
-  window.addEventListener('load', async () => {
-    if (isSignInWithEmailLink(auth, window.location.href)) {
+  // Magic Link処理（即時実行）
+  if (isMagicLink) {
+    ;(async () => {
       let email = window.localStorage.getItem('emailForSignIn')
       if (!email) {
-        // ユーザーがメールリンクを別のデバイスで開いた場合
         email = window.prompt('確認のためメールアドレスを入力してください：')
       }
-      
+
       if (email) {
         try {
           showLoading('メールリンクでログイン中...')
@@ -740,6 +746,6 @@ import Layout from '../layouts/Layout.astro'
         showForm()
         showError('メールアドレスが必要です')
       }
-    }
-  })
+    })()
+  }
 </script>
