@@ -677,7 +677,7 @@ import Layout from '../layouts/Layout.astro'
   })
 
   // Magic Linkメール認証（tobiratory-webと同じ）
-  const emailSubmitBtn = document.getElementById('email-submit-btn')
+  const emailSubmitBtn = document.getElementById('email-submit-btn') as HTMLButtonElement | null
 
   emailForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
@@ -696,18 +696,29 @@ import Layout from '../layouts/Layout.astro'
       // メールアドレスを保存
       window.localStorage.setItem('emailForSignIn', email)
 
-      // 成功メッセージを表示
-      showError('✓ ログインリンクを送信しました！メールをご確認ください。')
+      // 成功メッセージを表示（「別のアドレスを使う」リンク付き）
+      authError.innerHTML = '✓ ログインリンクを送信しました！メールをご確認ください。<br><button id="resend-btn" style="margin-top:0.5rem;background:none;border:none;color:#16a34a;text-decoration:underline;cursor:pointer;font-size:0.875rem;padding:0;">別のメールアドレスを使う</button>'
+      authError.style.display = 'block'
       authError.style.backgroundColor = '#f0fdf4'
       authError.style.borderColor = '#bbf7d0'
       authError.style.color = '#16a34a'
+
+      document.getElementById('resend-btn')?.addEventListener('click', () => {
+        hideError()
+        emailSubmitBtn.disabled = false
+        emailSubmitBtn.textContent = 'メールでログイン / 新規登録'
+        emailSubmitBtn.style.backgroundColor = ''
+        const emailInput = document.getElementById('email-input') as HTMLInputElement
+        emailInput.value = ''
+        emailInput.focus()
+      })
 
       // ボタンを「送信済み」に変更
       emailSubmitBtn.textContent = '送信済み'
       emailSubmitBtn.style.backgroundColor = '#10b981'
 
       // 入力欄をクリア
-      document.getElementById('email-input').value = ''
+      ;(document.getElementById('email-input') as HTMLInputElement).value = ''
 
     } catch (error) {
       // ボタンを元に戻す

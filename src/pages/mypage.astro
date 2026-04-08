@@ -40,6 +40,15 @@ import '../styles/tobiracast.css'
         </div>
       </div>
 
+      <div id="cancel-notice" class="cancel-notice fade-in" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="cancel-notice-text"></span>
+      </div>
+
       <div class="profile-card fade-in">
         <div class="info-section">
           <label>現在のプラン</label>
@@ -205,6 +214,27 @@ import '../styles/tobiracast.css'
     gap: 1rem;
   }
 
+  .cancel-notice {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    padding: 1rem 1.25rem;
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: #9a3412;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .cancel-notice svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #ea580c;
+  }
+
   .portal-btn {
     display: flex;
     align-items: center;
@@ -325,6 +355,8 @@ import '../styles/tobiracast.css'
   const subscriptionTierEl = document.getElementById('subscription-tier')
   const subscriptionStatusEl = document.getElementById('subscription-status')
   const subscriptionPeriodEndEl = document.getElementById('subscription-period-end')
+  const cancelNotice = document.getElementById('cancel-notice')
+  const cancelNoticeText = document.getElementById('cancel-notice-text')
   const logoutBtn = document.getElementById('logout-btn')
   const portalBtn = document.getElementById('portal-btn') as HTMLButtonElement | null
 
@@ -400,6 +432,17 @@ import '../styles/tobiracast.css'
         // サブスク加入中ならポータルボタンを表示
         if (portalBtn && hasPremiumAccess(subscription)) {
           portalBtn.style.display = 'flex'
+        }
+
+        // キャンセル済み（期間終了待ち）の場合は警告表示
+        if (cancelNotice && cancelNoticeText && subscription.cancel_at_period_end) {
+          const endDate = subscription.current_period_end
+            ? new Date(subscription.current_period_end).toLocaleDateString('ja-JP', {
+                year: 'numeric', month: 'long', day: 'numeric',
+              })
+            : '期間終了時'
+          cancelNoticeText.textContent = `解約済みです。${endDate}までは引き続きご利用いただけます。`
+          cancelNotice.style.display = 'flex'
         }
       } else {
         if (subscriptionTierEl) subscriptionTierEl.textContent = '取得失敗'
